@@ -1,4 +1,4 @@
-package com.wordsweeper.service.rest;
+package com.wordsweeper.service;
 
 import com.wordsweeper.service.model.Board;
 
