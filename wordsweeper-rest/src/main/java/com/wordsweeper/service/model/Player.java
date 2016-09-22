@@ -1,7 +1,5 @@
 package com.wordsweeper.service.model;
 
-import java.util.HashMap;
-
 /**
  * Created by francisco on 9/13/16.
  */
@@ -23,7 +21,7 @@ public class Player {
         return name;
     }
 
-    public void setScore(int score) {
+    protected void setScore(int score) {
         this.score = score;
     }
 }

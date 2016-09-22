@@ -1,6 +1,5 @@
 package com.wordsweeper.service;
 
-import com.wordsweeper.service.model.Board;
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
 
@@ -34,9 +33,50 @@ public class GameService {
         // TODO: actually load the game here
         Game game = new Game(null);
 
-        Player newPlayer = new Player(playerName);
+        if (game.isLocked()) {
+            return null;
+        }
 
-        game.addPlayer(newPlayer);
+        if (game.addPlayer(playerName)) {
+
+            return Response /* Return response with the game object */
+                    .ok(game)
+                    .build();
+        } else {
+            return null;
+        }
+    }
+
+    @GET
+    @Path("/lock/{gameId}/{playerName}")
+    public Response lock(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+
+        // TODO: actually load the game here
+        Game game = new Game(null);
+
+        game.lock(playerName);
+
+        // TODO: persist game
+
+        return Response /* Return response with the game object */
+                .ok(game)
+                .build();
+    }
+
+    @GET
+    @Path("/exit/{gameId}/{playerName}")
+    public Response exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+
+        // TODO: actually load the game here
+        Game game = new Game(null);
+
+        game.removePlayer(playerName);
+
+        if (game.isEmpty()) {
+            game.end();
+        }
+
+        // TODO: persist game
 
         return Response /* Return response with the game object */
                 .ok(game)
