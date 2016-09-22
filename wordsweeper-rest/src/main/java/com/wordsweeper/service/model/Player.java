@@ -18,4 +18,12 @@ public class Player {
         this.offsetX = 0;
         this.offsetY = 0;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
