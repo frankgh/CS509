@@ -10,6 +10,10 @@ public class RandomUtil {
     final static SecureRandom random = new SecureRandom();
 
     public static char getRandomCharacter() {
-        return alphabet.charAt(random.nextInt(alphabet.length()));
+        return alphabet.charAt(nextInt(alphabet.length()));
+    }
+
+    public static int nextInt(int n) {
+        return random.nextInt(n);
     }
 }

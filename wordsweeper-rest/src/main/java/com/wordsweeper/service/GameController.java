@@ -2,6 +2,7 @@ package com.wordsweeper.service;
 
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,14 +13,21 @@ import javax.ws.rs.core.Response;
  * Created by francisco on 9/15/16.
  */
 @Path("/game")
-public class GameService {
+public class GameController {
 
     @GET
-    @Path("/create/{playerName}")
-    public Response create(@PathParam("playerName") String playerName) {
+    @Path("/create/{playerName}{password:(/password/[^/]+?)?}")
+    public Response create(@PathParam("playerName") String playerName, @PathParam("password") String password) {
 
         Player player = new Player(playerName); /* create a new player for the board */
-        Game game = new Game(player); /* create a game with the new player */
+
+        Game game;
+
+        if (StringUtils.isBlank(password)) {
+            game = new Game(player); /* create a game with the new player */
+        } else {
+            game = new Game(player, password); /* Create a password protected game */
+        }
 
         return Response /* Return response with the game object */
                 .ok(game)
@@ -27,24 +35,29 @@ public class GameService {
     }
 
     @GET
-    @Path("/join/{gameId}/{playerName}")
-    public Response join(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+    @Path("/join/{gameId}/{playerName}{password:(/password/[^/]+?)?}")
+    public Response join(@PathParam("gameId") String gameId,
+                         @PathParam("playerName") String playerName,
+                         @PathParam("password") String password) {
 
         // TODO: actually load the game here
         Game game = new Game(null);
 
-        if (game.isLocked()) {
+        if (game.ended() || game.isLocked()) {
             return null;
         }
 
-        if (game.addPlayer(playerName)) {
+        boolean addPlayer;
 
-            return Response /* Return response with the game object */
-                    .ok(game)
-                    .build();
+        if (StringUtils.isNotBlank(password)) {
+            addPlayer = game.addPlayer(playerName, password); /* join a password protected game */
         } else {
-            return null;
+            addPlayer = game.addPlayer(playerName); /* join the game */
         }
+
+        return Response /* Return response with the game object */
+                .ok(game)
+                .build();
     }
 
     @GET
@@ -86,6 +99,8 @@ public class GameService {
     @GET
     @Path("/reset/{gameId}")
     public Response reset(@PathParam("gameId") String gameId) {
+
+        // only managing user
 
         // TODO: actually load the game here
         Game game = new Game(null);

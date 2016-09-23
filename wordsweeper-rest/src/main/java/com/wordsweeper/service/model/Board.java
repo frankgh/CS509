@@ -24,7 +24,7 @@ public class Board {
     @Column(name = "columns")
     int columns; /* The number of columns in the board */
 
-    List<Letter> letterList; /* A list of all letters available in the board */
+    List<Cell> cellList; /* A list of all the cells that make up the board */
 
     public Board(int size) {
         this(size, size);
@@ -46,12 +46,88 @@ public class Board {
         return rows * columns;
     }
 
+    /**
+     * Grows the board by the specified amount of rows and columns
+     *
+     * @param amount the amount of columns and rows to increase
+     */
+    public void grow(int amount) {
+        growX(amount);
+        growY(amount);
+    }
+
+    /**
+     * Grows the board on the x direction by the specified amount
+     * it adds columns to the right of the board
+     *
+     * @param amount the amount to grow
+     */
+    private void growX(int amount) {
+        columns += amount;
+
+        for (int i = 0; i < (amount * columns); i++) {
+            for (int j = 0; j < amount; j++) {
+                addCell(((rows + amount) * i) + rows + j);
+            }
+        }
+    }
+
+    /**
+     * Grows the board on the y direction by the specified amount.
+     * It adds rows to the bottom of the board
+     *
+     * @param amount the amount to grow
+     */
+    private void growY(int amount) {
+        rows += amount;
+
+        for (int i = 0; i < amount * rows; i++) {
+            addCell();
+        }
+    }
+
+    /**
+     * Reset the board
+     */
     public void reset() {
-        this.letterList = new ArrayList<Letter>(rows * columns);
+        this.cellList = new ArrayList<>(getLetterCount());
 
         for (int i = 0; i < getLetterCount(); i++) {
-            this.letterList.add(new Letter(RandomUtil.getRandomCharacter(), 1));
+            addCell();
         }
+
+        generateMultiplierCell();
+    }
+
+    /**
+     * Chooses a single cell to be the multiplier cell
+     */
+    private void generateMultiplierCell() {
+        int multiplierCellIndex = RandomUtil.nextInt(cellList.size());
+
+        for (int i = 0; i < cellList.size(); i++) {
+            if (i == multiplierCellIndex) {
+                cellList.get(i).setMultiplier(Cell.MAX_CELL_MULTIPLIER);
+            } else {
+                cellList.get(i).setMultiplier(1);
+            }
+        }
+    }
+
+    /**
+     * Adds a cell to the list of cells
+     */
+    private void addCell() {
+        this.cellList.add(new Cell());
+    }
+
+    /**
+     * Inserts a cell at the specified index
+     *
+     * @param index index at which the cell is to be inserted
+     */
+    private void addCell(int index) {
+        this.cellList.add(index, new Cell());
     }
 
 }

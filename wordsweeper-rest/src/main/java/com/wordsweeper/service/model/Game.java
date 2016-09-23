@@ -17,21 +17,26 @@ public class Game {
     Board board;
     List<Player> playerList;
     Player managingPlayer;
+    private boolean locked;
+    private String password;
 
     /*
     0: Active
     1: Inactive
      */
     int status;
-    private boolean locked;
-    private String password;
 
     public Game(Player player) {
+        this(player, null);
+    }
+
+    public Game(Player player, String password) {
         this.status = STATUS_ACTIVE;
         this.board = new Board(DEFAULT_BOARD_SIZE);
         this.playerList = new ArrayList<>();
         this.playerList.add(player);
         this.managingPlayer = player;
+        this.password = password;
     }
 
     /**
@@ -45,12 +50,41 @@ public class Game {
     }
 
     /**
+     * Add a new player given a player name to the current password protected game
+     *
+     * @param playerName the new player name
+     * @param password   the game password
+     * @return false if there is a player with the same game in the game or the password doesn't match, true otherwise
+     */
+    public boolean addPlayer(String playerName, String password) {
+        return addPlayer(new Player(playerName), password);
+    }
+
+    /**
      * Adds a new player to the current game
      *
      * @param player the new player
      * @return false if there is a player with the same game in the game, true otherwise
      */
     public boolean addPlayer(Player player) {
+        return addPlayer(player, null);
+    }
+
+
+    /**
+     * Add a new player to the current password protected game
+     *
+     * @param player   the new player
+     * @param password the game password
+     * @return false if there is a player with the same game in the game or the password doesn't match, true otherwise
+     */
+    public boolean addPlayer(Player player, String password) {
+
+        if (StringUtils.isNotBlank(password) && StringUtils.isNotBlank(this.password)) {
+            if (!StringUtils.equals(password, this.password)) {
+                return false;
+            }
+        }
 
         if (status == STATUS_INACTIVE) {
             return false; /* unable to add players to a finished game */
@@ -159,5 +193,14 @@ public class Game {
     public void end() {
         this.locked = true;
         this.status = STATUS_INACTIVE;
+    }
+
+    /**
+     * Whether the game has ended
+     *
+     * @return true if the game ended, false otherwise
+     */
+    public boolean ended() {
+        return status == STATUS_INACTIVE;
     }
 }
