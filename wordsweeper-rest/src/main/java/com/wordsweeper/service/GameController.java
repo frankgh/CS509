@@ -20,7 +20,6 @@ public class GameController {
     public Response create(@PathParam("playerName") String playerName, @PathParam("password") String password) {
 
         Player player = new Player(playerName); /* create a new player for the board */
-
         Game game;
 
         if (StringUtils.isBlank(password)) {
