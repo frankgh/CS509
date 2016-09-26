@@ -9,4 +9,9 @@ public class Word {
 
     String word;
     List<Cell> cellList;
+
+    public Word(String word, List<Cell> cellList) {
+        this.word = word;
+        this.cellList = cellList;
+    }
 }

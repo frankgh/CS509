@@ -49,10 +49,14 @@ public class GameController {
 
         boolean addPlayer;
 
-        if (StringUtils.isNotBlank(password)) {
-            addPlayer = game.addPlayer(playerName, password); /* join a password protected game */
-        } else {
+        if (StringUtils.isBlank(password)) {
             addPlayer = game.addPlayer(playerName); /* join the game */
+        } else {
+            addPlayer = game.addPlayer(playerName, password); /* join a password protected game */
+        }
+
+        if (addPlayer) {
+            game.getBoard().shuffle(); /* finally, shuffle the board */
         }
 
         return Response /* Return response with the game object */

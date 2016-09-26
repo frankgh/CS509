@@ -1,5 +1,6 @@
 package com.wordsweeper.service.model;
 
+import com.wordsweeper.service.util.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Game {
     Player managingPlayer;
     private boolean locked;
     private String password;
+    private String uniqueId;
 
     /*
     0: Active
@@ -37,6 +39,7 @@ public class Game {
         this.playerList.add(player);
         this.managingPlayer = player;
         this.password = password;
+        this.uniqueId = RandomUtil.nextUniqueId();
     }
 
     /**
@@ -202,5 +205,9 @@ public class Game {
      */
     public boolean ended() {
         return status == STATUS_INACTIVE;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

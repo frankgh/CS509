@@ -57,6 +57,37 @@ public class Board {
     }
 
     /**
+     * Shuffle the board
+     */
+    public void shuffle() {
+        RandomUtil.shuffleCells(cellList);
+    }
+
+    /**
+     * Determine whether a word is valid
+     *
+     * @param word the word to validate
+     * @return true if the word is valid, false if not
+     */
+    public boolean validateWord(Word word) {
+        // TODO: implement this method
+        return true;
+    }
+
+    /**
+     * Reset the board
+     */
+    public void reset() {
+        this.cellList = new ArrayList<>(getLetterCount());
+
+        for (int i = 0; i < getLetterCount(); i++) {
+            addCell();
+        }
+
+        generateMultiplierCell();
+    }
+
+    /**
      * Grows the board on the x direction by the specified amount
      * it adds columns to the right of the board
      *
@@ -87,19 +118,6 @@ public class Board {
     }
 
     /**
-     * Reset the board
-     */
-    public void reset() {
-        this.cellList = new ArrayList<>(getLetterCount());
-
-        for (int i = 0; i < getLetterCount(); i++) {
-            addCell();
-        }
-
-        generateMultiplierCell();
-    }
-
-    /**
      * Chooses a single cell to be the multiplier cell
      */
     private void generateMultiplierCell() {
@@ -109,7 +127,7 @@ public class Board {
             if (i == multiplierCellIndex) {
                 cellList.get(i).setMultiplier(Cell.MAX_CELL_MULTIPLIER);
             } else {
-                cellList.get(i).setMultiplier(1);
+                cellList.get(i).setMultiplier(Cell.DEFAULT_CELL_MULTIPLIER);
             }
         }
     }
