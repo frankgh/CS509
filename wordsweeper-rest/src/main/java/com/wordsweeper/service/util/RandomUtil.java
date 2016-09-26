@@ -38,18 +38,6 @@ public class RandomUtil {
     }
 
     /**
-     * Shuffle the provided list of cells
-     *
-     * @param cells the cells to be shuffled
-     */
-    public static void shuffleCells(List<Cell> cells) {
-        if (cells == null)
-            return;
-
-        Collections.shuffle(cells, random);
-    }
-
-    /**
      * Generate a unique id
      *
      * @return the unique id

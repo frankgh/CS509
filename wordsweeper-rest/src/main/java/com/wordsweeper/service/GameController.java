@@ -56,7 +56,7 @@ public class GameController {
         }
 
         if (addPlayer) {
-            game.getBoard().shuffle(); /* finally, shuffle the board */
+            game.getBoard().reset(); /* finally, reset the board */
         }
 
         return Response /* Return response with the game object */

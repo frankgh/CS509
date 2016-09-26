@@ -57,13 +57,6 @@ public class Board {
     }
 
     /**
-     * Shuffle the board
-     */
-    public void shuffle() {
-        RandomUtil.shuffleCells(cellList);
-    }
-
-    /**
      * Determine whether a word is valid
      *
      * @param word the word to validate

@@ -117,10 +117,12 @@ public class Game {
         for (Player p : playerList) {
             if (StringUtils.equals(p.getName(), playerName)) {
 
-                playerList.remove(p);
+                playerList.remove(p); /* Remove player from the game */
 
                 if (p.equals(managingPlayer) && !playerList.isEmpty()) {
-                    managingPlayer = playerList.get(0);
+                    // If the removed player was the managing player
+                    // assign a new random managing player to the game
+                    managingPlayer = playerList.get(RandomUtil.nextInt(playerList.size()));
                 }
 
                 return true;
