@@ -83,10 +83,8 @@ public class Game {
      */
     public boolean addPlayer(Player player, String password) {
 
-        if (StringUtils.isNotBlank(password) && StringUtils.isNotBlank(this.password)) {
-            if (!StringUtils.equals(password, this.password)) {
-                return false;
-            }
+        if (StringUtils.isNotBlank(this.password) && !StringUtils.equals(password, this.password)) {
+            return false; /* password doesn't match */
         }
 
         if (status == STATUS_INACTIVE) {
