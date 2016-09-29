@@ -6,15 +6,13 @@ package com.wordsweeper.service.model;
 public class Player {
 
     private String name;
-    private int offsetX;
-    private int offsetY;
+    private Location offset;
     private int score;
 
     public Player(String playerName) {
         this.name = playerName;
         this.score = 0;
-        this.offsetX = 0;
-        this.offsetY = 0;
+        this.offset = new Location(0, 0);
     }
 
     public String getName() {
