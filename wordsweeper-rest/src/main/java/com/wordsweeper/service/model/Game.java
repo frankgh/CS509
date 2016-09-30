@@ -14,6 +14,8 @@ public class Game {
     private static final int STATUS_ACTIVE = 0;
     private static final int STATUS_INACTIVE = 1;
     private static final int DEFAULT_BOARD_SIZE = 7;
+    private static final int PLAYER_BOARD_ROWS = 4;
+    private static final int PLAYER_BOARD_COLUMNS = 4;
 
     Board board;
     List<Player> playerList;
@@ -36,7 +38,7 @@ public class Game {
         this.status = STATUS_ACTIVE;
         this.board = new Board(DEFAULT_BOARD_SIZE);
         this.playerList = new ArrayList<>();
-        this.playerList.add(player);
+        addPlayer(player);
         this.managingPlayer = player;
         this.password = password;
         this.uniqueId = RandomUtil.nextUniqueId();
@@ -90,7 +92,7 @@ public class Game {
         }
 
         if (status == STATUS_INACTIVE) {
-            return false; /* unable to add players to a finished game */
+            return false; /* unable to save players to a finished game */
         }
 
         if (isLocked()) {
@@ -102,6 +104,9 @@ public class Game {
         }
 
         playerList.add(player);
+
+        randomizePlayerLocation(player);
+
         return true;
     }
 
@@ -133,15 +138,27 @@ public class Game {
     }
 
     /**
-     * Resets the status of the board
-     * and all the player scores.
+     * Resets the status of the board and all
+     * the player scores and their position on the board.
      */
     public void reset() {
         this.board.reset();
 
         for (Player player : playerList) {
             player.setScore(0);
+            randomizePlayerLocation(player);
         }
+    }
+
+    /**
+     * Randomizes the location of a player
+     *
+     * @param player the player
+     */
+    private void randomizePlayerLocation(Player player) {
+        player.setLocation(new Location(
+                board.getRows() - PLAYER_BOARD_ROWS,
+                board.getColumns() - PLAYER_BOARD_COLUMNS));
     }
 
     /**

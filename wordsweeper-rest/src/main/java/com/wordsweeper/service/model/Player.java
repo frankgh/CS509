@@ -8,6 +8,7 @@ public class Player {
     private String name;
     private Location offset;
     private int score;
+    private Location location;
 
     public Player(String playerName) {
         this.name = playerName;
@@ -21,5 +22,9 @@ public class Player {
 
     protected void setScore(int score) {
         this.score = score;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
