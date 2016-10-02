@@ -141,4 +141,11 @@ public class Board {
         this.cellList.add(index, new Cell());
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
 }
