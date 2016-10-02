@@ -10,10 +10,10 @@ import java.util.Hashtable;
  * Generic Server in a Client/Server communication.
  */
 public class Server {
-    ServerSocket serverSocket = null;    /* ServerSocket to which we bind */
     int state = 0;                       /* Server state. 0=inactive, 1=accepting */
-    IProtocolHandler protocolHandler;    /* Handler for protocol */
     final int serverPort;                /* Default server port. */
+    ServerSocket serverSocket = null;    /* ServerSocket to which we bind */
+    IProtocolHandler protocolHandler;    /* Handler for protocol */
 
     /**
      * Hold onto references to all threads actively managed by server.
@@ -21,8 +21,8 @@ public class Server {
     static Hashtable<String, ClientState> ids = new Hashtable<String, ClientState>();
 
     public Server(IProtocolHandler ph, int port) {
+        this.serverPort = port;
         this.protocolHandler = ph;
-        serverPort = port;
     }
 
     /**
