@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -66,13 +66,18 @@ public class Response {
     @XmlAttribute(name = "reason")
     protected String reason;
 
+    public Response(String id, boolean success) {
+        this.id = id;
+        this.success = success;
+    }
+
     /**
      * Gets the value of the connectResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ConnectResponse }
-     *     
+     *
      */
     public ConnectResponse getConnectResponse() {
         return connectResponse;
@@ -80,11 +85,11 @@ public class Response {
 
     /**
      * Sets the value of the connectResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ConnectResponse }
-     *     
+     *
      */
     public void setConnectResponse(ConnectResponse value) {
         this.connectResponse = value;
@@ -92,11 +97,11 @@ public class Response {
 
     /**
      * Gets the value of the boardResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link BoardResponse }
-     *     
+     *
      */
     public BoardResponse getBoardResponse() {
         return boardResponse;
@@ -104,11 +109,11 @@ public class Response {
 
     /**
      * Sets the value of the boardResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link BoardResponse }
-     *     
+     *
      */
     public void setBoardResponse(BoardResponse value) {
         this.boardResponse = value;
@@ -116,11 +121,11 @@ public class Response {
 
     /**
      * Gets the value of the lockGameResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link LockGameResponse }
-     *     
+     *
      */
     public LockGameResponse getLockGameResponse() {
         return lockGameResponse;
@@ -128,11 +133,11 @@ public class Response {
 
     /**
      * Sets the value of the lockGameResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link LockGameResponse }
-     *     
+     *
      */
     public void setLockGameResponse(LockGameResponse value) {
         this.lockGameResponse = value;
@@ -140,11 +145,11 @@ public class Response {
 
     /**
      * Gets the value of the resetGameResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ResetGameResponse }
-     *     
+     *
      */
     public ResetGameResponse getResetGameResponse() {
         return resetGameResponse;
@@ -152,11 +157,11 @@ public class Response {
 
     /**
      * Sets the value of the resetGameResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ResetGameResponse }
-     *     
+     *
      */
     public void setResetGameResponse(ResetGameResponse value) {
         this.resetGameResponse = value;
@@ -164,11 +169,11 @@ public class Response {
 
     /**
      * Gets the value of the joinGameResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JoinGameResponse }
-     *     
+     *
      */
     public JoinGameResponse getJoinGameResponse() {
         return joinGameResponse;
@@ -176,11 +181,11 @@ public class Response {
 
     /**
      * Sets the value of the joinGameResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JoinGameResponse }
-     *     
+     *
      */
     public void setJoinGameResponse(JoinGameResponse value) {
         this.joinGameResponse = value;
@@ -188,11 +193,11 @@ public class Response {
 
     /**
      * Gets the value of the exitGameResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ExitGameResponse }
-     *     
+     *
      */
     public ExitGameResponse getExitGameResponse() {
         return exitGameResponse;
@@ -200,11 +205,11 @@ public class Response {
 
     /**
      * Sets the value of the exitGameResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ExitGameResponse }
-     *     
+     *
      */
     public void setExitGameResponse(ExitGameResponse value) {
         this.exitGameResponse = value;
@@ -212,11 +217,11 @@ public class Response {
 
     /**
      * Gets the value of the findWordResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link FindWordResponse }
-     *     
+     *
      */
     public FindWordResponse getFindWordResponse() {
         return findWordResponse;
@@ -224,11 +229,11 @@ public class Response {
 
     /**
      * Sets the value of the findWordResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link FindWordResponse }
-     *     
+     *
      */
     public void setFindWordResponse(FindWordResponse value) {
         this.findWordResponse = value;
@@ -236,11 +241,11 @@ public class Response {
 
     /**
      * Gets the value of the listGamesResponse property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ListGamesResponse }
-     *     
+     *
      */
     public ListGamesResponse getListGamesResponse() {
         return listGamesResponse;
@@ -248,11 +253,11 @@ public class Response {
 
     /**
      * Sets the value of the listGamesResponse property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ListGamesResponse }
-     *     
+     *
      */
     public void setListGamesResponse(ListGamesResponse value) {
         this.listGamesResponse = value;
@@ -260,11 +265,11 @@ public class Response {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getId() {
         return id;
@@ -272,11 +277,11 @@ public class Response {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setId(String value) {
         this.id = value;
@@ -284,7 +289,7 @@ public class Response {
 
     /**
      * Gets the value of the success property.
-     * 
+     *
      */
     public boolean isSuccess() {
         return success;
@@ -292,7 +297,7 @@ public class Response {
 
     /**
      * Sets the value of the success property.
-     * 
+     *
      */
     public void setSuccess(boolean value) {
         this.success = value;
@@ -300,11 +305,11 @@ public class Response {
 
     /**
      * Gets the value of the reason property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getReason() {
         return reason;
@@ -312,11 +317,11 @@ public class Response {
 
     /**
      * Sets the value of the reason property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setReason(String value) {
         this.reason = value;
