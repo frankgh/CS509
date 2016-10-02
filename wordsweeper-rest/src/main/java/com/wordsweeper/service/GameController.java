@@ -2,6 +2,8 @@ package com.wordsweeper.service;
 
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
+import com.wordsweeper.service.repository.GameDao;
+import com.wordsweeper.service.repository.GameDaoImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.GET;
@@ -27,6 +29,9 @@ public class GameController {
         } else {
             game = new Game(player, password); /* Create a password protected game */
         }
+
+        GameDao gameDao = new GameDaoImpl();
+        gameDao.save(game);
 
         return Response /* Return response with the game object */
                 .ok(game)
