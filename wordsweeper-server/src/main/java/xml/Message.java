@@ -1,31 +1,43 @@
 package xml;
 
-import java.io.*;
-import java.util.UUID;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.xml.transform.dom.*;
-import javax.xml.validation.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.UUID;
 
-/** Support class for XML parsing of requests and responses. */
+/**
+ * Support class for XML parsing of requests and responses.
+ */
 public class Message {
     static DocumentBuilder builder = null;              // builder for parsing XML strings
     static XMLHandler errorHandler = new XMLHandler();  // we must provide an error handler
     static Transformer transformer;                     // to convert to string
     public final Node contents;                         // root of DOM containing parsed XML
 
-    /** Configure builder at first use. */
-    public static boolean configure (String schema) {
+    /**
+     * Configure builder at first use.
+     */
+    public static boolean configure(String schema) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         try {
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setSchema(sf.newSchema(new Source[] {new StreamSource(schema)}));
+            factory.setSchema(sf.newSchema(new Source[]{new StreamSource(schema)}));
             builder = factory.newDocumentBuilder();
             builder.setErrorHandler(errorHandler);
         } catch (Exception e) {
@@ -44,14 +56,16 @@ public class Message {
         return true;
     }
 
-    /** Parse XML and construct Message object only if it succeeds. */
-    public Message (String xmlSource) throws IllegalArgumentException {
+    /**
+     * Parse XML and construct Message object only if it succeeds.
+     */
+    public Message(String xmlSource) throws IllegalArgumentException {
         if (builder == null) {
-            throw new RuntimeException ("XML Protocol not configured.");
+            throw new RuntimeException("XML Protocol not configured.");
         }
 
         try {
-            InputSource is = new InputSource (new StringReader (xmlSource));
+            InputSource is = new InputSource(new StringReader(xmlSource));
 
             // parse method in builder is not thread safe.
             Document d = null;
@@ -69,14 +83,16 @@ public class Message {
                     return;
                 }
             }
-            throw new IllegalArgumentException ("XML document has no child node");
+            throw new IllegalArgumentException("XML document has no child node");
         } catch (Exception e) {
             errorHandler.failFast();
-            throw new IllegalArgumentException (e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    /** Represent message as a string. */
+    /**
+     * Represent message as a string.
+     */
     public String toString() {
         DOMSource domSource = new DOMSource(contents);
         StringWriter writer = new StringWriter();
@@ -90,37 +106,53 @@ public class Message {
     }
 
 
-    /** Determine the success of the given message. */
+    /**
+     * Determine the success of the given message.
+     */
     public boolean success() {
         return Boolean.valueOf(contents.getAttributes().getNamedItem(Parser.success).getNodeValue());
     }
 
-    /** Determine the reason for failure of the message. */
+    /**
+     * Determine the reason for failure of the message.
+     */
     public String reason() {
         Node r = contents.getAttributes().getNamedItem(Parser.reason);
-        if (r == null) { return ""; }
+        if (r == null) {
+            return "";
+        }
         return r.getNodeValue();
     }
 
-    /** Determine the id for the message. */
+    /**
+     * Determine the id for the message.
+     */
     public String id() {
         Node r = contents.getAttributes().getNamedItem(Parser.id);
-        if (r == null) { return ""; }
+        if (r == null) {
+            return "";
+        }
         return r.getNodeValue();
     }
 
-    /** Create standard request XML header string with built-in (statistically) unique id. */
+    /**
+     * Create standard request XML header string with built-in (statistically) unique id.
+     */
     public static String requestHeader() {
         String id = UUID.randomUUID().toString();
         return "<request id='" + id + "'>";
     }
 
-    /** Create standard response XML header string for a successful response. */
+    /**
+     * Create standard response XML header string for a successful response.
+     */
     public static String responseHeader(String id) {
         return "<response id = '" + id + "' success='true'>";
     }
 
-    /** Create standard response XML header string for a failed response. */
+    /**
+     * Create standard response XML header string for a failed response.
+     */
     public static String responseHeader(String id, String reason) {
         return "<response id='" + id + "' success='false' reason='" + reason + "'>";
     }
