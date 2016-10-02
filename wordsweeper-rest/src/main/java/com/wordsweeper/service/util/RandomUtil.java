@@ -1,11 +1,7 @@
 package com.wordsweeper.service.util;
 
-import com.wordsweeper.service.model.Cell;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by francisco on 9/20/16.
