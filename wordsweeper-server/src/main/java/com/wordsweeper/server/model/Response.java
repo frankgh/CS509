@@ -66,6 +66,10 @@ public class Response {
     @XmlAttribute(name = "reason")
     protected String reason;
 
+    public Response() {
+
+    }
+
     public Response(String id, boolean success) {
         this.id = id;
         this.success = success;
