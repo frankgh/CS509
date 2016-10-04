@@ -10,7 +10,7 @@ import java.io.StringWriter;
  */
 public class JAXBUtil {
 
-    public static void println(Object obj) {
+    public static void prettyPrintln(Object obj) {
         if (obj == null) {
             return;
         }

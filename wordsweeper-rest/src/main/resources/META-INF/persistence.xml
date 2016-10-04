@@ -5,6 +5,9 @@
     <persistence-unit name="db-manager">
         <class>com.wordsweeper.service.model.Letter</class>
         <class>com.wordsweeper.service.model.Player</class>
+        <class>com.wordsweeper.service.model.Game</class>
+        <class>com.wordsweeper.service.model.Board</class>
+        <class>com.wordsweeper.service.model.Cell</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>

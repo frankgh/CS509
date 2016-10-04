@@ -18,7 +18,7 @@ public class AdminGameController {
     public Response list() {
         GameDao gameDao = new GameDaoImpl();
 
-        return Response /* Return response with the game object */
+        return Response /* Return response with the game list */
                 .ok(gameDao.findAll())
                 .build();
     }

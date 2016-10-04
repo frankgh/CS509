@@ -30,7 +30,7 @@ public class WordSweeperProtocolHandler implements IShutdownHandler {
     public synchronized Response process(ClientState st, Request request) {
 
         System.out.println("Request Received:");
-        JAXBUtil.println(request);
+        JAXBUtil.prettyPrintln(request);
 
         if (request.getCreateGameRequest() != null) {
             return new CreateGameRequestController(model).process(st, request);

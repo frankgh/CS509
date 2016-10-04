@@ -133,7 +133,7 @@ public class ServerThread extends Thread implements ClientState {
         }
 
         System.out.println("Sending Response to " + id + ":");
-        JAXBUtil.println(response);
+        JAXBUtil.prettyPrintln(response);
         toClient.println(sw.toString());
         return !toClient.checkError();
     }

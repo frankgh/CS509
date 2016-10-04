@@ -26,10 +26,10 @@ public class Game {
     @Column(name = "id")
     int id; /* The internal id of the game */
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     Board board;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     List<Player> playerList;
 
     @Column(name = "managingPlayerName")
