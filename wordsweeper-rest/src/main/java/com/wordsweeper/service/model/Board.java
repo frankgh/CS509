@@ -24,7 +24,11 @@ public class Board {
     @Column(name = "columns")
     int columns; /* The number of columns in the board */
 
+    @OneToMany
     List<Cell> cellList; /* A list of all the cells that make up the board */
+
+    protected Board() {
+    }
 
     public Board(int size) {
         this(size, size);
