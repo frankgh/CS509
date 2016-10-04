@@ -67,12 +67,23 @@ public class Response {
     protected String reason;
 
     public Response() {
-
     }
 
     public Response(String id, boolean success) {
         this.id = id;
         this.success = success;
+    }
+
+    public Response(ConnectResponse connectResponse, String id) {
+        this.id = id;
+        this.success = true;
+        this.connectResponse = connectResponse;
+    }
+
+    public Response(BoardResponse boardResponse, String id) {
+        this.id = id;
+        this.success = true;
+        this.boardResponse = boardResponse;
     }
 
     /**

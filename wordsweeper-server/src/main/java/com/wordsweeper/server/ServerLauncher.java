@@ -1,9 +1,8 @@
 package com.wordsweeper.server;
 
-import com.wordsweeper.server.controller.SampleProtocolHandler;
+import com.wordsweeper.server.controller.WordSweeperProtocolHandler;
 import com.wordsweeper.server.model.ServerModel;
 import server.Server;
-import xml.Message;
 
 import java.io.IOException;
 
@@ -16,17 +15,12 @@ public class ServerLauncher {
      * Execute the Server using the default port.
      */
     public static void main(String[] args) {
-        // FIRST thing to do is register the protocol being used. There will be a single class protocol
-        // that will be defined and which everyone will use. For now, demonstrate with skeleton protocol.
-        if (!Message.configure("wordsweeper.xsd")) {
-            System.exit(0);
-        }
 
         // Server-side model contains everything you need on the server.
         ServerModel serverModel = new ServerModel();
 
         // Start server and have ProtocolHandler be responsible for all XML messages.
-        Server server = new Server(new SampleProtocolHandler(serverModel), 11425);
+        Server server = new Server(new WordSweeperProtocolHandler(serverModel), 11425);
 
         try {
             server.bind();

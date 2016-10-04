@@ -1,10 +1,9 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.model.*;
 import server.ClientState;
 import server.IProtocolHandler;
 import server.Server;
-import xml.Message;
 
 /**
  * Controller on server to package up the current state of the model
@@ -18,34 +17,37 @@ public class JoinGameRequestController implements IProtocolHandler {
         this.model = model;
     }
 
-    public Message process(ClientState client, Message request) {
+    public synchronized Response process(ClientState client, Request request) {
 
         model.joinGame();
 
-        String otherPlayers = "";
+        BoardResponse boardResponse = new BoardResponse();
+        boardResponse.setGameId("hg12jhd");
+        boardResponse.setManagingUser("player2");
+        boardResponse.setBonus("4,3");
+        boardResponse.setContents("ABCGBCJDH...HDJHJD");
+
         for (int i = 0; i < model.getNumPlayers(); i++) {
-            otherPlayers += "<player name='player" + i + "' score='38974' position='2,2' board='ECDRFTGOUIGERPRT'/>";
+            Player player = new Player();
+            player.setName("player" + i);
+            player.setScore(38974);
+            player.setPosition("2,2");
+            player.setBoard("ECDRFTGOUIGERPRT");
+            boardResponse.getPlayer().add(player);
         }
 
-        // Construct message reflecting state
-        String xmlString = Message.responseHeader(request.id()) +
-                "<boardResponse gameId='hg12jhd' managingUser='player2' bonus='4,3' contents='ABCGBCJDH...HDJHJD'>" +
-                otherPlayers +
-                "</boardResponse>" +
-                "</response>";
-
-        Message message = new Message(xmlString);
+        Response response = new Response(boardResponse, request.getId());
 
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
         // hint: rely on your game to store player names...
         for (String id : Server.ids()) {
             if (!id.equals(client.id())) {
-                Server.getState(id).sendMessage(message);
+                Server.getState(id).sendMessage(response);
             }
         }
 
         // send this response back to the client which sent us the request.
-        return message;
+        return response;
     }
 }

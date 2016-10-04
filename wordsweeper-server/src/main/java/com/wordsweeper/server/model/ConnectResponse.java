@@ -30,6 +30,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "connectResponse")
 public class ConnectResponse {
 
+    public ConnectResponse() {
+    }
+
+    public ConnectResponse(String id) {
+        this.id = id;
+    }
+
     @XmlAttribute(name = "id", required = true)
     protected String id;
 
