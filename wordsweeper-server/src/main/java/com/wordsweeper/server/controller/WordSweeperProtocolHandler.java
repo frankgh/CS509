@@ -39,7 +39,7 @@ public class WordSweeperProtocolHandler implements IShutdownHandler {
         }
 
         // unknown? no idea what to do
-        System.err.println("Unable to handle message:");
+        System.err.println("Unable to handle message");
         return null;
     }
 
