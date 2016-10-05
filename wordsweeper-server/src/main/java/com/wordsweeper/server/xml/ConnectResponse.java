@@ -1,5 +1,5 @@
 
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="gameId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,34 +27,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "resetGameRequest")
-public class ResetGameRequest {
+@XmlRootElement(name = "connectResponse")
+public class ConnectResponse {
 
-    @XmlAttribute(name = "gameId", required = true)
-    protected String gameId;
+    public ConnectResponse() {
+    }
+
+    public ConnectResponse(String id) {
+        this.id = id;
+    }
+
+    @XmlAttribute(name = "id", required = true)
+    protected String id;
 
     /**
-     * Gets the value of the gameId property.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getGameId() {
-        return gameId;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the gameId property.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setGameId(String value) {
-        this.gameId = value;
+    public void setId(String value) {
+        this.id = value;
     }
 
 }

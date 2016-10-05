@@ -1,8 +1,8 @@
 package server;
 
-import com.wordsweeper.server.model.ConnectResponse;
-import com.wordsweeper.server.model.Request;
-import com.wordsweeper.server.model.Response;
+import com.wordsweeper.server.xml.ConnectResponse;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
 import com.wordsweeper.server.util.JAXBUtil;
 
 import javax.xml.bind.JAXBContext;

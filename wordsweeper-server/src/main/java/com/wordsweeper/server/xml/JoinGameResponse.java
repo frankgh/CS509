@@ -1,5 +1,5 @@
 
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "resetGameResponse")
-public class ResetGameResponse {
+@XmlRootElement(name = "joinGameResponse")
+public class JoinGameResponse {
 
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;

@@ -1,6 +1,10 @@
 package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.model.*;
+import com.wordsweeper.server.xml.BoardResponse;
+import com.wordsweeper.server.xml.Player;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
 import server.ClientState;
 import server.IProtocolHandler;
 import server.Server;

@@ -1,7 +1,7 @@
 package server;
 
-import com.wordsweeper.server.model.Request;
-import com.wordsweeper.server.model.Response;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
 
 /**
  * ServerThread out-sources processing of protocol to implementors

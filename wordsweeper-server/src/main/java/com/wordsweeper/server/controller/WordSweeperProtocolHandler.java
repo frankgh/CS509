@@ -1,7 +1,7 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.Request;
-import com.wordsweeper.server.model.Response;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.JAXBUtil;
 import server.ClientState;
