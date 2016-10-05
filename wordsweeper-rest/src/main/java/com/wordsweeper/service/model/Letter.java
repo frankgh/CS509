@@ -24,4 +24,16 @@ public class Letter {
         this.score = score;
         this.character = character;
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public char getCharacter() {
+        return character;
+    }
+
+    public int getScore() {
+        return score;
+    }
 }
