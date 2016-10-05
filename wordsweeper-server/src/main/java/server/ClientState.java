@@ -1,9 +1,10 @@
 package server;
 
 import com.wordsweeper.server.model.Response;
-import xml.Message;
 
-/** Server-side interface to per-client state. Exposes only the methods of ServerThread that are safe. */
+/**
+ * Server-side interface to per-client state. Exposes only the methods of ServerThread that are safe.
+ */
 public interface ClientState {
 
     /**
@@ -15,16 +16,16 @@ public interface ClientState {
     /**
      * Associate new object data as the user-defined data for the thread and return the old previous value.
      */
-    public Object setData(Object newData);
+    Object setData(Object newData);
 
     /**
      * Retrieve user-defined data associated with this thread.
      */
-    public Object getData();
+    Object getData();
 
     /**
      * Retrieve our unique id.
      */
-    public String id();
+    String id();
 
 }
