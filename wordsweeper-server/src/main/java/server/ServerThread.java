@@ -1,13 +1,15 @@
 package server;
 
-import org.w3c.dom.Node;
-import xml.Message;
-import xml.Parser;
+import com.wordsweeper.server.model.ConnectResponse;
+import com.wordsweeper.server.model.Request;
+import com.wordsweeper.server.model.Response;
+import com.wordsweeper.server.util.JAXBUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.net.Socket;
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ public class ServerThread extends Thread implements ClientState {
     final Server server;             // Server for which we are operating.
     final String id;                 // Associated unique ID for this thread.
     Object data;                     // User-defined object associated with each thread.
+    private Request request;
 
     /**
      * Create objects to handle input/output to client.
@@ -46,16 +49,24 @@ public class ServerThread extends Thread implements ClientState {
      */
     public void run() {
         // Initial connect request comes in
-        Message m = Parser.extractRequest(fromClient);
-        Node child = m.contents.getFirstChild();
-        if (!child.getLocalName().equals(Parser.connectRequest)) {
+        Request request = getRequest();
+
+        if (request == null) {
+            closeConnection();
             return;
         }
 
+        if (request.getConnectRequest() == null) {
+            closeConnection();
+            System.err.println("Received invalid initial request from Remote Client.");
+            return;
+        }
+
+        Response responseWrapper = new Response(new ConnectResponse(id), request.getId());
+
         // Return connect response with our (statistically) unique ID.
-        String xmlString = Message.responseHeader(m.id()) + "<connectResponse id='" + id + "'/></response>";
-        Message r = new Message(xmlString);
-        if (!sendMessage(r)) {
+        if (!sendMessage(responseWrapper)) {
+            closeConnection();
             System.err.println("Unable to respond to connect Request from remote Client.");
             return;
         }
@@ -64,9 +75,9 @@ public class ServerThread extends Thread implements ClientState {
         Server.register(id, this);
 
         // have handler manage the protocol until it decides it is done.
-        while ((m = Parser.extractRequest(fromClient)) != null) {
+        while ((request = getRequest()) != null) {
 
-            Message response = handler.process(this, m);
+            Response response = handler.process(this, request);
             if (!sendMessage(response)) {
                 break;
             }
@@ -79,13 +90,7 @@ public class ServerThread extends Thread implements ClientState {
         Server.unregister(id);
 
         // close communication to client.
-        try {
-            fromClient.close();
-            toClient.close();
-            client.close();
-        } catch (IOException e) {
-            System.err.println("Unable to close connection:" + e.getMessage());
-        }
+        closeConnection();
     }
 
     /**
@@ -112,16 +117,86 @@ public class ServerThread extends Thread implements ClientState {
     }
 
     /**
-     * Send the given message to the client on whose behalf this thread is executing and return true
-     * on success, false on error.
+     * Send a response object to the client.
+     *
+     * @param response the response
+     * @return true on success, otherwise false
      */
-    public boolean sendMessage(Message m) {
-        if (m == null) {
-            return false;
+    public boolean sendMessage(Response response) {
+        StringWriter sw = new StringWriter();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(response.getClass());
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.marshal(response, sw);
+        } catch (JAXBException e) {
+            e.printStackTrace();
         }
 
-        toClient.println(m.toString());
-
+        System.out.println("Sending Response to " + id + ":");
+        JAXBUtil.prettyPrintln(response);
+        toClient.println(sw.toString());
         return !toClient.checkError();
+    }
+
+    /**
+     * Deserialize the request from the stream
+     *
+     * @return the request
+     */
+    private Request getRequest() {
+        String xml = getXmlStringFromReader(fromClient, "</request>");
+
+        if (xml == null) {
+            return null;
+        }
+
+        try {
+            JAXBContext requestContext = JAXBContext.newInstance(Request.class);
+            Unmarshaller unmarshaller = requestContext.createUnmarshaller();
+            StringReader reader = new StringReader(xml);
+            return (Request) unmarshaller.unmarshal(reader);
+        } catch (JAXBException e) {
+            System.err.println("Unable to deserialize request from Remote Client.");
+            return null;
+        }
+    }
+
+    /**
+     * Extract the XML message and construct String object based on
+     * the terminator string (either "</request>" or "</response>"). Returns
+     * null if communication is interrupted in any way.
+     */
+    static String getXmlStringFromReader(BufferedReader in, String terminator) {
+        try {
+            String line = in.readLine();
+            if (line == null) {
+                return null;
+            }
+            StringBuilder buf = new StringBuilder(line);
+            while (!buf.substring(buf.length() - terminator.length(), buf.length()).equals(terminator)) {
+                line = in.readLine();
+                if (line == null) {
+                    return null;
+                }
+                buf.append(line);
+            }
+
+            return buf.toString();
+        } catch (IOException ioe) {
+            return null;
+        }
+    }
+
+    /**
+     * Close the connection to the client
+     */
+    private void closeConnection() {
+        try {
+            fromClient.close();
+            toClient.close();
+            client.close();
+        } catch (IOException e) {
+            System.err.println("Unable to close connection:" + e.getMessage());
+        }
     }
 }

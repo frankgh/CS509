@@ -5,6 +5,8 @@ package com.wordsweeper.server.model;
  */
 
 public class ServerModel {
+
+
     int numPlayers = 0;
 
     public void joinGame() {

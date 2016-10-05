@@ -27,7 +27,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <finalName>vwsolr-utils-with-dependencies-${project.version}</finalName>
+                    <finalName>word-sweeper-with-dependencies-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
                     <descriptorRefs>

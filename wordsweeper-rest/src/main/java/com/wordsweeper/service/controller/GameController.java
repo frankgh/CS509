@@ -1,4 +1,4 @@
-package com.wordsweeper.service;
+package com.wordsweeper.service.controller;
 
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;

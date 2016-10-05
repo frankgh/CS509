@@ -1,14 +1,30 @@
 package com.wordsweeper.service.model;
 
+import javax.persistence.*;
+
 /**
  * Created by francisco on 9/13/16.
  */
+@Entity
+@Table(name = "player")
 public class Player {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Embedded
     private Location offset;
+
+    @Column(name = "score")
     private int score;
-    private Location location;
+
+    public Player() {
+    }
 
     public Player(String playerName) {
         this.name = playerName;
@@ -24,7 +40,7 @@ public class Player {
         this.score = score;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setOffset(Location location) {
+        this.offset = location;
     }
 }

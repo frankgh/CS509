@@ -49,6 +49,6 @@ public class GameDaoImpl implements GameDao {
 
     @Override
     public List<Game> findAll() {
-        return null;
+        return entityManagerFactory.createEntityManager().createQuery("from Game").getResultList();
     }
 }

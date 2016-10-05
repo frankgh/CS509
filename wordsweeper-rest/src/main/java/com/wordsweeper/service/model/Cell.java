@@ -2,15 +2,29 @@ package com.wordsweeper.service.model;
 
 import com.wordsweeper.service.util.RandomUtil;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by francisco on 9/13/16.
  */
+@Entity
+@Table(name = "cell")
 public class Cell {
 
     public static final int DEFAULT_CELL_MULTIPLIER = 1;
     public static final int MAX_CELL_MULTIPLIER = 10;
 
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    int id; /* The id of the cell */
+
+    @Embedded
     Letter letter;
+
+    @NotNull
+    @Column(name = "multiplier")
     int multiplier;
 
     public Cell() {
