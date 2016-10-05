@@ -1,44 +1,45 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.model.Request;
+import com.wordsweeper.server.model.Response;
 import com.wordsweeper.server.model.ServerModel;
-import org.w3c.dom.Node;
+import com.wordsweeper.server.util.JAXBUtil;
 import server.ClientState;
 import server.IShutdownHandler;
-import xml.Message;
 
 /**
- * Sample implementation of a protocol handler to respond to messages received from clients.
+ * WordSweeper implementation of a protocol handler to respond to messages received from clients.
  * You should follow this template when designing YOUR protocol handler.
  * <p>
  * To avoid issues with multiple clients submitting requests concurrently,
- * notice that the {@link #process(ClientState, Message)} method is synchronized.
+ * notice that the {@link #process(ClientState, Request)} method is synchronized.
  * This will ensure that no more than one server thread executes this method
  * at a time.
  * <p>
  * Also extended to support detection of client disconnects so these can release the lock
  * if indeed the client was the one locking the model.
  */
-public class SampleProtocolHandler implements IShutdownHandler {
+public class WordSweeperProtocolHandler implements IShutdownHandler {
 
     ServerModel model;
 
-    public SampleProtocolHandler(ServerModel model) {
+    public WordSweeperProtocolHandler(ServerModel model) {
         this.model = model;
     }
 
-    public synchronized Message process(ClientState st, Message request) {
-        Node child = request.contents.getFirstChild();
-        String type = child.getLocalName();
+    public synchronized Response process(ClientState st, Request request) {
 
-        System.out.println(request);
-        if (type.equals("createGameRequest")) {
+        System.out.println("Request Received:");
+        JAXBUtil.prettyPrintln(request);
+
+        if (request.getCreateGameRequest() != null) {
             return new CreateGameRequestController(model).process(st, request);
-        } else if (type.equals("joinGameRequest")) {
+        } else if (request.getJoinGameRequest() != null) {
             return new JoinGameRequestController(model).process(st, request);
         }
 
         // unknown? no idea what to do
-        System.err.println("Unable to handle message:" + request);
+        System.err.println("Unable to handle message");
         return null;
     }
 

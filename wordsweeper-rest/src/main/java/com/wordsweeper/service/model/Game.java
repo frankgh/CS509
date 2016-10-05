@@ -3,12 +3,16 @@ package com.wordsweeper.service.model;
 import com.wordsweeper.service.util.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by francisco on 9/13/16.
  */
+@Entity
+@Table(name = "game")
 public class Game {
 
     private static final int STATUS_ACTIVE = 0;
@@ -17,18 +21,42 @@ public class Game {
     private static final int PLAYER_BOARD_ROWS = 4;
     private static final int PLAYER_BOARD_COLUMNS = 4;
 
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    int id; /* The internal id of the game */
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     Board board;
+
+    @OneToMany(cascade = CascadeType.ALL)
     List<Player> playerList;
-    Player managingPlayer;
+
+    @Column(name = "managingPlayerName")
+    String managingPlayerName;
+
+    @NotNull
+    @Column(name = "locked")
     private boolean locked;
+
+    @Column(name = "password")
     private String password;
-    private String uniqueId;
+
+    @NotNull
+    @Column(name = "uniqueId")
+    private final String uniqueId;
 
     /*
     0: Active
     1: Inactive
      */
+    @NotNull
+    @Column(name = "status")
     int status;
+
+    protected Game() {
+        this.uniqueId = RandomUtil.nextUniqueId();
+    }
 
     public Game(Player player) {
         this(player, null);
@@ -39,7 +67,7 @@ public class Game {
         this.board = new Board(DEFAULT_BOARD_SIZE);
         this.playerList = new ArrayList<>();
         addPlayer(player);
-        this.managingPlayer = player;
+        this.managingPlayerName = player.getName();
         this.password = password;
         this.uniqueId = RandomUtil.nextUniqueId();
     }
@@ -122,10 +150,10 @@ public class Game {
 
                 playerList.remove(p); /* Remove player from the game */
 
-                if (p.equals(managingPlayer) && !playerList.isEmpty()) {
+                if (managingPlayerName.equals(p.getName()) && !playerList.isEmpty()) {
                     // If the removed player was the managing player
                     // assign a new random managing player to the game
-                    managingPlayer = playerList.get(RandomUtil.nextInt(playerList.size()));
+                    managingPlayerName = playerList.get(RandomUtil.nextInt(playerList.size())).getName();
                 }
 
                 return true;
@@ -154,7 +182,7 @@ public class Game {
      * @param player the player
      */
     private void randomizePlayerLocation(Player player) {
-        player.setLocation(new Location(
+        player.setOffset(new Location(
                 board.getRows() - PLAYER_BOARD_ROWS,
                 board.getColumns() - PLAYER_BOARD_COLUMNS));
     }
@@ -200,7 +228,7 @@ public class Game {
      * @return true if the game was locked, false otherwise
      */
     public boolean lock(String currentPlayerName) {
-        if (managingPlayer != null && StringUtils.equals(managingPlayer.getName(), currentPlayerName)) {
+        if (StringUtils.equals(managingPlayerName, currentPlayerName)) {
             this.locked = true;
             return true;
         }
