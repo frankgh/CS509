@@ -17,7 +17,7 @@ public class SampleClientMessageHandler implements IMessageHandler {
 		this.app = app;
 	}
 	
-	@Override
+//	@Override
 	public void process(Message response) {
 		String type = response.contents.getFirstChild().getLocalName();
 
