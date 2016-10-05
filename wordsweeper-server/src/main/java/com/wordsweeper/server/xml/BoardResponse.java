@@ -1,5 +1,5 @@
 
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.xml;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

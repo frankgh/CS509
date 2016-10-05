@@ -1,5 +1,5 @@
 
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.xml;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

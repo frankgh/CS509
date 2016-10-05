@@ -1,7 +1,6 @@
 
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.xml;
 
-import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -18,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="gameId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="players" use="required" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *       &lt;attribute name="position" use="required" type="{}commaSeparatedPair" />
+ *       &lt;attribute name="letter" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -29,60 +28,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "gameBrief")
-public class GameBrief {
+@XmlRootElement(name = "cell")
+public class Cell {
 
-    @XmlAttribute(name = "gameId", required = true)
-    protected String gameId;
-    @XmlAttribute(name = "players", required = true)
-    protected BigInteger players;
+    @XmlAttribute(name = "position", required = true)
+    protected String position;
+    @XmlAttribute(name = "letter", required = true)
+    protected String letter;
 
     /**
-     * Gets the value of the gameId property.
+     * Gets the value of the position property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getGameId() {
-        return gameId;
+    public String getPosition() {
+        return position;
     }
 
     /**
-     * Sets the value of the gameId property.
+     * Sets the value of the position property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setGameId(String value) {
-        this.gameId = value;
+    public void setPosition(String value) {
+        this.position = value;
     }
 
     /**
-     * Gets the value of the players property.
+     * Gets the value of the letter property.
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public BigInteger getPlayers() {
-        return players;
+    public String getLetter() {
+        return letter;
     }
 
     /**
-     * Sets the value of the players property.
+     * Sets the value of the letter property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public void setPlayers(BigInteger value) {
-        this.players = value;
+    public void setLetter(String value) {
+        this.letter = value;
     }
 
 }
