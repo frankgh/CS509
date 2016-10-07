@@ -22,11 +22,11 @@ public class ServerModel {
     	int boardSize = 7;
     	
     	 // randomly generate the column of the player
-        String randColP = String.valueOf(generator.nextInt(boardSize));
+        String randColP = String.valueOf(generator.nextInt(boardSize-3));
         outputRandData.add(randColP);
         
         // randomly generate the row of the player
-        String randRowP = String.valueOf(generator.nextInt(boardSize));
+        String randRowP = String.valueOf(generator.nextInt(boardSize-3));
         outputRandData.add(randRowP);
         
         // randomly generate the game Id
@@ -37,6 +37,7 @@ public class ServerModel {
         	gameID += alphanumeric.charAt(generator.nextInt(alphanumeric.length()));
         }
         outputRandData.add(gameID);
+        System.out.println("The gameID is: " + gameID); // FOR TESTING
         
         // randomly generate the column of the x10 bonus
         String randColB = String.valueOf(generator.nextInt(boardSize));
@@ -49,10 +50,10 @@ public class ServerModel {
         // randomly generate the letters of the board
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String boardContent = "";
-        for(int i = 0; i < alphabet.length(); i ++){
+        for(int i = 0; i < boardSize*boardSize; i ++){
         	boardContent += alphabet.charAt(generator.nextInt(alphabet.length()));
         }
-        
+        outputRandData.add(boardContent);
         System.out.println("The board is: " + boardContent); // FOR TESTING
         
         // add new game to list of games

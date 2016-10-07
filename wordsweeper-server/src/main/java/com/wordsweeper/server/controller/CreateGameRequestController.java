@@ -25,25 +25,26 @@ public class CreateGameRequestController implements IProtocolHandler {
     public Response process(ClientState client, Request request) {
 
         ArrayList<String> randGenData = model.createGame(request.getCreateGameRequest().getName(), request.getId());  // HACK.
-        // randGenData[1] - random column of new player
-        // randGenData[2] - random row of new player
-        // randGenData[3] - random gameID of new game
-        // randGenData[4] - random column of x10 bonus
-        // randGenData[5] - random row of x10 bonus
-         // randGenData[6] - random letters of the new board
+        // randGenData[0] - random column of new player
+        // randGenData[1] - random row of new player
+        // randGenData[2] - random gameID of new game
+        // randGenData[3] - random column of x10 bonus
+        // randGenData[4] - random row of x10 bonus
+         // randGenData[5] - random letters of the new board
         Player player = new Player();
         player.setName(request.getCreateGameRequest().getName());
         player.setScore(0);	//initialize score
-
-        player.setPosition(randGenData.get(0) +","+ randGenData.get(1));
-        System.out.println("/" + randGenData.get(1)+","+randGenData.get(1) + "\\"); // FOR TESTING
-        player.setBoard("AFERKSOEROIERPOR"); // what is that??
+        player.setPosition(randGenData.get(0) + "," + randGenData.get(1));
+        System.out.println("/" + randGenData.get(0) + "," + randGenData.get(1) + "\\"); // FOR TESTING
+        
+        // FROM big board , get Small board
+        player.setBoard("AFERKSOEROIERPOR");
 
         BoardResponse boardResponse = new BoardResponse();
-        boardResponse.setGameId("hg12jhd");
+        boardResponse.setGameId(randGenData.get(2));
         boardResponse.setManagingUser(request.getCreateGameRequest().getName());
-        boardResponse.setBonus(randGenData.get(2) +","+ randGenData.get(3));
-        boardResponse.setContents("ABCGBCJDH...HDJHJD");
+        boardResponse.setBonus(randGenData.get(3) + "," + randGenData.get(4));
+        boardResponse.setContents(randGenData.get(5));
         boardResponse.getPlayer().add(player);
 
         // send this response back to the client which sent us the request.
