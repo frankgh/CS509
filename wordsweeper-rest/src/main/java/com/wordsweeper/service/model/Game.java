@@ -5,12 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by francisco on 9/13/16.
  */
+@XmlRootElement
 @Entity
 @Table(name = "game")
 public class Game {
@@ -22,14 +24,14 @@ public class Game {
     private static final int PLAYER_BOARD_COLUMNS = 4;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The internal id of the game */
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
     Board board;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     List<Player> playerList;
 
     @Column(name = "managingPlayerName")
@@ -37,14 +39,14 @@ public class Game {
 
     @NotNull
     @Column(name = "locked")
-    private boolean locked;
+    boolean locked;
 
     @Column(name = "password")
-    private String password;
+    String password;
 
     @NotNull
     @Column(name = "uniqueId")
-    private final String uniqueId;
+    final String uniqueId;
 
     /*
     0: Active
@@ -183,8 +185,8 @@ public class Game {
      */
     private void randomizePlayerLocation(Player player) {
         player.setOffset(new Location(
-                board.getRows() - PLAYER_BOARD_ROWS,
-                board.getColumns() - PLAYER_BOARD_COLUMNS));
+                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS),
+                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS)));
     }
 
     /**
@@ -254,5 +256,25 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public String getManagingPlayerName() {
+        return managingPlayerName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public List<Player> getPlayerList() {
+        return playerList;
     }
 }

@@ -16,7 +16,7 @@ public class Cell {
     public static final int MAX_CELL_MULTIPLIER = 10;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the cell */
 
@@ -34,5 +34,17 @@ public class Cell {
 
     public void setMultiplier(int multiplier) {
         this.multiplier = multiplier;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Letter getLetter() {
+        return letter;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
     }
 }

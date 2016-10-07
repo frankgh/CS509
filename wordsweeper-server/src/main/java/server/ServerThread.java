@@ -24,7 +24,6 @@ public class ServerThread extends Thread implements ClientState {
     final Server server;             // Server for which we are operating.
     final String id;                 // Associated unique ID for this thread.
     Object data;                     // User-defined object associated with each thread.
-    private Request request;
 
     /**
      * Create objects to handle input/output to client.

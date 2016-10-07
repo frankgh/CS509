@@ -14,7 +14,7 @@ import java.util.List;
 public class Board {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the board */
 
@@ -24,7 +24,7 @@ public class Board {
     @Column(name = "columns")
     int columns; /* The number of columns in the board */
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     List<Cell> cellList; /* A list of all the cells that make up the board */
 
     protected Board() {
@@ -46,7 +46,7 @@ public class Board {
      *
      * @return the number of letters in the board
      */
-    public int getLetterCount() {
+    int getLetterCount() {
         return rows * columns;
     }
 
@@ -155,5 +155,13 @@ public class Board {
 
     public int getColumns() {
         return columns;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<Cell> getCellList() {
+        return cellList;
     }
 }
