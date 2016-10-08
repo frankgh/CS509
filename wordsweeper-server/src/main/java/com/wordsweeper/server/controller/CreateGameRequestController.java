@@ -38,7 +38,21 @@ public class CreateGameRequestController implements IProtocolHandler {
         System.out.println("/" + randGenData.get(0) + "," + randGenData.get(1) + "\\"); // FOR TESTING
         
         // FROM big board , get Small board
-        player.setBoard("AFERKSOEROIERPOR");
+        // smaller board is 4x4 = 16 letters
+        // if init posi
+        String smallBoard = "";
+        int readIndex = Integer.valueOf(randGenData.get(0)) + 7 * Integer.valueOf(randGenData.get(1));
+        for(int i = 0; i < 16; i++){
+        	// every four steps jump a row (i.e. jump 4 letters)
+        	smallBoard += randGenData.get(5).charAt(readIndex);
+        	System.out.println("WE ARE AT: " + i);
+        	if((i+1) % 4 == 0) 
+        		readIndex += 3;
+        	else
+        		readIndex ++;
+        }
+
+        player.setBoard(smallBoard);
 
         BoardResponse boardResponse = new BoardResponse();
         boardResponse.setGameId(randGenData.get(2));
