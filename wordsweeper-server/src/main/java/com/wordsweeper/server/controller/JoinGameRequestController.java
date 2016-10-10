@@ -8,6 +8,7 @@ import com.wordsweeper.server.xml.Response;
 import server.ClientState;
 import server.IProtocolHandler;
 import server.Server;
+import com.wordsweeper.server.controller.CreateGameRequestController;
 
 /**
  * Controller on server to package up the current state of the model
@@ -23,20 +24,35 @@ public class JoinGameRequestController implements IProtocolHandler {
 
     public synchronized Response process(ClientState client, Request request) {
 
-        model.joinGame();
-
+    	int intialCooordRange=4;
+    	int boardSize=49;
+		String stringBoardAlp=new String(CreateGameRequestController.generateAlphabet(boardSize));
+		char[][] WholeBoard=CreateGameRequestController.stringToArray(stringBoardAlp);
+    	
+		model.joinGame();
         BoardResponse boardResponse = new BoardResponse();
-        boardResponse.setGameId("hg12jhd");
-        boardResponse.setManagingUser("player2");
-        boardResponse.setBonus("4,3");
-        boardResponse.setContents("ABCGBCJDH...HDJHJD");
+        String exitGameID=boardResponse.getManagingUser();
+        String exitGameManager=boardResponse.getGameId();
+        boardResponse.setGameId(CreateGameRequestController.generateGameId(7));
+//        boardResponse.setGameId(exitGameID);
+//        boardResponse.setManagingUser(exitGameManager);
+        boardResponse.setBonus(CreateGameRequestController.generateCoord(7));
+        boardResponse.setContents(CreateGameRequestController.arrayToString(WholeBoard));
+        
+        
+//        boardResponse.setGameId("hg12jhd");
+        boardResponse.setManagingUser("player0");
+//        boardResponse.setBonus("4,3");
+//        boardResponse.setContents("ABCGBCJDH...HDJHJD");
 
         for (int i = 0; i < model.getNumPlayers(); i++) {
-            Player player = new Player();
+        	String initialCoords=CreateGameRequestController.generateCoord(intialCooordRange);
+        	char[][] ClinetBoard=CreateGameRequestController.ClientBoard(WholeBoard,initialCoords);
+        	Player player = new Player();
             player.setName("player" + i);
-            player.setScore(38974);
-            player.setPosition("2,2");
-            player.setBoard("ECDRFTGOUIGERPRT");
+            player.setScore(0);
+            player.setPosition(initialCoords);
+            player.setBoard(CreateGameRequestController.arrayToString(ClinetBoard));
             boardResponse.getPlayer().add(player);
         }
 
