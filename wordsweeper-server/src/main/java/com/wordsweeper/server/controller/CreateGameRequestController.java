@@ -1,10 +1,7 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.*;
-import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.Player;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.xml.*;
 import server.ClientState;
 import server.IProtocolHandler;
 
@@ -37,7 +34,11 @@ public class CreateGameRequestController implements IProtocolHandler {
         boardResponse.setContents("ABCGBCJDH...HDJHJD");
         boardResponse.getPlayer().add(player);
 
+        Response response = new ObjectFactory().createResponse();
+        response.setId(request.getId());
+        response.setBoardResponse(boardResponse);
+
         // send this response back to the client which sent us the request.
-        return new Response(boardResponse, request.getId());
+        return response;
     }
 }

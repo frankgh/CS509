@@ -1,10 +1,7 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.*;
-import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.Player;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.xml.*;
 import server.ClientState;
 import server.IProtocolHandler;
 import server.Server;
@@ -40,7 +37,9 @@ public class JoinGameRequestController implements IProtocolHandler {
             boardResponse.getPlayer().add(player);
         }
 
-        Response response = new Response(boardResponse, request.getId());
+        Response response = new ObjectFactory().createResponse();
+        response.setId(request.getId());
+        response.setBoardResponse(boardResponse);
 
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
