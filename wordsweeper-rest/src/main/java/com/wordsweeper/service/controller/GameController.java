@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Created by francisco on 9/15/16.
@@ -81,28 +80,31 @@ public class GameController {
     @GET
     @Path("/exit/{gameId}/{playerName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+    public Game exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        game.removePlayer(playerName);
-
-        if (game.isEmpty()) {
-            game.end();
+        if (game == null) {
+            return null;
         }
 
-        // TODO: persist game
+        if (game.removePlayer(playerName)) {
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+            if (game.isEmpty()) {
+                game.end();
+            }
+
+            gameDao.save(game);
+        }
+
+        return game; /* Return response with the game object */
     }
 
     @GET
     @Path("/reset/{gameId}/{playerName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reset(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+    public Game reset(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
         GameDao gameDao = new GameDaoImpl();
         Game game = gameDao.findByGameId(gameId);
@@ -116,8 +118,6 @@ public class GameController {
             gameDao.save(game);
         }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return game; /* Return response with the game object */
     }
 }

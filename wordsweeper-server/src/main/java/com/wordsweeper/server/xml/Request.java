@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{}showGameStateRequest"/>
  *       &lt;/choice>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="version" type="{http://www.w3.org/2001/XMLSchema}string" default="1.0" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -65,6 +66,8 @@ public class Request {
     protected ShowGameStateRequest showGameStateRequest;
     @XmlAttribute(name = "id", required = true)
     protected String id;
+    @XmlAttribute(name = "version")
+    protected String version;
 
     /**
      * Gets the value of the connectRequest property.
@@ -328,6 +331,34 @@ public class Request {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the version property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getVersion() {
+        if (version == null) {
+            return "1.0";
+        } else {
+            return version;
+        }
+    }
+
+    /**
+     * Sets the value of the version property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setVersion(String value) {
+        this.version = value;
     }
 
 }
