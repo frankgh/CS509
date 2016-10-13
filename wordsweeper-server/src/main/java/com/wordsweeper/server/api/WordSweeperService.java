@@ -13,8 +13,11 @@ public interface WordSweeperService {
     @GET("/wordsweeper/rest/game/create/{playerName}/password/{password}")
     Call<Game> createGameWithPassword(@Path("playerName") String playerName, @Path(value = "password") String password);
 
-    @GET("/wordsweeper/rest/game/join/{gameId}/{playerName}/password/{password:([^/]+)?}")
-    Call<Game> joinGame(@Path("gameId") String gameId, @Path("playerName") String playerName, @Path("password") String password);
+    @GET("/wordsweeper/rest/game/join/{gameId}/{playerName}")
+    Call<Game> joinGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
+
+    @GET("/wordsweeper/rest/game/join/{gameId}/{playerName}/password/{password}")
+    Call<Game> joinGameWithPassword(@Path("gameId") String gameId, @Path("playerName") String playerName, @Path("password") String password);
 
     @GET("/wordsweeper/rest/game/lock/{gameId}/{playerName}")
     Call<Game> lockGame(@Path("gameId") String gameId, @Path("playerName") String playerName);

@@ -173,10 +173,6 @@ public class Board {
         return columns;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public List<Cell> getCellList() {
         return cellList;
     }

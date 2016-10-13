@@ -41,6 +41,27 @@ public class ServerModel {
         return true;
     }
 
+    public boolean joinGame(ClientState client, Game game) {
+
+        if (!isClientInGame(client)) {
+            return false;
+        }
+
+        List<String> userList = usersInGameMap.get(game.getUniqueId());
+
+        /* Add user to the list of users in the game */
+        userList.add(client.id());
+
+        /* Map a client id to a game */
+        clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+
+        return true;
+    }
+
+    public List<String> idsByGameId(String gameId) {
+        return usersInGameMap.get(gameId);
+    }
+
     /**
      * Exit a game
      *
