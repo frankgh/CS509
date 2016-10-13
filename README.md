@@ -63,7 +63,9 @@ protocol. The wordsweeper-server project uses maven to build a jar file.
 - [Maven](https://maven.apache.org/)
 
 ### Third Party Libraries
-None
+- Retrofit 2
+- Gson
+- OkHttp
 
 ### Building
 ```
