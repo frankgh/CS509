@@ -1,7 +1,6 @@
 
 package com.wordsweeper.server.xml;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{}player" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="gameId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="size" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *       &lt;attribute name="size" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="managingUser" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="contents" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="bonus" use="required" type="{}commaSeparatedPair" />
@@ -46,7 +45,7 @@ public class BoardResponse {
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
     @XmlAttribute(name = "size")
-    protected BigInteger size;
+    protected Integer size;
     @XmlAttribute(name = "managingUser", required = true)
     protected String managingUser;
     @XmlAttribute(name = "contents")
@@ -112,10 +111,10 @@ public class BoardResponse {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public BigInteger getSize() {
+    public Integer getSize() {
         return size;
     }
 
@@ -124,10 +123,10 @@ public class BoardResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public void setSize(BigInteger value) {
+    public void setSize(Integer value) {
         this.size = value;
     }
 

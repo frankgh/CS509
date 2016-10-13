@@ -20,26 +20,26 @@ public class JoinGameRequestController implements IProtocolHandler {
 
     public synchronized Response process(ClientState client, Request request) {
 
-        model.joinGame();
-
-        BoardResponse boardResponse = new BoardResponse();
-        boardResponse.setGameId("hg12jhd");
-        boardResponse.setManagingUser("player2");
-        boardResponse.setBonus("4,3");
-        boardResponse.setContents("ABCGBCJDH...HDJHJD");
-
-        for (int i = 0; i < model.getNumPlayers(); i++) {
-            Player player = new Player();
-            player.setName("player" + i);
-            player.setScore(38974);
-            player.setPosition("2,2");
-            player.setBoard("ECDRFTGOUIGERPRT");
-            boardResponse.getPlayer().add(player);
-        }
+//        model.createGame(request.getCreateGameRequest().getName(), game);
+//
+//        BoardResponse boardResponse = new BoardResponse();
+//        boardResponse.setGameId("hg12jhd");
+//        boardResponse.setManagingUser("player2");
+//        boardResponse.setBonus("4,3");
+//        boardResponse.setContents("ABCGBCJDH...HDJHJD");
+//
+//        for (int i = 0; i < model.getNumPlayers(); i++) {
+//            Player player = new Player();
+//            player.setName("player" + i);
+//            player.setScore(38974);
+//            player.setPosition("2,2");
+//            player.setBoard("ECDRFTGOUIGERPRT");
+//            boardResponse.getPlayer().add(player);
+//        }
 
         Response response = new ObjectFactory().createResponse();
         response.setId(request.getId());
-        response.setBoardResponse(boardResponse);
+//        response.setBoardResponse(boardResponse);
 
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning

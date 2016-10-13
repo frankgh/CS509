@@ -27,6 +27,9 @@ public class Board {
     @OneToMany
     List<Cell> cellList; /* A list of all the cells that make up the board */
 
+    @Embedded
+    Location bonusCellLocation; /* The location of the bonus cell */
+
     protected Board() {
     }
 
@@ -119,14 +122,27 @@ public class Board {
      */
     private void generateMultiplierCell() {
         int multiplierCellIndex = RandomUtil.nextInt(cellList.size());
+        bonusCellLocation = new Location(getRow(multiplierCellIndex), getColumn(multiplierCellIndex));
+    }
 
-        for (int i = 0; i < cellList.size(); i++) {
-            if (i == multiplierCellIndex) {
-                cellList.get(i).setMultiplier(Cell.MAX_CELL_MULTIPLIER);
-            } else {
-                cellList.get(i).setMultiplier(Cell.DEFAULT_CELL_MULTIPLIER);
-            }
-        }
+    /**
+     * The column for a given index in the list of cells
+     *
+     * @param index a zero-based index of cells
+     * @return the zero-based column for the given index
+     */
+    public int getColumn(int index) {
+        return index % columns;
+    }
+
+    /**
+     * The row for a given index in the list of cells
+     *
+     * @param index a zero-based index of the cells
+     * @return the zero-based row for the given index
+     */
+    public int getRow(int index) {
+        return index / rows;
     }
 
     private int getCellIndexJustBelow(int row, int column) {
@@ -163,5 +179,9 @@ public class Board {
 
     public List<Cell> getCellList() {
         return cellList;
+    }
+
+    public Location getBonusCellLocation() {
+        return bonusCellLocation;
     }
 }

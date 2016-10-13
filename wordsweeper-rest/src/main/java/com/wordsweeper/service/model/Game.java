@@ -270,10 +270,6 @@ public class Game {
         return uniqueId;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
     public List<Player> getPlayerList() {
         return playerList;
     }
