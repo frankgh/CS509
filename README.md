@@ -69,7 +69,7 @@ protocol. The wordsweeper-server project uses maven to build a jar file.
 
 ### Building
 ```
-maven clean install
+mvn clean install
 ```
 
 ### Running

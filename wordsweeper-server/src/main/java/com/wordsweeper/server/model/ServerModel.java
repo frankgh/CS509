@@ -28,15 +28,17 @@ public class ServerModel {
             return false;
         }
 
-        /* Create a list of ClientState IDs that are associated to the unique game ID */
-        List<String> userList = new ArrayList<String>();
-        userList.add(client.id());
+        synchronized (usersInGameMap) {
+            /* Create a list of ClientState IDs that are associated to the unique game ID */
+            List<String> userList = new ArrayList<String>();
+            userList.add(client.id());
 
-        /* Map a client id to a game */
-        clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+            /* Map a client id to a game */
+            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
 
-        /* Add a list of users to the gameId map */
-        usersInGameMap.put(game.getUniqueId(), userList);
+            /* Add a list of users to the gameId map */
+            usersInGameMap.put(game.getUniqueId(), userList);
+        }
 
         return true;
     }
@@ -47,13 +49,15 @@ public class ServerModel {
             return false;
         }
 
-        List<String> userList = usersInGameMap.get(game.getUniqueId());
+        synchronized (usersInGameMap) {
+            List<String> userList = usersInGameMap.get(game.getUniqueId());
 
         /* Add user to the list of users in the game */
-        userList.add(client.id());
+            userList.add(client.id());
 
         /* Map a client id to a game */
-        clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+        }
 
         return true;
     }
@@ -74,18 +78,20 @@ public class ServerModel {
             return false;
         }
 
-        String gameId = clientIdToGameIdMap.get(client.id());
+        synchronized (usersInGameMap) {
+            String gameId = clientIdToGameIdMap.get(client.id());
 
-        if (!usersInGameMap.containsKey(gameId)) {
-            return false;
-        }
+            if (!usersInGameMap.containsKey(gameId)) {
+                return false;
+            }
 
-        List<String> usersInGame = usersInGameMap.get(gameId);
+            List<String> usersInGame = usersInGameMap.get(gameId);
 
-        for (int i = 0; i < usersInGame.size(); i++) {
-            if (client.id().equals(usersInGame.get(i))) {
-                usersInGame.remove(i);
-                return true;
+            for (int i = 0; i < usersInGame.size(); i++) {
+                if (client.id().equals(usersInGame.get(i))) {
+                    usersInGame.remove(i);
+                    return true;
+                }
             }
         }
 

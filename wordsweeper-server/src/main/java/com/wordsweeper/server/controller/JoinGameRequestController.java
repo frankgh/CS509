@@ -60,6 +60,7 @@ public class JoinGameRequestController implements IProtocolHandler {
         }
 
         if (!model.joinGame(client, game)) {
+            // TODO: handle this condition
             return null;
         }
 
