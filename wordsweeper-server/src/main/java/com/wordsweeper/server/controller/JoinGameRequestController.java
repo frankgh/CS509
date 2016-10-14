@@ -30,8 +30,11 @@ public class JoinGameRequestController implements IProtocolHandler {
     public synchronized Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
-            // TODO: handle this case
-            return null;
+            // Rogue client wants to create a game without exiting his previous game
+            Response response = new ObjectFactory().createResponse();
+            response.setId(request.getId());
+            response.setSuccess(false); /* success to false */
+            return response;
         }
 
         Game game = null;
