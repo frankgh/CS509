@@ -1,10 +1,14 @@
 package com.wordsweeper.server.util;
 
+import com.sun.deploy.util.StringUtils;
 import com.wordsweeper.server.model.Cell;
 import com.wordsweeper.server.model.Game;
 import com.wordsweeper.server.model.Player;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by francisco on 10/12/16.
@@ -20,13 +24,13 @@ public class MappingUtil {
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
-        StringBuffer letterStringBuffer = new StringBuffer();
+        List<String> word = new ArrayList<String>();
 
         for (Cell cell : source.getBoard().getCellList()) {
-            letterStringBuffer.append(cell.getLetter().getCharacter());
+            word.add(cell.printCharacter());
         }
 
-        boardResponse.setContents(letterStringBuffer.toString());
+        boardResponse.setContents(StringUtils.join(word, ","));
 
         for (Player player : source.getPlayerList()) {
             com.wordsweeper.server.xml.Player mPlayer = new com.wordsweeper.server.xml.Player();
@@ -34,23 +38,18 @@ public class MappingUtil {
             mPlayer.setScore(player.getScore());
             mPlayer.setPosition(player.getOffset().toString());
 
-            StringBuffer playerBoardSb = new StringBuffer();
+            word = new ArrayList<String>();
 
             for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
                 for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
 
                     int index = (i * source.getBoard().getColumns()) + j;
 
-                    playerBoardSb.append(source
-                            .getBoard()
-                            .getCellList()
-                            .get(index)
-                            .getLetter()
-                            .getCharacter());
+                    word.add(source.getBoard().getCellList().get(index).printCharacter());
                 }
             }
 
-            mPlayer.setBoard(playerBoardSb.toString());
+            mPlayer.setBoard(StringUtils.join(word, ","));
 
             boardResponse.getPlayer().add(mPlayer);
         }

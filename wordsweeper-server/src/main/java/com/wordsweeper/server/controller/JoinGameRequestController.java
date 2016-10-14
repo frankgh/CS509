@@ -68,6 +68,7 @@ public class JoinGameRequestController implements IProtocolHandler {
 
         Response response = new ObjectFactory().createResponse();
         response.setId(request.getId());
+        response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
         // all other players on game (excepting this particular client) need to be told of this

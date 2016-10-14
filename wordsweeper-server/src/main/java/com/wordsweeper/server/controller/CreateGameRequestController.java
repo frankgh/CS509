@@ -66,6 +66,7 @@ public class CreateGameRequestController implements IProtocolHandler {
         /* Create the response object */
         Response response = new ObjectFactory().createResponse();
         response.setId(request.getId());
+        response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
         // send this response back to the client which sent us the request.

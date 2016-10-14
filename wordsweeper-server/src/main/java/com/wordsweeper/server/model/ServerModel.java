@@ -45,7 +45,7 @@ public class ServerModel {
 
     public boolean joinGame(ClientState client, Game game) {
 
-        if (!isClientInGame(client)) {
+        if (isClientInGame(client)) {
             return false;
         }
 

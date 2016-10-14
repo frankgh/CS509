@@ -64,6 +64,7 @@ public class ServerThread extends Thread implements ClientState {
         ObjectFactory objectFactory = new ObjectFactory();
         Response responseWrapper = objectFactory.createResponse();
         responseWrapper.setId(request.getId());
+        responseWrapper.setSuccess(true);
         responseWrapper.setConnectResponse(objectFactory.createConnectResponse());
         responseWrapper.getConnectResponse().setId(id);
 
