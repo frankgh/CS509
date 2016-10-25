@@ -1,7 +1,6 @@
 
 package com.wordsweeper.server.xml;
 
-import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -19,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="gameId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="players" use="required" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *       &lt;attribute name="players" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,7 +34,7 @@ public class GameBrief {
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
     @XmlAttribute(name = "players", required = true)
-    protected BigInteger players;
+    protected int players;
 
     /**
      * Gets the value of the gameId property.
@@ -64,24 +63,16 @@ public class GameBrief {
     /**
      * Gets the value of the players property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
      */
-    public BigInteger getPlayers() {
+    public int getPlayers() {
         return players;
     }
 
     /**
      * Sets the value of the players property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
      */
-    public void setPlayers(BigInteger value) {
+    public void setPlayers(int value) {
         this.players = value;
     }
 

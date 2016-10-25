@@ -1,78 +1,110 @@
 package com.wordsweeper.server.model;
 
+import server.ClientState;
+
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * HACK: Replace with actual functionality!
+ * The server model that holds information about connections and games
  */
-
 public class ServerModel {
-	
-    int numPlayers = 0;
-    long seed;
-    Random generator;
-    ArrayList<GameState> games;
-    public void joinGame() {
-        numPlayers++;
-    }
-    
-    public ArrayList<String> createGame(String name, String id) {
-    	ArrayList<String> outputRandData = new ArrayList<String>();
-    	int boardSize = 7;
-    	
-    	 // randomly generate the column of the player
-        String randColP = String.valueOf(generator.nextInt(boardSize-3));
-        outputRandData.add(randColP);
-        
-        // randomly generate the row of the player
-        String randRowP = String.valueOf(generator.nextInt(boardSize-3));
-        outputRandData.add(randRowP);
-        
-        // randomly generate the game Id
-        String alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz";
-        String gameID = "";
-        int IDSize = 7;
-        for(int i = 0; i < IDSize; i ++){
-        	gameID += alphanumeric.charAt(generator.nextInt(alphanumeric.length()));
+
+    Map<String, String> clientIdToGameIdMap = new HashMap<String, String>();
+    Map<String, List<String>> usersInGameMap = new HashMap<String, List<String>>();
+
+    /**
+     * Create a game
+     *
+     * @param client the ClientState
+     * @param game   the game
+     * @return true if successfully added, false otherwise
+     */
+    public boolean createGame(ClientState client, Game game) {
+
+        if (isClientInGame(client)) {
+            return false;
         }
-        outputRandData.add(gameID);
-        System.out.println("The gameID is: " + gameID); // FOR TESTING
-        
-        // randomly generate the column of the x10 bonus
-        String randColB = String.valueOf(generator.nextInt(boardSize));
-        outputRandData.add(randColB);
-        
-        // randomly generate the row of the x10 bonus
-        String randRowB = String.valueOf(generator.nextInt(boardSize));
-        outputRandData.add(randRowB);
-        
-        // randomly generate the letters of the board
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String boardContent = "";
-        for(int i = 0; i < boardSize*boardSize; i ++){
-        	boardContent += alphabet.charAt(generator.nextInt(alphabet.length()));
+
+        synchronized (usersInGameMap) {
+            /* Create a list of ClientState IDs that are associated to the unique game ID */
+            List<String> userList = new ArrayList<String>();
+            userList.add(client.id());
+
+            /* Map a client id to a game */
+            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+
+            /* Add a list of users to the gameId map */
+            usersInGameMap.put(game.getUniqueId(), userList);
         }
-        outputRandData.add(boardContent);
-        System.out.println("The board is: " + boardContent); // FOR TESTING
-        
-        // add new game to list of games
-        GameState newGame = new GameState(gameID, "");
-        games.add(newGame);
-        
-        return outputRandData;
+
+        return true;
     }
-    
-     public int getNumPlayers() {
-        return numPlayers;
+
+    public boolean joinGame(ClientState client, Game game) {
+
+        if (isClientInGame(client)) {
+            return false;
+        }
+
+        synchronized (usersInGameMap) {
+            List<String> userList = usersInGameMap.get(game.getUniqueId());
+
+        /* Add user to the list of users in the game */
+            userList.add(client.id());
+
+        /* Map a client id to a game */
+            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+        }
+
+        return true;
     }
-    
-    public ServerModel () {
-    	// Generate a random seed
-        this.seed = (long) Math.random() * Long.MAX_VALUE;
-        // Initialize random generator with seed
-        this.generator = new Random(seed);
-        // Initialize array list of games
-        this.games = new ArrayList<GameState>();
+
+    public List<String> idsByGameId(String gameId) {
+        return usersInGameMap.get(gameId);
+    }
+
+    /**
+     * Exit a game
+     *
+     * @param client the ClientState object
+     * @return true if successfully removed, false otherwise
+     */
+    public boolean exitGame(ClientState client) {
+
+        if (!isClientInGame(client)) {
+            return false;
+        }
+
+        synchronized (usersInGameMap) {
+            String gameId = clientIdToGameIdMap.get(client.id());
+
+            if (!usersInGameMap.containsKey(gameId)) {
+                return false;
+            }
+
+            List<String> usersInGame = usersInGameMap.get(gameId);
+
+            for (int i = 0; i < usersInGame.size(); i++) {
+                if (client.id().equals(usersInGame.get(i))) {
+                    usersInGame.remove(i);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a ClientState is already associated to a game
+     *
+     * @param client the ClientState
+     * @return true if the client is in a game, false otherwise
+     */
+    public boolean isClientInGame(ClientState client) {
+        return clientIdToGameIdMap.containsKey(client.id());
     }
 }

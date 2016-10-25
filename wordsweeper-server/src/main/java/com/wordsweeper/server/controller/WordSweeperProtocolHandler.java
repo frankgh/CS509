@@ -44,6 +44,6 @@ public class WordSweeperProtocolHandler implements IShutdownHandler {
     }
 
     public void logout(ClientState st) {
-        new ClientDisconnectController().process(st);
+        new ClientDisconnectController(model).process(st);
     }
 }

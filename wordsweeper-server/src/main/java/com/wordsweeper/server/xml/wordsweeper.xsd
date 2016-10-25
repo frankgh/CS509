@@ -32,6 +32,7 @@
 
             </xs:choice>
             <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="version" default="1.0" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
@@ -55,6 +56,7 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name='success' type='xs:boolean' use='required'/>
             <xs:attribute name='reason' type='xs:string' use='optional'/>  <!-- Only on failure -->
+            <xs:attribute name="version" default="1.0" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
@@ -86,7 +88,7 @@
     <xs:element name='gameBrief'>
         <xs:complexType>
             <xs:attribute name='gameId' type='xs:string' use='required'/>        <!-- Valid Game ID -->
-            <xs:attribute name='players' type='xs:integer'
+            <xs:attribute name='players' type='xs:int'
                           use='required'/>        <!-- Number of players on that game. -->
         </xs:complexType>
     </xs:element>
@@ -133,8 +135,8 @@
         <xs:complexType>
             <xs:attribute name='name' type='xs:string' use='required'/>
             <xs:attribute name='gameId' type='xs:string' use='required'/>
-            <xs:attribute name='rowChange' type='xs:integer' use='optional'/>
-            <xs:attribute name='colChange' type='xs:integer' use='optional'/>
+            <xs:attribute name='rowChange' type='xs:int' use='optional'/>
+            <xs:attribute name='colChange' type='xs:int' use='optional'/>
         </xs:complexType>
     </xs:element>
 
@@ -215,7 +217,7 @@
                 <xs:element ref='player' minOccurs='0' maxOccurs='unbounded'/>
             </xs:sequence>
             <xs:attribute name='gameId' type='xs:string' use='required'/>
-            <xs:attribute name='size' type='xs:integer' use='optional'/>   <!-- Admin Client needs size. -->
+            <xs:attribute name='size' type='xs:int' use='optional'/>   <!-- Admin Client needs size. -->
             <xs:attribute name='managingUser' type='xs:string' use='required'/>
             <xs:attribute name='contents' type='xs:string' use='optional'/>   <!-- Admin Client needs whole board. -->
             <xs:attribute name='bonus' type='commaSeparatedPair' use='required'/>   <!-- location of bonus. -->
