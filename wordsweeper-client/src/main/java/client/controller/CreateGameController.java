@@ -17,8 +17,11 @@ public class CreateGameController {
 
 	/** Make the request on the server and wait for response. */
 	public void process() {
+		String name = app.getName();
+		String password = app.getPassword();
+		
 		// send the request to create the game.
-		String xmlString = Message.requestHeader() + "<createGameRequest name='samplePlayer'/></request>";
+		String xmlString = Message.requestHeader() + "<createGameRequest name='"+name+"'/></request>";
 		Message m = new Message (xmlString);
 
 		// Request the lock (this might not succeed).
