@@ -20,9 +20,13 @@ public class JoinGameController {
 		String name = app.getName();
 		String password = app.getPassword();
 		String game_id = app.getGameID();
-		
+		String xmlString = "";
  		// send the request to create the game.
-		String xmlString = Message.requestHeader() + "<joinGameRequest gameId='"+game_id+"' name='"+name+"'/></request>";
+		if(password.length()>0)
+			xmlString = Message.requestHeader() + "<joinGameRequest gameId='"+game_id+"' name='"+name+"' password='"+password+"'/></request>";
+		else
+			xmlString = Message.requestHeader() + "<joinGameRequest gameId='"+game_id+"' name='"+name+"'/></request>";
+		
 		Message m = new Message (xmlString);
 
 		// Request the lock (this might not succeed).
