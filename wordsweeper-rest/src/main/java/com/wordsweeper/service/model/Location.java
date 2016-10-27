@@ -30,4 +30,12 @@ public class Location {
     public int getRow() {
         return row;
     }
+    
+    protected void setRow(int row) {
+    	this.row = row;
+    }
+    
+    protected void setColumn(int column) {
+    	this.column = column;
+    }
 }
