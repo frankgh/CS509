@@ -1,49 +1,45 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import server.ClientState;
-import server.IShutdownHandler;
 
 /**
- * WordSweeper implementation of a protocol handler to respond to messages received from clients.
- * You should follow this template when designing YOUR protocol handler.
- * <p>
- * To avoid issues with multiple clients submitting requests concurrently,
- * notice that the {@link #process(ClientState, Request)} method is synchronized.
- * This will ensure that no more than one server thread executes this method
- * at a time.
- * <p>
- * Also extended to support detection of client disconnects so these can release the lock
- * if indeed the client was the one locking the model.
+ * Created by francisco on 10/27/16.
  */
-public class WordSweeperProtocolHandler implements IShutdownHandler {
+public class WordSweeperProtocolHandler implements IProtocolHandler {
 
-    ServerModel model;
+    ControllerChain chain = new EmptyHandler();
 
-    public WordSweeperProtocolHandler(ServerModel model) {
-        this.model = model;
+    /**
+     * Register new controller chain as occurring before existing chain.
+     */
+    public void registerHandler(ControllerChain handler) {
+        handler.next = chain;
+        chain = handler;
     }
 
-    public synchronized Response process(ClientState st, Request request) {
+    /**
+     * Process the request through the chain
+     *
+     * @param state   the ClientState
+     * @param request the request
+     */
+    public Response process(ClientState state, Request request) {
 
         System.out.println("Request Received:");
         JAXBUtil.prettyPrintln(request);
+        ControllerChain handler = chain;
 
-        if (request.getCreateGameRequest() != null) {
-            return new CreateGameRequestController(model).process(st, request);
-        } else if (request.getJoinGameRequest() != null) {
-            return new JoinGameRequestController(model).process(st, request);
+        while (handler != null) {
+            if (handler.canProcess(request)) {
+                return handler.process(state, request);
+            }
+            handler = (ControllerChain) handler.next;
         }
 
-        // unknown? no idea what to do
         System.err.println("Unable to handle message");
         return null;
-    }
-
-    public void logout(ClientState st) {
-        new ClientDisconnectController(model).process(st);
     }
 }

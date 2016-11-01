@@ -1,5 +1,7 @@
 package server;
 
+import com.wordsweeper.server.controller.IProtocolHandler;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,7 +44,6 @@ public class Server {
     public void process() throws IOException {
         while (state == 1) {
             Socket client = serverSocket.accept();
-
             new ServerThread(this, client, protocolHandler).start();
         }
 

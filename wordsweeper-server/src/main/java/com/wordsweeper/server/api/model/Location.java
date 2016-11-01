@@ -1,18 +1,34 @@
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.api.model;
 
 /**
  * Created by francisco on 10/12/16.
  */
 public class Location {
 
-    private int column;
+    /**
+     * The Column.
+     */
+    int column;
 
-    private int row;
+    /**
+     * The Row.
+     */
+    int row;
 
+    /**
+     * Gets column.
+     *
+     * @return the column
+     */
     public int getColumn() {
         return column;
     }
 
+    /**
+     * Gets row.
+     *
+     * @return the row
+     */
     public int getRow() {
         return row;
     }

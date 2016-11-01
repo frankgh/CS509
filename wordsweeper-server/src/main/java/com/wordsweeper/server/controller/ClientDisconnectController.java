@@ -9,16 +9,28 @@ import server.ClientState;
  */
 public class ClientDisconnectController {
 
+    /**
+     * The Model.
+     */
     ServerModel model;
 
+    /**
+     * Instantiates a new Client disconnect controller.
+     *
+     * @param model the model
+     */
     public ClientDisconnectController(ServerModel model) {
         this.model = model;
     }
 
+    /**
+     * Process.
+     *
+     * @param state the state
+     */
     public void process(ClientState state) {
 
         model.exitGame(state);
-
         System.out.println("Client disconnected for client:" + state.id());
     }
 }

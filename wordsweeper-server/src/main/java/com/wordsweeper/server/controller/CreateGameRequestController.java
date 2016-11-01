@@ -1,16 +1,14 @@
 package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
-import com.wordsweeper.server.model.Game;
+import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
 import server.ClientState;
-import server.IProtocolHandler;
 
 import java.io.IOException;
 
@@ -18,22 +16,26 @@ import java.io.IOException;
  * Controller on server to package up the current state of the model
  * as an updateResponse message and send it back to the client.
  */
-public class CreateGameRequestController implements IProtocolHandler {
+public class CreateGameRequestController extends ControllerChain {
 
-    ServerModel model;
-
+    /**
+     * Instantiates a new Create game request controller.
+     *
+     * @param model the model
+     */
     public CreateGameRequestController(ServerModel model) {
         this.model = model;
+    }
+
+    public boolean canProcess(Request request) {
+        return request != null && request.getCreateGameRequest() != null;
     }
 
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
             // Rogue client wants to create a game without exiting his previous game
-            Response response = new ObjectFactory().createResponse();
-            response.setId(request.getId());
-            response.setSuccess(false); /* success to false */
-            return response;
+            return getUnsuccessfulResponse(request);
         }
 
         Game game = null;
@@ -53,21 +55,16 @@ public class CreateGameRequestController implements IProtocolHandler {
             System.err.println("Error connecting to the webservice");
         }
 
-        if (game == null) {
-            // TODO: handle this request
-            return null;
-        }
-
-
-        if (!model.createGame(client, game)) { /* associate a clientState to the game */
-            return null;
+        if (game == null ||
+                !model.createGame(client, game)) { /* associate a clientState to the game */
+            return getUnsuccessfulResponse(request);
         }
 
         /* Map the game to a BoardResponse object */
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
 
         /* Create the response object */
-        Response response = new ObjectFactory().createResponse();
+        Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);

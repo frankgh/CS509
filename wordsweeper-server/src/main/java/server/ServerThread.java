@@ -1,5 +1,6 @@
 package server;
 
+import com.wordsweeper.server.controller.IProtocolHandler;
 import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
@@ -88,9 +89,10 @@ public class ServerThread extends Thread implements ClientState {
         }
 
         // client is done so thread can be de-registered
-        if (handler instanceof IShutdownHandler) {
-            ((IShutdownHandler) handler).logout(Server.getState(id));
-        }
+        // TODO: fix this
+//        if (handler instanceof IShutdownHandler) {
+//            ((IShutdownHandler) handler).logout(Server.getState(id));
+//        }
         Server.unregister(id);
 
         // close communication to client.

@@ -1,4 +1,4 @@
-package com.wordsweeper.server.model;
+package com.wordsweeper.server.api.model;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -7,18 +7,39 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Letter {
 
-    private String score;
+    /**
+     * The Score.
+     */
+    String score;
 
-    private String character;
+    /**
+     * The Character.
+     */
+    String character;
 
+    /**
+     * Gets score.
+     *
+     * @return the score
+     */
     public String getScore() {
         return score;
     }
 
+    /**
+     * Gets character.
+     *
+     * @return the character
+     */
     public String getCharacter() {
         return character;
     }
 
+    /**
+     * Print character string.
+     *
+     * @return the string
+     */
     public String printCharacter() {
         String c = new String(getCharacter());
 

@@ -1,13 +1,19 @@
-package com.wordsweeper.server.model;
-
-import org.apache.commons.lang3.StringUtils;
+package com.wordsweeper.server.api.model;
 
 /**
  * Created by francisco on 10/12/16.
  */
 public class Cell {
+    /**
+     * The Letter.
+     */
     Letter letter;
 
+    /**
+     * Print character string.
+     *
+     * @return the string
+     */
     public String printCharacter() {
         return letter.printCharacter();
     }

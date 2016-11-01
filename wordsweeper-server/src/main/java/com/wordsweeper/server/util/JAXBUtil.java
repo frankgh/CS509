@@ -10,6 +10,11 @@ import java.io.StringWriter;
  */
 public class JAXBUtil {
 
+    /**
+     * Pretty println XML.
+     *
+     * @param obj the obj
+     */
     public static void prettyPrintln(Object obj) {
         if (obj == null) {
             return;

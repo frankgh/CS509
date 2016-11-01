@@ -3,9 +3,8 @@ package com.wordsweeper.service.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-/**
- * Created by Francisco Guerrero on 9/27/2016.
- */
+
+
 @Embeddable
 public class Location {
 

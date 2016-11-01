@@ -1,8 +1,8 @@
 package com.wordsweeper.server.util;
 
-import com.wordsweeper.server.model.Cell;
-import com.wordsweeper.server.model.Game;
-import com.wordsweeper.server.model.Player;
+import com.wordsweeper.server.api.model.Cell;
+import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.api.model.Player;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +15,12 @@ import java.util.List;
  */
 public class MappingUtil {
 
+    /**
+     * Map game to board response board response.
+     *
+     * @param source the source
+     * @return the board response
+     */
     public static BoardResponse mapGameToBoardResponse(Game source) {
 
         BoardResponse boardResponse = new ObjectFactory().createBoardResponse();

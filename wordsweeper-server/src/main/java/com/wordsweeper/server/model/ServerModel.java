@@ -1,5 +1,6 @@
 package com.wordsweeper.server.model;
 
+import com.wordsweeper.server.api.model.Game;
 import server.ClientState;
 
 import java.util.ArrayList;
@@ -12,7 +13,16 @@ import java.util.Map;
  */
 public class ServerModel {
 
+    Map<String, List<GameSt>> gameMap = new HashMap<String, List<GameSt>>();
+
+    /**
+     * The Client id to game id map.
+     */
     Map<String, String> clientIdToGameIdMap = new HashMap<String, String>();
+
+    /**
+     * The Users in game map.
+     */
     Map<String, List<String>> usersInGameMap = new HashMap<String, List<String>>();
 
     /**
@@ -26,6 +36,10 @@ public class ServerModel {
 
         if (isClientInGame(client)) {
             return false;
+        }
+
+        synchronized (gameMap) {
+
         }
 
         synchronized (usersInGameMap) {
@@ -43,6 +57,13 @@ public class ServerModel {
         return true;
     }
 
+    /**
+     * Join game boolean.
+     *
+     * @param client the client
+     * @param game   the game
+     * @return the boolean
+     */
     public boolean joinGame(ClientState client, Game game) {
 
         if (isClientInGame(client)) {
@@ -52,16 +73,22 @@ public class ServerModel {
         synchronized (usersInGameMap) {
             List<String> userList = usersInGameMap.get(game.getUniqueId());
 
-        /* Add user to the list of users in the game */
+            /* Add user to the list of users in the game */
             userList.add(client.id());
 
-        /* Map a client id to a game */
+            /* Map a client id to a game */
             clientIdToGameIdMap.put(client.id(), game.getUniqueId());
         }
 
         return true;
     }
 
+    /**
+     * Ids by game id list.
+     *
+     * @param gameId the game id
+     * @return the list
+     */
     public List<String> idsByGameId(String gameId) {
         return usersInGameMap.get(gameId);
     }
@@ -106,5 +133,25 @@ public class ServerModel {
      */
     public boolean isClientInGame(ClientState client) {
         return clientIdToGameIdMap.containsKey(client.id());
+    }
+
+    /**
+     * Get the game ID for the user
+     *
+     * @param client the ClientState
+     * @return the game ID for the user
+     */
+    public String getGameId(ClientState client) {
+        return clientIdToGameIdMap.containsKey(client.id()) ? clientIdToGameIdMap.get(client.id()) : null;
+    }
+
+    public boolean isManagingPlayer(ClientState client) {
+        // TODO: implement
+        return true;
+    }
+
+    public String getPlayerName(ClientState client) {
+        // TODO: implement
+        return null;
     }
 }

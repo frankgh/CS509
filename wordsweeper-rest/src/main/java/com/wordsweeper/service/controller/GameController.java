@@ -18,6 +18,13 @@ import javax.ws.rs.core.MediaType;
 @Path("/game")
 public class GameController {
 
+    /**
+     * Creates a game in the persistence layer with the provided playerName and optional password
+     *
+     * @param playerName the name of the player
+     * @param password   (optional) the password for the game
+     * @return the Game object
+     */
     @GET
     @Path("/create/{playerName}{p:(/password/)?}{password:([^/]+)?}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +39,14 @@ public class GameController {
         return game;
     }
 
+    /**
+     * Join an existing game j
+     *
+     * @param gameId
+     * @param playerName
+     * @param password
+     * @return
+     */
     @GET
     @Path("/join/{gameId}/{playerName}{p:(/password/)?}{password:([^/]+)?}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,6 +67,8 @@ public class GameController {
         if (addPlayer) {
             game.getBoard().reset(); /* finally, reset the board */
             gameDao.save(game);
+        } else {
+            return null;
         }
 
         return game; /* Return response with the game object */
