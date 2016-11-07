@@ -32,7 +32,7 @@ public class ServerModel {
      * @param game   the game
      * @return true if successfully added, false otherwise
      */
-    public boolean createGame(ClientState client, Game game) {
+    public boolean createGame(ClientState client, Game game, String playerName) {
 
         if (isClientInGame(client)) {
             return false;

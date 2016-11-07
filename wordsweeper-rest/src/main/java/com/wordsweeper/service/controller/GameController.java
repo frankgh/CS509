@@ -77,6 +77,13 @@ public class GameController {
                     .build();
         }
 
+        if (game.isPasswordProtected() && !StringUtils.equals(password, game.getPassword())) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_PASSWORD, "The game is password protected"))
+                    .status(Response.Status.FORBIDDEN)
+                    .build();
+        }
+
         boolean addPlayer = game.addPlayer(playerName,
                 StringUtils.isBlank(password) ? null : password); /* join the game */
 

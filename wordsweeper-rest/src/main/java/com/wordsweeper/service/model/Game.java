@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by francisco on 9/13/16.
+ *
  * @author francisco
  */
 @XmlRootElement
@@ -250,8 +251,18 @@ public class Game {
      * @return true if there is a user with the same name in the game, false otherwise
      */
     boolean containsPlayer(Player player) {
+        return containsPlayer(player.getName());
+    }
+
+    /**
+     * Determine if there's a Player with the same name already joined to the game
+     *
+     * @param playerName the name of the player
+     * @return true if there is a user with the same name in the game, false otherwise
+     */
+    public boolean containsPlayer(String playerName) {
         for (Player p : playerList) {
-            if (StringUtils.equals(p.getName(), player.getName())) {
+            if (StringUtils.equals(p.getName(), playerName)) {
                 return true;
             }
         }
@@ -291,6 +302,7 @@ public class Game {
      * Ends the current game
      */
     public void end() {
+        this.managingPlayerName = null;
         this.locked = true;
         this.status = STATUS_INACTIVE;
     }
@@ -347,5 +359,14 @@ public class Game {
      */
     public List<Player> getPlayerList() {
         return playerList;
+    }
+
+    /**
+     * Is password protected boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPasswordProtected() {
+        return StringUtils.isNotBlank(password);
     }
 }

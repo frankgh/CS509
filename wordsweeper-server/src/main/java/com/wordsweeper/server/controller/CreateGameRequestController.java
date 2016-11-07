@@ -56,7 +56,7 @@ public class CreateGameRequestController extends ControllerChain {
         }
 
         if (game == null ||
-                !model.createGame(client, game)) { /* associate a clientState to the game */
+                !model.createGame(client, game, request.getCreateGameRequest().getName())) { /* associate a clientState to the game */
             return getUnsuccessfulResponse(request);
         }
 

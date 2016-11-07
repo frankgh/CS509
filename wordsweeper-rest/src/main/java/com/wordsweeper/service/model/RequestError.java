@@ -20,6 +20,11 @@ public class RequestError {
     public final static int GAME_IS_LOCKED = 403;
 
     /**
+     * The constant INVALID_PASSWORD.
+     */
+    public final static int INVALID_PASSWORD = 403;
+
+    /**
      * The constant PLAYER_ALREADY_EXISTS.
      */
     public final static int PLAYER_ALREADY_EXISTS = 400;

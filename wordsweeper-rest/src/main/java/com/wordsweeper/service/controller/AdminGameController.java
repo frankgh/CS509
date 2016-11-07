@@ -17,6 +17,11 @@ import javax.ws.rs.core.Response;
 @Path("/admin/game")
 public class AdminGameController {
 
+    /**
+     * Return a list of all games in the server.
+     *
+     * @return the list of games
+     */
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)

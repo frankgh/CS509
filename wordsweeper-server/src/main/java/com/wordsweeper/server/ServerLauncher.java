@@ -24,9 +24,9 @@ public class ServerLauncher {
         ServerModel serverModel = new ServerModel();
 
         WordSweeperProtocolHandler handler = new WordSweeperProtocolHandler();
+        handler.registerHandler(new ResetGameRequestController(serverModel));
         handler.registerHandler(new CreateGameRequestController(serverModel));
         handler.registerHandler(new JoinGameRequestController(serverModel));
-        handler.registerHandler(new ResetGameRequestController(serverModel));
 
         // Start server and have ProtocolHandler be responsible for all XML messages.
         //Server server = new Server(new WordSweeperProtocolHandler(serverModel), 11425);
