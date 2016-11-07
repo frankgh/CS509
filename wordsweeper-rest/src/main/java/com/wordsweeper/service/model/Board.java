@@ -8,35 +8,66 @@ import java.util.List;
 
 /**
  * Created by francisco on 9/13/16.
+ *
+ * @author francisco
  */
 @Entity
 @Table(name = "board")
 public class Board {
 
+    /**
+     * The Id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the board */
 
+    /**
+     * The Rows.
+     */
     @Column(name = "rows")
     int rows; /* The number of rows in the board */
 
+    /**
+     * The Columns.
+     */
     @Column(name = "columns")
     int columns; /* The number of columns in the board */
 
+    /**
+     * The Cell list.
+     */
     @OneToMany
     List<Cell> cellList; /* A list of all the cells that make up the board */
 
+    /**
+     * The Bonus cell location.
+     */
     @Embedded
     Location bonusCellLocation; /* The location of the bonus cell */
 
+    /**
+     * Instantiates a new Board.
+     */
     protected Board() {
     }
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param size the size
+     */
     public Board(int size) {
         this(size, size);
     }
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param rows    the rows
+     * @param columns the columns
+     */
     public Board(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
@@ -165,18 +196,38 @@ public class Board {
         this.cellList.add(index, new Cell());
     }
 
+    /**
+     * Gets rows.
+     *
+     * @return the rows
+     */
     public int getRows() {
         return rows;
     }
 
+    /**
+     * Gets columns.
+     *
+     * @return the columns
+     */
     public int getColumns() {
         return columns;
     }
 
+    /**
+     * Gets cell list.
+     *
+     * @return the cell list
+     */
     public List<Cell> getCellList() {
         return cellList;
     }
 
+    /**
+     * Gets bonus cell location.
+     *
+     * @return the bonus cell location
+     */
     public Location getBonusCellLocation() {
         return bonusCellLocation;
     }

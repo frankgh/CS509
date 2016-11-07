@@ -89,10 +89,9 @@ public class ServerThread extends Thread implements ClientState {
         }
 
         // client is done so thread can be de-registered
-        // TODO: fix this
-//        if (handler instanceof IShutdownHandler) {
-//            ((IShutdownHandler) handler).logout(Server.getState(id));
-//        }
+        if (handler instanceof IShutdownHandler) {
+            ((IShutdownHandler) handler).logout(Server.getState(id));
+        }
         Server.unregister(id);
 
         // close communication to client.

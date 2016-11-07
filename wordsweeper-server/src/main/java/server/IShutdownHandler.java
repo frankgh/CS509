@@ -2,10 +2,10 @@ package server;
 
 /**
  * If you want to be told when a client exits, make sure your ProtocolHandler
- * implements {@link IShutdownHandler} instead of {@link IProtocolHandler}.
+ * implements {@link IShutdownHandler}.
  * <p>
  */
-public interface IShutdownHandler extends IProtocolHandler {
+public interface IShutdownHandler {
 
     /**
      * When client terminates connection, this method is invoked, but only if

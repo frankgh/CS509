@@ -4,11 +4,12 @@ import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import server.ClientState;
+import server.IShutdownHandler;
 
 /**
  * Created by francisco on 10/27/16.
  */
-public class WordSweeperProtocolHandler implements IProtocolHandler {
+public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHandler {
 
     ControllerChain chain = new EmptyHandler();
 
@@ -41,5 +42,14 @@ public class WordSweeperProtocolHandler implements IProtocolHandler {
 
         System.err.println("Unable to handle message");
         return null;
+    }
+
+    /**
+     * When a client logs out, we need to communicate that to the API server
+     *
+     * @param state
+     */
+    public void logout(ClientState state) {
+
     }
 }
