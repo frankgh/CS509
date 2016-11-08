@@ -34,7 +34,7 @@ public class ServerLauncher {
         try {
             server.bind();
         } catch (IOException ioe) {
-            System.err.println("Unable to launch SERVER:" + ioe.getMessage());
+            System.err.println("Unable to launch server:" + ioe.getMessage());
             System.exit(-1);
         }
 
