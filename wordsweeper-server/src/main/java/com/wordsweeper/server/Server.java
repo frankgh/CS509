@@ -1,6 +1,7 @@
-package server;
+package com.wordsweeper.server;
 
 import com.wordsweeper.server.controller.IProtocolHandler;
+import com.wordsweeper.server.model.ClientState;
 
 import java.io.IOException;
 import java.net.ServerSocket;

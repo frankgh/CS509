@@ -42,39 +42,39 @@ public class RequestError {
     /**
      * The Error code.
      */
-    int errorCode;
+    int statusCode;
 
     /**
      * The Error description.
      */
-    String errorDescription;
+    String message;
 
     /**
      * Instantiates a new Request error.
      *
-     * @param errorCode        the error code
-     * @param errorDescription the error description
+     * @param statusCode the error code
+     * @param message    the message
      */
-    public RequestError(int errorCode, String errorDescription) {
-        this.errorCode = errorCode;
-        this.errorDescription = errorDescription;
+    public RequestError(int statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
     }
 
     /**
-     * Gets error code.
+     * Gets status code.
      *
-     * @return the error code
+     * @return the status code
      */
-    public int getErrorCode() {
-        return errorCode;
+    public int getStatusCode() {
+        return statusCode;
     }
 
     /**
-     * Gets error description.
+     * Gets message.
      *
-     * @return the error description
+     * @return the message
      */
-    public String getErrorDescription() {
-        return errorDescription;
+    public String getMessage() {
+        return message;
     }
 }

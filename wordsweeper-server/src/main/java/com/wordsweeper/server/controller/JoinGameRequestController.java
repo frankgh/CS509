@@ -2,19 +2,21 @@ package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-import server.ClientState;
 
 import java.io.IOException;
 
 /**
  * Controller on server to package up the current state of the model
  * as an updateResponse message and send it back to the client.
+ *
+ * @author francisco
  */
 public class JoinGameRequestController extends ControllerChain {
 
@@ -34,7 +36,7 @@ public class JoinGameRequestController extends ControllerChain {
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
-            return getUnsuccessfulResponse(request); /* Return empty response */
+            return getUnsuccessfulResponse(request, "The player is already in a game"); /* Return empty response */
         }
 
         Game game = null;
@@ -52,14 +54,25 @@ public class JoinGameRequestController extends ControllerChain {
         }
 
         try {
-            game = call.execute().body();
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
 
-        if (game == null ||
-                !model.joinGame(client, game)) {
-            return getUnsuccessfulResponse(request);
+        if (game == null) {
+            return getUnsuccessfulResponse(request, "Unable to join the game");
+        }
+
+        client.setData(request.getJoinGameRequest().getName());
+        if (!model.joinGame(client, game)) {
+            client.setData(null);
+            return getUnsuccessfulResponse(request, "Unable to join the game");
         }
 
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);

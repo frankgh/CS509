@@ -1,9 +1,8 @@
 package com.wordsweeper.server.model;
 
 import com.wordsweeper.server.api.model.Game;
-import server.ClientState;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,45 +12,29 @@ import java.util.Map;
  */
 public class ServerModel {
 
-    Map<String, List<GameSt>> gameMap = new HashMap<String, List<GameSt>>();
-
-    /**
-     * The Client id to game id map.
-     */
-    Map<String, String> clientIdToGameIdMap = new HashMap<String, String>();
-
-    /**
-     * The Users in game map.
-     */
-    Map<String, List<String>> usersInGameMap = new HashMap<String, List<String>>();
+    Map<String, GameSession> gameIdToGameSessionMap = new HashMap<String, GameSession>();
+    Map<String, GameSession> clientStateIdToGameSessionMap = new HashMap<String, GameSession>();
 
     /**
      * Create a game
      *
      * @param client the ClientState
-     * @param game   the game
+     * @param gameId the gameId
      * @return true if successfully added, false otherwise
      */
-    public boolean createGame(ClientState client, Game game, String playerName) {
+    public boolean createGame(ClientState client, String gameId) {
 
         if (isClientInGame(client)) {
             return false;
         }
 
-        synchronized (gameMap) {
+        synchronized (gameIdToGameSessionMap) {
+            GameSession gameSession = new GameSession(gameId);
+            gameSession.managingPlayer = (String) client.getData();
+            gameSession.addClientState(client);
 
-        }
-
-        synchronized (usersInGameMap) {
-            /* Create a list of ClientState IDs that are associated to the unique game ID */
-            List<String> userList = new ArrayList<String>();
-            userList.add(client.id());
-
-            /* Map a client id to a game */
-            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
-
-            /* Add a list of users to the gameId map */
-            usersInGameMap.put(game.getUniqueId(), userList);
+            gameIdToGameSessionMap.put(gameId, gameSession);
+            clientStateIdToGameSessionMap.put(client.id(), gameSession);
         }
 
         return true;
@@ -66,18 +49,17 @@ public class ServerModel {
      */
     public boolean joinGame(ClientState client, Game game) {
 
+        /* client is already in a game */
         if (isClientInGame(client)) {
             return false;
         }
 
-        synchronized (usersInGameMap) {
-            List<String> userList = usersInGameMap.get(game.getUniqueId());
+        synchronized (gameIdToGameSessionMap) {
+            GameSession gameSession = gameIdToGameSessionMap.get(game.getUniqueId());
+            gameSession.addClientState(client);
+            gameSession.managingPlayer = game.getManagingPlayerName();
 
-            /* Add user to the list of users in the game */
-            userList.add(client.id());
-
-            /* Map a client id to a game */
-            clientIdToGameIdMap.put(client.id(), game.getUniqueId());
+            clientStateIdToGameSessionMap.put(client.id(), gameSession);
         }
 
         return true;
@@ -89,8 +71,8 @@ public class ServerModel {
      * @param gameId the game id
      * @return the list
      */
-    public List<String> idsByGameId(String gameId) {
-        return usersInGameMap.get(gameId);
+    public List<ClientState> idsByGameId(String gameId) {
+        return gameIdToGameSessionMap.get(gameId).clientStateList;
     }
 
     /**
@@ -105,24 +87,22 @@ public class ServerModel {
             return false;
         }
 
-        synchronized (usersInGameMap) {
-            String gameId = clientIdToGameIdMap.get(client.id());
+        synchronized (gameIdToGameSessionMap) {
+            GameSession gameSession = clientStateIdToGameSessionMap.get(client.id());
 
-            if (!usersInGameMap.containsKey(gameId)) {
-                return false;
-            }
+            if (gameSession.removeClientState(client)) {
+                clientStateIdToGameSessionMap.remove(client.id());
+                client.setData(null);
 
-            List<String> usersInGame = usersInGameMap.get(gameId);
-
-            for (int i = 0; i < usersInGame.size(); i++) {
-                if (client.id().equals(usersInGame.get(i))) {
-                    usersInGame.remove(i);
-                    return true;
+                if (gameSession.isEmpty()) {
+                    gameIdToGameSessionMap.remove(gameSession.gameId);
                 }
+            } else {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -132,7 +112,7 @@ public class ServerModel {
      * @return true if the client is in a game, false otherwise
      */
     public boolean isClientInGame(ClientState client) {
-        return clientIdToGameIdMap.containsKey(client.id());
+        return clientStateIdToGameSessionMap.containsKey(client.id());
     }
 
     /**
@@ -142,16 +122,18 @@ public class ServerModel {
      * @return the game ID for the user
      */
     public String getGameId(ClientState client) {
-        return clientIdToGameIdMap.containsKey(client.id()) ? clientIdToGameIdMap.get(client.id()) : null;
+        return clientStateIdToGameSessionMap.containsKey(client.id())
+                ? clientStateIdToGameSessionMap.get(client.id()).gameId
+                : null;
     }
 
     public boolean isManagingPlayer(ClientState client) {
-        // TODO: implement
-        return true;
-    }
 
-    public String getPlayerName(ClientState client) {
-        // TODO: implement
-        return null;
+        if (!isClientInGame(client)) {
+            return false;
+        }
+
+        GameSession gameSession = clientStateIdToGameSessionMap.get(client.id());
+        return StringUtils.equals(gameSession.managingPlayer, (String) client.getData());
     }
 }

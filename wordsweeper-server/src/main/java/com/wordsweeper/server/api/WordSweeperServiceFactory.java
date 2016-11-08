@@ -21,6 +21,8 @@ public class WordSweeperServiceFactory {
      */
     private static final WordSweeperService service;
 
+    private static final Retrofit retrofit;
+
     static {
 
 //        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -28,7 +30,7 @@ public class WordSweeperServiceFactory {
 //        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         OkHttpClient client = new OkHttpClient.Builder().build();
 
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl("http://localhost:8080/wordsweeper/rest/") // TODO: hardcoded URL
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -43,5 +45,14 @@ public class WordSweeperServiceFactory {
      */
     public static WordSweeperService getService() {
         return service;
+    }
+
+    /**
+     * Return the retrofit object.
+     *
+     * @return the retrofit
+     */
+    public static Retrofit retrofit() {
+        return retrofit;
     }
 }

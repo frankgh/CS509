@@ -1,12 +1,8 @@
 package com.wordsweeper.server;
 
 
-import com.wordsweeper.server.controller.CreateGameRequestController;
-import com.wordsweeper.server.controller.JoinGameRequestController;
-import com.wordsweeper.server.controller.ResetGameRequestController;
-import com.wordsweeper.server.controller.WordSweeperProtocolHandler;
+import com.wordsweeper.server.controller.*;
 import com.wordsweeper.server.model.ServerModel;
-import server.Server;
 
 import java.io.IOException;
 
@@ -23,7 +19,8 @@ public class ServerLauncher {
         // Server-side model contains everything you need on the server.
         ServerModel serverModel = new ServerModel();
 
-        WordSweeperProtocolHandler handler = new WordSweeperProtocolHandler();
+        WordSweeperProtocolHandler handler = new WordSweeperProtocolHandler(serverModel);
+        handler.registerHandler(new ExitGameRequestController(serverModel));
         handler.registerHandler(new ResetGameRequestController(serverModel));
         handler.registerHandler(new CreateGameRequestController(serverModel));
         handler.registerHandler(new JoinGameRequestController(serverModel));

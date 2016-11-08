@@ -2,13 +2,13 @@ package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-import server.ClientState;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public class CreateGameRequestController extends ControllerChain {
 
         if (model.isClientInGame(client)) {
             // Rogue client wants to create a game without exiting his previous game
-            return getUnsuccessfulResponse(request);
+            return getUnsuccessfulResponse(request, "The player is already in a game");
         }
 
         Game game = null;
@@ -50,14 +50,25 @@ public class CreateGameRequestController extends ControllerChain {
         }
 
         try {
-            game = call.execute().body();
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
 
-        if (game == null ||
-                !model.createGame(client, game, request.getCreateGameRequest().getName())) { /* associate a clientState to the game */
-            return getUnsuccessfulResponse(request);
+        if (game == null) {
+            return getUnsuccessfulResponse(request, "Unable to create the game");
+        }
+
+        client.setData(request.getCreateGameRequest().getName());
+        if (!model.createGame(client, game.getUniqueId())) { /* associate a clientState to the game */
+            client.setData(null);
+            return getUnsuccessfulResponse(request, "Unable to create the game");
         }
 
         /* Map the game to a BoardResponse object */

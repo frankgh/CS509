@@ -1,11 +1,11 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import server.ClientState;
-import server.Server;
 
 /**
  * Created by francisco on 10/27/16.
@@ -82,11 +82,23 @@ public abstract class ControllerChain implements IProtocolHandler {
      * @param request the request
      * @return the empty unsuccessful response
      */
-    protected Response getUnsuccessfulResponse(Request request) {
+    protected Response getUnsuccessfulResponse(Request request, String reason) {
         Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(false); /* success to false */
+        response.setReason(reason);
         return response;
+    }
+
+    /**
+     * Handle API errors and return an unsuccessful response to the client
+     *
+     * @param request  the request
+     * @param response the response
+     * @return the response
+     */
+    protected Response handleAPIError(Request request, retrofit2.Response<?> response) {
+        return getUnsuccessfulResponse(request, MappingUtil.parseError(response).message());
     }
 
     /**
@@ -100,9 +112,9 @@ public abstract class ControllerChain implements IProtocolHandler {
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
         // hint: rely on your game to store player names...
-        for (String id : model.idsByGameId(gameId)) {
-            if (!id.equals(clientId)) {
-                Server.getState(id).sendMessage(response);
+        for (ClientState state : model.idsByGameId(gameId)) {
+            if (!state.id().equals(clientId)) {
+                state.sendMessage(response);
             }
         }
     }

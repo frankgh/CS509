@@ -1,20 +1,45 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.model.ClientState;
+import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import server.ClientState;
-import server.IShutdownHandler;
 
 /**
+ * WordSweeperProtocolHandler is in charge of registering handlers and processing
+ * requests, handing them off to the handler that is able to process such request.
+ * WordSweeperProtocolHandler will also make sure that clients that disconnect
+ * from the server are removed from the API and the local ServerModel state.
+ * <p>
  * Created by francisco on 10/27/16.
+ *
+ * @author francisco
  */
 public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHandler {
 
+    /**
+     * The Model.
+     */
+    ServerModel model;
+    /**
+     * The Chain.
+     */
     ControllerChain chain = new EmptyHandler();
 
     /**
+     * Instantiates a new Word sweeper protocol handler.
+     *
+     * @param model the model
+     */
+    public WordSweeperProtocolHandler(ServerModel model) {
+        this.model = model;
+    }
+
+    /**
      * Register new controller chain as occurring before existing chain.
+     *
+     * @param handler the handler
      */
     public void registerHandler(ControllerChain handler) {
         handler.next = chain;
@@ -34,9 +59,8 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
         ControllerChain handler = chain;
 
         while (handler != null) {
-            if (handler.canProcess(request)) {
+            if (handler.canProcess(request))
                 return handler.process(state, request);
-            }
             handler = (ControllerChain) handler.next;
         }
 
@@ -45,11 +69,17 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
     }
 
     /**
-     * When a client logs out, we need to communicate that to the API server
+     * Find a suitable Handler that is able to Shutdown the client connection
      *
      * @param state
      */
     public void logout(ClientState state) {
 
+        ControllerChain handler = chain;
+        while (handler != null) {
+            if (handler instanceof IShutdownHandler)
+                ((IShutdownHandler) handler).logout(state);
+            handler = (ControllerChain) handler.next;
+        }
     }
 }

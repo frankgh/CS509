@@ -2,7 +2,7 @@ package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import server.ClientState;
+import com.wordsweeper.server.model.ClientState;
 
 /**
  * Created by francisco on 10/27/16.

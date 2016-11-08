@@ -2,12 +2,12 @@ package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import server.ClientState;
 
 import java.io.IOException;
 
@@ -34,20 +34,21 @@ public class ResetGameRequestController extends ControllerChain {
 
         /* If the client is not in a game return an unsuccessful response */
         if (!model.isClientInGame(client)) {
-            return getUnsuccessfulResponse(request); /* Return empty response */
+            return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
         }
 
         /* Only the managing player can reset the game */
         if (!model.isManagingPlayer(client)) {
-            return getUnsuccessfulResponse(request); /* Return empty response */
+            return getUnsuccessfulResponse(request, "The player is not the managing player"); /* Return empty response */
         }
 
         Game game = null;
         String gameId = model.getGameId(client);
+        String playerName = (String) client.getData();
 
         try {
             game = WordSweeperServiceFactory.getService()
-                    .resetGame(gameId, model.getPlayerName(client))
+                    .resetGame(gameId, playerName)
                     .execute().body();
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
@@ -55,7 +56,7 @@ public class ResetGameRequestController extends ControllerChain {
 
         /* The request failed, return unsuccessful response */
         if (game == null) {
-            return getUnsuccessfulResponse(request);
+            return getUnsuccessfulResponse(request, "Unable to reset game");
         }
 
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);

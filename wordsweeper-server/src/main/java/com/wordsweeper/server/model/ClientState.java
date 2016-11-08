@@ -1,4 +1,4 @@
-package server;
+package com.wordsweeper.server.model;
 
 import com.wordsweeper.server.xml.Response;
 
