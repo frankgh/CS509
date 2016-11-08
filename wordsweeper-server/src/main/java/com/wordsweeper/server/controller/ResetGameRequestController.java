@@ -12,24 +12,33 @@ import com.wordsweeper.server.xml.Response;
 import java.io.IOException;
 
 /**
- * Created by francisco on 10/25/16.
+ * Controller on server in charge of relying resetGame requests
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game
+ *
+ * @author francisco
  */
 public class ResetGameRequestController extends ControllerChain {
 
+    /**
+     * Instantiates a new Reset game request controller.
+     *
+     * @param model the model
+     */
     public ResetGameRequestController(ServerModel model) {
         this.model = model;
     }
 
-    /**
-     * Can process boolean.
-     *
-     * @param request the request
-     * @return true if the handler can process the request, false otherwise
-     */
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
     public boolean canProcess(Request request) {
         return request != null && request.getResetGameRequest() != null;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
     public Response process(ClientState client, Request request) {
 
         /* If the client is not in a game return an unsuccessful response */
@@ -39,7 +48,7 @@ public class ResetGameRequestController extends ControllerChain {
 
         /* Only the managing player can reset the game */
         if (!model.isManagingPlayer(client)) {
-            return getUnsuccessfulResponse(request, "The player is not the managing player"); /* Return empty response */
+            return getUnsuccessfulResponse(request, "Only the managing player is allowed to reset the game"); /* Return empty response */
         }
 
         Game game = null;
@@ -47,9 +56,15 @@ public class ResetGameRequestController extends ControllerChain {
         String playerName = (String) client.getData();
 
         try {
-            game = WordSweeperServiceFactory.getService()
+            retrofit2.Response<Game> apiResponse = WordSweeperServiceFactory.getService()
                     .resetGame(gameId, playerName)
-                    .execute().body();
+                    .execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
@@ -65,7 +80,7 @@ public class ResetGameRequestController extends ControllerChain {
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
-        broadcastResponse(response, client.id(), gameId);
+        broadcastResponse(response, client.id(), game);
 
         return response;
     }

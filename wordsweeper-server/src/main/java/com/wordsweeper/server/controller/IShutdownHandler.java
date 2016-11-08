@@ -6,6 +6,9 @@ import com.wordsweeper.server.model.ClientState;
  * If you want to be told when a client exits, make sure your ProtocolHandler
  * implements {@link IShutdownHandler}.
  * <p>
+ *
+ * @author heineman
+ * @author francisco
  */
 public interface IShutdownHandler {
 

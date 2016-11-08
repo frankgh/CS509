@@ -11,6 +11,8 @@ import java.util.Hashtable;
 
 /**
  * Generic Server in a Client/Server communication.
+ *
+ * @author heineman
  */
 public class Server {
     int state = 0;                       /* Server state. 0=inactive, 1=accepting */
@@ -77,6 +79,11 @@ public class Server {
         return true;
     }
 
+    /**
+     * Unregister thread
+     *
+     * @param id the id of the thread
+     */
     public static void unregister(String id) {
         ids.remove(id);
     }

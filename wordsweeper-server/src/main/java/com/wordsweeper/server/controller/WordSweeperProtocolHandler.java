@@ -46,12 +46,16 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
         chain = handler;
     }
 
-    /**
-     * Process the request through the chain
-     *
-     * @param state   the ClientState
-     * @param request the request
-     */
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
+    public boolean canProcess(Request request) {
+        return false;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
     public Response process(ClientState state, Request request) {
 
         System.out.println("Request Received:");

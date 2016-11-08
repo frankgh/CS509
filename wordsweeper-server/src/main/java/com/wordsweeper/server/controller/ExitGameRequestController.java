@@ -14,7 +14,11 @@ import retrofit2.Call;
 import java.io.IOException;
 
 /**
- * Controller on server to handle exitGame Requests from the clients.
+ * Controller on server in charge of relying exitGame requests
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game. Additionally, this controller
+ * implements IShutdownHandler and makes sure that the state of
+ * the game is up-to-date
  *
  * @author francisco
  */
@@ -29,6 +33,9 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
         this.model = model;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IShutdownHandler#logout(com.wordsweeper.server.model.ClientState)
+	 */
     public void logout(ClientState state) {
 
         /* If the client is still joined to game, we need to remove him */
@@ -39,10 +46,16 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
     public boolean canProcess(Request request) {
         return request != null && request.getExitGameRequest() != null;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
     public Response process(ClientState client, Request request) {
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
@@ -51,7 +64,13 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
         Call<Game> call = WordSweeperServiceFactory.getService().exitGame(gameId, playerName);
 
         try {
-            game = call.execute().body();
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
@@ -66,7 +85,7 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
-        broadcastResponse(response, client.id(), gameId);
+        broadcastResponse(response, client.id(), game);
 
         // send this response back to the client which sent us the request.
         return response;

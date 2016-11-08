@@ -9,10 +9,18 @@ import java.util.Map;
 
 /**
  * The server model that holds information about connections and games
+ *
+ * @author francisco
  */
 public class ServerModel {
 
+    /**
+     * The Game id to game session map.
+     */
     Map<String, GameSession> gameIdToGameSessionMap = new HashMap<String, GameSession>();
+    /**
+     * The Client state id to game session map.
+     */
     Map<String, GameSession> clientStateIdToGameSessionMap = new HashMap<String, GameSession>();
 
     /**
@@ -127,6 +135,12 @@ public class ServerModel {
                 : null;
     }
 
+    /**
+     * Determine if ClientState is the managing player
+     *
+     * @param client the client
+     * @return true if client is the managing player, false otherwise
+     */
     public boolean isManagingPlayer(ClientState client) {
 
         if (!isClientInGame(client)) {
@@ -135,5 +149,36 @@ public class ServerModel {
 
         GameSession gameSession = clientStateIdToGameSessionMap.get(client.id());
         return StringUtils.equals(gameSession.managingPlayer, (String) client.getData());
+    }
+
+    /**
+     * Update game with the latest data from the server
+     *
+     * @param game the game
+     * @return true if the game has updates, false otherwise
+     */
+    public boolean updateGame(Game game) {
+
+        synchronized (gameIdToGameSessionMap) {
+            GameSession gameSession = gameIdToGameSessionMap.get(game.getUniqueId());
+
+            if (gameSession == null) {
+                return false;
+            }
+
+            boolean hasUpdates = false;
+
+            if (!StringUtils.equals(gameSession.managingPlayer, game.getManagingPlayerName())) {
+                gameSession.managingPlayer = game.getManagingPlayerName();
+                hasUpdates = true;
+            }
+
+            if (gameSession.isEmpty()) {
+                gameIdToGameSessionMap.remove(game.getUniqueId());
+                hasUpdates = true;
+            }
+
+            return hasUpdates;
+        }
     }
 }

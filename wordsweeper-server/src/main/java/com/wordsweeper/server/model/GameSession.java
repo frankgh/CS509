@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by francisco on 10/29/16.
+ * A class to maintain Game Session values in the thin server.
+ *
+ * @author francisco
  */
 public class GameSession {
 

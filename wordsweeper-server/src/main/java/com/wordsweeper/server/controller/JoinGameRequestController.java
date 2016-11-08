@@ -13,8 +13,9 @@ import retrofit2.Call;
 import java.io.IOException;
 
 /**
- * Controller on server to package up the current state of the model
- * as an updateResponse message and send it back to the client.
+ * Controller on server in charge of relying joinGame requests
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game
  *
  * @author francisco
  */
@@ -29,10 +30,16 @@ public class JoinGameRequestController extends ControllerChain {
         this.model = model;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
     public boolean canProcess(Request request) {
         return request != null && request.getJoinGameRequest() != null;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
@@ -81,7 +88,7 @@ public class JoinGameRequestController extends ControllerChain {
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
-        broadcastResponse(response, client.id(), request.getJoinGameRequest().getGameId());
+        broadcastResponse(response, client.id(), game);
 
         // send this response back to the client which sent us the request.
         return response;

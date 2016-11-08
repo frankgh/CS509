@@ -18,6 +18,8 @@ import java.util.UUID;
 
 /**
  * Thread to handle individual requests from a client.
+ *
+ * @author heineman
  */
 public class ServerThread extends Thread implements ClientState {
     final Socket client;             // Socket used by thread to communicate with client.

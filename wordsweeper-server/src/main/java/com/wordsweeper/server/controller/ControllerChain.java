@@ -1,5 +1,6 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
@@ -8,7 +9,10 @@ import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 
 /**
- * Created by francisco on 10/27/16.
+ * ControllerChain is in charge of chaining up all the controllers.
+ *
+ * @author heineman
+ * @author francisco
  */
 public abstract class ControllerChain implements IProtocolHandler {
 
@@ -106,16 +110,17 @@ public abstract class ControllerChain implements IProtocolHandler {
      *
      * @param response the response to be broadcast
      * @param clientId the clientId of the requesting client
-     * @param gameId   the gameId
+     * @param game     the game
      */
-    protected void broadcastResponse(Response response, String clientId, String gameId) {
+    protected void broadcastResponse(Response response, String clientId, Game game) {
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
         // hint: rely on your game to store player names...
-        for (ClientState state : model.idsByGameId(gameId)) {
+        for (ClientState state : model.idsByGameId(game.getUniqueId())) {
             if (!state.id().equals(clientId)) {
                 state.sendMessage(response);
             }
         }
+        model.updateGame(game);
     }
 }

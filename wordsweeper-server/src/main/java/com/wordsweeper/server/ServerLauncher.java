@@ -8,6 +8,8 @@ import java.io.IOException;
 
 /**
  * Code to launch Server  from the command line.
+ *
+ * @author francisco
  */
 public class ServerLauncher {
 

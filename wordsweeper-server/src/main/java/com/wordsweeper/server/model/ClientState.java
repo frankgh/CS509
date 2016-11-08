@@ -4,6 +4,8 @@ import com.wordsweeper.server.xml.Response;
 
 /**
  * Server-side interface to per-client state. Exposes only the methods of ServerThread that are safe.
+ *
+ * @author heineman
  */
 public interface ClientState {
 
