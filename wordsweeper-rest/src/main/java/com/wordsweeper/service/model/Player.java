@@ -3,9 +3,8 @@ package com.wordsweeper.service.model;
 import javax.persistence.*;
 
 /**
- * Model class for Player
+ * Model class for the WordSweeper Player
  *
- * Created by francisco on 9/13/16.
  * @author francisco
  */
 @Entity

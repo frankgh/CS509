@@ -1,6 +1,7 @@
 package com.wordsweeper.service.controller;
 
 import com.wordsweeper.service.model.Game;
+import com.wordsweeper.service.model.Player;
 import com.wordsweeper.service.model.RequestError;
 import com.wordsweeper.service.repository.GameDao;
 import com.wordsweeper.service.repository.GameDaoImpl;
@@ -13,23 +14,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The board controller
- * <p>
- * Created by francisco on 11/7/16.
+ * Player controller
  *
  * @author francisco
  */
-@Path("/board")
-public class BoardController {
+@Path("/player")
+public class PlayerController {
 
-
+    /**
+     * Reposition a Player's board by the provided rowChange and columnChange values.
+     *
+     * @param gameId       the game id
+     * @param playerName   the player name
+     * @param rowChange    the row change
+     * @param columnChange the column change
+     * @return the response
+     */
     @GET
     @Path("/reposition/{gameId}/{playerName}/{rowChange}/{columnChange}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response repositionBoard(@PathParam("gameId") String gameId,
                                     @PathParam("playerName") String playerName,
-                                    @PathParam("rowChange") String rowChange,
-                                    @PathParam("columnChange") String columnChange) {
+                                    @PathParam("rowChange") int rowChange,
+                                    @PathParam("columnChange") int columnChange) {
 
         GameDao gameDao = new GameDaoImpl();
         Game game = gameDao.findByGameId(gameId);
@@ -41,15 +48,18 @@ public class BoardController {
                     .build();
         }
 
-        if (!game.containsPlayer(playerName)) {
+        Player player = game.getPlayer(playerName);
+
+        if (player == null) {
             return Response
                     .ok(new RequestError(RequestError.NO_SUCH_PLAYER_EXISTS, "No such player exists in the game"))
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
 
-      //  blaaahh
+        game.repositionBoard(player, rowChange, columnChange);
+        gameDao.save(game);
 
-        return null;
+        return Response.ok(game).build(); /* Return response with the game object */
     }
 }

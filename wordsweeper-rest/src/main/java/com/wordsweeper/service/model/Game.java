@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by francisco on 9/13/16.
+ * Model for the WordSweeper Game
  *
  * @author francisco
  */
@@ -221,6 +221,21 @@ public class Game {
     }
 
     /**
+     * Gets a player by player name.
+     *
+     * @param playerName the player name
+     * @return the player if it exists, null otherwise
+     */
+    public Player getPlayer(String playerName) {
+        for (Player p : playerList) {
+            if (StringUtils.equals(p.getName(), playerName)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Resets the status of the board and all
      * the player scores and their position on the board.
      */
@@ -260,14 +275,8 @@ public class Game {
      * @param playerName the name of the player
      * @return true if there is a user with the same name in the game, false otherwise
      */
-    public boolean containsPlayer(String playerName) {
-        for (Player p : playerList) {
-            if (StringUtils.equals(p.getName(), playerName)) {
-                return true;
-            }
-        }
-
-        return false;
+    boolean containsPlayer(String playerName) {
+        return getPlayer(playerName) != null;
     }
 
     /**
@@ -368,5 +377,20 @@ public class Game {
      */
     public boolean isPasswordProtected() {
         return StringUtils.isNotBlank(password);
+    }
+
+    /**
+     * Reposition Player's board by rowChange and columnChange, staying within bounds
+     *
+     * @param player       the player to reposition
+     * @param rowChange    the rowChange
+     * @param columnChange the columnChange
+     */
+    public void repositionBoard(Player player, int rowChange, int columnChange) {
+        player.setOffset(new Location(
+                Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
+                        board.getRows() - PLAYER_BOARD_ROWS - 1)),
+                Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
+                        board.getColumns() - PLAYER_BOARD_COLUMNS - 1))));
     }
 }
