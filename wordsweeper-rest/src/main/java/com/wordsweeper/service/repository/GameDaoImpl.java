@@ -1,26 +1,34 @@
 package com.wordsweeper.service.repository;
 
+import com.wordsweeper.service.model.Cell;
 import com.wordsweeper.service.model.Game;
+import com.wordsweeper.service.model.Player;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * Created by afguerrerohernan on 9/27/2016.
+ * Created by Francisco on 9/27/2016.
  */
-public class GameDaoImpl implements GameDao {
-
-    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("db-manager");
+public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
     @Override
     public Game save(Game entity) {
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
+
+        for (Cell cell : entity.getBoard().getCellList()) {
+            entityManager.persist(cell);
+        }
+
+        for (Player player : entity.getPlayerList()) {
+            entityManager.persist(player); /* persist the player */
+        }
+
+        entityManager.persist(entity.getBoard()); /* persist the board */
         entityManager.persist(entity);
+
         entityManager.getTransaction().commit();
         entityManager.close();
 
@@ -28,27 +36,18 @@ public class GameDaoImpl implements GameDao {
     }
 
     @Override
-    public Game findById(int id) {
+    public Game findByGameId(String gameId) {
 
-        Query query = entityManagerFactory.createEntityManager()
-                .createQuery("FROM Game where uniqueId = ?");
+        TypedQuery<Game> query = getEntityManager()
+                .createQuery("FROM Game WHERE uniqueId = :uniqueId", Game.class);
+        query.setParameter("uniqueId", gameId);
 
-
-        return null;
-    }
-
-    @Override
-    public Game update(Game entity) {
-        return null;
-    }
-
-    @Override
-    public Game delete(Game entity) {
-        return null;
+        List<Game> gameList = query.getResultList();
+        return gameList != null && gameList.size() > 0 ? gameList.get(0) : null;
     }
 
     @Override
     public List<Game> findAll() {
-        return entityManagerFactory.createEntityManager().createQuery("from Game").getResultList();
+        return getEntityManager().createQuery("from Game", Game.class).getResultList();
     }
 }

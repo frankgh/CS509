@@ -3,36 +3,52 @@ package com.wordsweeper.service.model;
 import com.wordsweeper.service.util.RandomUtil;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by francisco on 9/13/16.
+ *
+ * @author francisco
  */
 @Entity
 @Table(name = "cell")
 public class Cell {
 
+    /**
+     * The constant DEFAULT_CELL_MULTIPLIER.
+     */
     public static final int DEFAULT_CELL_MULTIPLIER = 1;
+    /**
+     * The constant MAX_CELL_MULTIPLIER.
+     */
     public static final int MAX_CELL_MULTIPLIER = 10;
 
+    /**
+     * The Id.
+     */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the cell */
 
+    /**
+     * The Letter.
+     */
     @Embedded
     Letter letter;
 
-    @NotNull
-    @Column(name = "multiplier")
-    int multiplier;
-
+    /**
+     * Instantiates a new Cell.
+     */
     public Cell() {
         this.letter = new Letter(RandomUtil.getRandomCharacter(), 1);
-        this.multiplier = DEFAULT_CELL_MULTIPLIER;
     }
 
-    public void setMultiplier(int multiplier) {
-        this.multiplier = multiplier;
+    /**
+     * Gets letter.
+     *
+     * @return the letter
+     */
+    public Letter getLetter() {
+        return letter;
     }
 }

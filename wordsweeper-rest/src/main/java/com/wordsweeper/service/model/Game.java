@@ -5,48 +5,91 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by francisco on 9/13/16.
+ *
+ * @author francisco
  */
+@XmlRootElement
 @Entity
 @Table(name = "game")
 public class Game {
 
-    private static final int STATUS_ACTIVE = 0;
-    private static final int STATUS_INACTIVE = 1;
-    private static final int DEFAULT_BOARD_SIZE = 7;
-    private static final int PLAYER_BOARD_ROWS = 4;
-    private static final int PLAYER_BOARD_COLUMNS = 4;
+    /**
+     * The Status active.
+     */
+    static final int STATUS_ACTIVE = 0;
+    /**
+     * The Status inactive.
+     */
+    static final int STATUS_INACTIVE = 1;
+    /**
+     * The Default board size.
+     */
+    static final int DEFAULT_BOARD_SIZE = 7;
+    /**
+     * The Player board rows.
+     */
+    static final int PLAYER_BOARD_ROWS = 4;
+    /**
+     * The Player board columns.
+     */
+    static final int PLAYER_BOARD_COLUMNS = 4;
 
+    /**
+     * The Id.
+     */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The internal id of the game */
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    /**
+     * The Board.
+     */
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
     Board board;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    /**
+     * The Player list.
+     */
+    @OneToMany
     List<Player> playerList;
 
+    /**
+     * The Managing player name.
+     */
     @Column(name = "managingPlayerName")
     String managingPlayerName;
 
+    /**
+     * The Locked.
+     */
     @NotNull
     @Column(name = "locked")
-    private boolean locked;
+    boolean locked;
 
+    /**
+     * The Password.
+     */
     @Column(name = "password")
-    private String password;
+    String password;
 
+    /**
+     * The Unique id.
+     */
     @NotNull
     @Column(name = "uniqueId")
-    private final String uniqueId;
+    final String uniqueId;
 
-    /*
+    /**
+     * The Status.
+     */
+/*
     0: Active
     1: Inactive
      */
@@ -54,14 +97,28 @@ public class Game {
     @Column(name = "status")
     int status;
 
+    /**
+     * Instantiates a new Game.
+     */
     protected Game() {
         this.uniqueId = RandomUtil.nextUniqueId();
     }
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param player the player
+     */
     public Game(Player player) {
         this(player, null);
     }
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param player   the player
+     * @param password the password
+     */
     public Game(Player player, String password) {
         this.status = STATUS_ACTIVE;
         this.board = new Board(DEFAULT_BOARD_SIZE);
@@ -183,19 +240,29 @@ public class Game {
      */
     private void randomizePlayerLocation(Player player) {
         player.setOffset(new Location(
-                board.getRows() - PLAYER_BOARD_ROWS,
-                board.getColumns() - PLAYER_BOARD_COLUMNS));
+                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS),
+                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS)));
     }
 
     /**
      * Determine if there's a Player with the same name already joined to the game
      *
-     * @param player
+     * @param player the player
      * @return true if there is a user with the same name in the game, false otherwise
      */
     boolean containsPlayer(Player player) {
+        return containsPlayer(player.getName());
+    }
+
+    /**
+     * Determine if there's a Player with the same name already joined to the game
+     *
+     * @param playerName the name of the player
+     * @return true if there is a user with the same name in the game, false otherwise
+     */
+    public boolean containsPlayer(String playerName) {
         for (Player p : playerList) {
-            if (StringUtils.equals(p.getName(), player.getName())) {
+            if (StringUtils.equals(p.getName(), playerName)) {
                 return true;
             }
         }
@@ -224,21 +291,18 @@ public class Game {
     /**
      * Locks the game if the locking user is the managing user
      *
-     * @param currentPlayerName the name of the manager user
      * @return true if the game was locked, false otherwise
      */
-    public boolean lock(String currentPlayerName) {
-        if (StringUtils.equals(managingPlayerName, currentPlayerName)) {
-            this.locked = true;
-            return true;
-        }
-        return false;
+    public boolean lock() {
+        this.locked = true;
+        return true;
     }
 
     /**
      * Ends the current game
      */
     public void end() {
+        this.managingPlayerName = null;
         this.locked = true;
         this.status = STATUS_INACTIVE;
     }
@@ -252,7 +316,57 @@ public class Game {
         return status == STATUS_INACTIVE;
     }
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public Board getBoard() {
         return board;
+    }
+
+    /**
+     * Gets managing player name.
+     *
+     * @return the managing player name
+     */
+    public String getManagingPlayerName() {
+        return managingPlayerName;
+    }
+
+    /**
+     * Gets password.
+     *
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Gets unique id.
+     *
+     * @return the unique id
+     */
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    /**
+     * Gets player list.
+     *
+     * @return the player list
+     */
+    public List<Player> getPlayerList() {
+        return playerList;
+    }
+
+    /**
+     * Is password protected boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPasswordProtected() {
+        return StringUtils.isNotBlank(password);
     }
 }

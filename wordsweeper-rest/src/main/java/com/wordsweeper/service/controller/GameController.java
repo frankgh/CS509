@@ -2,6 +2,7 @@ package com.wordsweeper.service.controller;
 
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
+import com.wordsweeper.service.model.RequestError;
 import com.wordsweeper.service.repository.GameDao;
 import com.wordsweeper.service.repository.GameDaoImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -9,117 +10,209 @@ import org.apache.commons.lang3.StringUtils;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * The game controller
+ * <p>
  * Created by francisco on 9/15/16.
+ *
+ * @author francisco
  */
 @Path("/game")
 public class GameController {
 
+    /**
+     * Creates a game in the persistence layer with the provided playerName and optional password
+     *
+     * @param playerName the name of the player
+     * @param password   (optional) an optional password for the game
+     * @return the Game object
+     */
     @GET
-    @Path("/create/{playerName}{password:(/password/[^/]+?)?}")
+    @Path("/create/{playerName}{p:(/password/)?}{password:([^/]+)?}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response create(@PathParam("playerName") String playerName, @PathParam("password") String password) {
 
         Player player = new Player(playerName); /* create a new player for the board */
-        Game game;
+        Game game = new Game(player, StringUtils.isBlank(password) ? null : password); /* create the game */
 
-        if (StringUtils.isBlank(password)) {
-            game = new Game(player); /* create a game with the new player */
-        } else {
-            game = new Game(player, password); /* Create a password protected game */
-        }
+        GameDao gameDao = new GameDaoImpl(); /* Data-access (persistence) object for Game */
+        gameDao.save(game); /* persist the game */
 
-        GameDao gameDao = new GameDaoImpl();
-        gameDao.save(game);
-
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return Response.ok(game).build();
     }
 
+    /**
+     * Join an existing game
+     *
+     * @param gameId     the unique ID of the existing game
+     * @param playerName the name of the joining player
+     * @param password   (optional) if the game is password protected, supply the password of the game
+     * @return the updated game status if success, a request error otherwise
+     */
     @GET
-    @Path("/join/{gameId}/{playerName}{password:(/password/[^/]+?)?}")
+    @Path("/join/{gameId}/{playerName}{p:(/password/)?}{password:([^/]+)?}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response join(@PathParam("gameId") String gameId,
                          @PathParam("playerName") String playerName,
                          @PathParam("password") String password) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl(); /* Data-access (persistence) object for Game */
+        Game game = gameDao.findByGameId(gameId);
 
-        if (game.ended() || game.isLocked()) {
-            return null;
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
         }
 
-        boolean addPlayer;
-
-        if (StringUtils.isBlank(password)) {
-            addPlayer = game.addPlayer(playerName); /* join the game */
-        } else {
-            addPlayer = game.addPlayer(playerName, password); /* join a password protected game */
+        if (game.isLocked()) {
+            return Response
+                    .ok(new RequestError(RequestError.GAME_IS_LOCKED, "The game is locked"))
+                    .status(Response.Status.FORBIDDEN)
+                    .build();
         }
+
+        if (game.isPasswordProtected() && !StringUtils.equals(password, game.getPassword())) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_PASSWORD, "The game is password protected"))
+                    .status(Response.Status.FORBIDDEN)
+                    .build();
+        }
+
+        boolean addPlayer = game.addPlayer(playerName,
+                StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
             game.getBoard().reset(); /* finally, reset the board */
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.PLAYER_ALREADY_EXISTS,
+                            "There is a player in the game with the same name"))
+                    .status(Response.Status.BAD_REQUEST)
+                    .build();
         }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return Response.ok(game).build(); /* Return response with the game object */
     }
 
+    /**
+     * Lock the game.
+     *
+     * @param gameId     the unique ID of the existing game
+     * @param playerName the name of the managing player name
+     * @return the updated game status if success, a request error otherwise
+     */
     @GET
     @Path("/lock/{gameId}/{playerName}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response lock(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        game.lock(playerName);
-
-        // TODO: persist game
-
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
-    }
-
-    @GET
-    @Path("/exit/{gameId}/{playerName}")
-    public Response exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
-
-        // TODO: actually load the game here
-        Game game = new Game(null);
-
-        game.removePlayer(playerName);
-
-        if (game.isEmpty()) {
-            game.end();
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
         }
 
-        // TODO: persist game
+        if (game.isLocked()) {
+            return Response
+                    .ok(new RequestError(RequestError.GAME_IS_LOCKED, "The game is already locked"))
+                    .status(Response.Status.FORBIDDEN)
+                    .build();
+        }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        if (StringUtils.equals(game.getManagingPlayerName(), playerName)) {
+            game.lock();
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.UNAUTHORIZED, "You are not authorized to perform this task"))
+                    .status(Response.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        return Response.ok(game).build(); /* Return response with the game object */
     }
 
+    /**
+     * Exit current game.
+     *
+     * @param gameId     the unique ID of the existing game
+     * @param playerName the name of the player that is leaving the game
+     * @return the updated game status if success, a request error otherwise
+     */
     @GET
-    @Path("/reset/{gameId}")
-    public Response reset(@PathParam("gameId") String gameId) {
+    @Path("/exit/{gameId}/{playerName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // only managing user
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
 
-        game.reset(); /* resets board and player scores */
+        if (game.removePlayer(playerName)) {
+            if (game.isEmpty()) {
+                game.end();
+            }
 
-        // TODO: persist board here
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_PLAYER_EXISTS, "No such player exists in the game"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
 
+        return Response.ok(game).build(); /* Return response with the game object */
+    }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+    /**
+     * Reset the game.
+     *
+     * @param gameId     the unique ID of the existing game
+     * @param playerName the name of the managing player name
+     * @return the updated game status if success, a request error otherwise
+     */
+    @GET
+    @Path("/reset/{gameId}/{playerName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reset(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
+
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        if (StringUtils.equals(game.getManagingPlayerName(), playerName)) {
+            game.reset(); /* resets board and player scores */
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.UNAUTHORIZED, "You are not authorized to perform this task"))
+                    .status(Response.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        return Response.ok(game).build(); /* Return response with the game object */
     }
 }

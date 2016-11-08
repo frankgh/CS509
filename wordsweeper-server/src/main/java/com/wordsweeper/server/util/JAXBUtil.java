@@ -6,10 +6,17 @@ import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 
 /**
- * Created by francisco on 10/4/16.
+ * Utilities for XML operations
+ *
+ * @author francisco
  */
 public class JAXBUtil {
 
+    /**
+     * Pretty println XML.
+     *
+     * @param obj the obj
+     */
     public static void prettyPrintln(Object obj) {
         if (obj == null) {
             return;

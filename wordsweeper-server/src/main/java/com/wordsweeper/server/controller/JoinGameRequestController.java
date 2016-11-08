@@ -1,51 +1,94 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.model.*;
-import server.ClientState;
-import server.IProtocolHandler;
-import server.Server;
+import com.wordsweeper.server.api.WordSweeperServiceFactory;
+import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
+import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.util.MappingUtil;
+import com.wordsweeper.server.xml.BoardResponse;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
+import retrofit2.Call;
+
+import java.io.IOException;
 
 /**
- * Controller on server to package up the current state of the model
- * as an updateResponse message and send it back to the client.
+ * Controller on server in charge of relying joinGame requests
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game
+ *
+ * @author francisco
  */
-public class JoinGameRequestController implements IProtocolHandler {
+public class JoinGameRequestController extends ControllerChain {
 
-    ServerModel model;
-
+    /**
+     * Instantiates a new Join game request controller.
+     *
+     * @param model the model
+     */
     public JoinGameRequestController(ServerModel model) {
         this.model = model;
     }
 
-    public synchronized Response process(ClientState client, Request request) {
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
+    public boolean canProcess(Request request) {
+        return request != null && request.getJoinGameRequest() != null;
+    }
 
-        model.joinGame();
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
+    public Response process(ClientState client, Request request) {
 
-        BoardResponse boardResponse = new BoardResponse();
-        boardResponse.setGameId("hg12jhd");
-        boardResponse.setManagingUser("player2");
-        boardResponse.setBonus("4,3");
-        boardResponse.setContents("ABCGBCJDH...HDJHJD");
-
-        for (int i = 0; i < model.getNumPlayers(); i++) {
-            Player player = new Player();
-            player.setName("player" + i);
-            player.setScore(38974);
-            player.setPosition("2,2");
-            player.setBoard("ECDRFTGOUIGERPRT");
-            boardResponse.getPlayer().add(player);
+        if (model.isClientInGame(client)) {
+            return getUnsuccessfulResponse(request, "The player is already in a game"); /* Return empty response */
         }
 
-        Response response = new Response(boardResponse, request.getId());
+        Game game = null;
+        Call<Game> call;
 
-        // all other players on game (excepting this particular client) need to be told of this
-        // same response. Note this is inefficient and should be replaced by more elegant functioning
-        // hint: rely on your game to store player names...
-        for (String id : Server.ids()) {
-            if (!id.equals(client.id())) {
-                Server.getState(id).sendMessage(response);
+        if (request.getJoinGameRequest().getPassword() != null) {
+            call = WordSweeperServiceFactory.getService().joinGameWithPassword(
+                    request.getJoinGameRequest().getGameId(),
+                    request.getJoinGameRequest().getName(),
+                    request.getJoinGameRequest().getPassword());
+        } else {
+            call = WordSweeperServiceFactory.getService().joinGame(
+                    request.getJoinGameRequest().getGameId(),
+                    request.getJoinGameRequest().getName());
+        }
+
+        try {
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
             }
+        } catch (IOException e) {
+            System.err.println("Error connecting to the webservice");
         }
+
+        if (game == null) {
+            return getUnsuccessfulResponse(request, "Unable to join the game");
+        }
+
+        client.setData(request.getJoinGameRequest().getName());
+        if (!model.joinGame(client, game)) {
+            client.setData(null);
+            return getUnsuccessfulResponse(request, "Unable to join the game");
+        }
+
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+        Response response = getObjectFactory().createResponse();
+        response.setId(request.getId());
+        response.setSuccess(true);
+        response.setBoardResponse(boardResponse);
+
+        broadcastResponse(response, client.id(), game);
 
         // send this response back to the client which sent us the request.
         return response;
