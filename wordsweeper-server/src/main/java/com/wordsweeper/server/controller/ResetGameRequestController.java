@@ -8,25 +8,24 @@ import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import retrofit2.Call;
 
 import java.io.IOException;
 
 /**
- * Controller on server in charge of relying joinGame requests
+ * Controller on server in charge of relying resetGame requests
  * to the API, and packaging up the API response to send to all
  * the players joined to the game
  *
  * @author francisco
  */
-public class JoinGameRequestController extends ControllerChain {
+public class ResetGameRequestController extends ControllerChain {
 
     /**
-     * Instantiates a new Join game request controller.
+     * Instantiates a new Reset game request controller.
      *
      * @param model the model
      */
-    public JoinGameRequestController(ServerModel model) {
+    public ResetGameRequestController(ServerModel model) {
         this.model = model;
     }
 
@@ -34,7 +33,7 @@ public class JoinGameRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
     public boolean canProcess(Request request) {
-        return request != null && request.getJoinGameRequest() != null;
+        return request != null && request.getResetGameRequest() != null;
     }
 
     /* (non-Javadoc)
@@ -42,26 +41,24 @@ public class JoinGameRequestController extends ControllerChain {
 	 */
     public Response process(ClientState client, Request request) {
 
-        if (model.isClientInGame(client)) {
-            return getUnsuccessfulResponse(request, "The player is already in a game"); /* Return empty response */
+        /* If the client is not in a game return an unsuccessful response */
+        if (!model.isClientInGame(client)) {
+            return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
+        }
+
+        /* Only the managing player can reset the game */
+        if (!model.isManagingPlayer(client)) {
+            return getUnsuccessfulResponse(request, "Only the managing player is allowed to reset the game"); /* Return empty response */
         }
 
         Game game = null;
-        Call<Game> call;
-
-        if (request.getJoinGameRequest().getPassword() != null) {
-            call = WordSweeperServiceFactory.getService().joinGameWithPassword(
-                    request.getJoinGameRequest().getGameId(),
-                    request.getJoinGameRequest().getName(),
-                    request.getJoinGameRequest().getPassword());
-        } else {
-            call = WordSweeperServiceFactory.getService().joinGame(
-                    request.getJoinGameRequest().getGameId(),
-                    request.getJoinGameRequest().getName());
-        }
+        String gameId = model.getGameId(client);
+        String playerName = (String) client.getData();
 
         try {
-            retrofit2.Response<Game> apiResponse = call.execute();
+            retrofit2.Response<Game> apiResponse = WordSweeperServiceFactory.getService()
+                    .resetGame(gameId, playerName)
+                    .execute();
 
             if (apiResponse.isSuccessful()) {
                 game = apiResponse.body();
@@ -72,14 +69,9 @@ public class JoinGameRequestController extends ControllerChain {
             System.err.println("Error connecting to the webservice");
         }
 
+        /* The request failed, return unsuccessful response */
         if (game == null) {
-            return getUnsuccessfulResponse(request, "Unable to join the game");
-        }
-
-        client.setData(request.getJoinGameRequest().getName());
-        if (!model.joinGame(client, game)) {
-            client.setData(null);
-            return getUnsuccessfulResponse(request, "Unable to join the game");
+            return getUnsuccessfulResponse(request, "Unable to reset game");
         }
 
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
@@ -90,7 +82,6 @@ public class JoinGameRequestController extends ControllerChain {
 
         broadcastResponse(response, client.id(), game);
 
-        // send this response back to the client which sent us the request.
         return response;
     }
 }

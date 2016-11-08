@@ -1,4 +1,7 @@
-package server;
+package com.wordsweeper.server;
+
+import com.wordsweeper.server.controller.IProtocolHandler;
+import com.wordsweeper.server.model.ClientState;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,6 +11,8 @@ import java.util.Hashtable;
 
 /**
  * Generic Server in a Client/Server communication.
+ *
+ * @author heineman
  */
 public class Server {
     int state = 0;                       /* Server state. 0=inactive, 1=accepting */
@@ -42,7 +47,6 @@ public class Server {
     public void process() throws IOException {
         while (state == 1) {
             Socket client = serverSocket.accept();
-
             new ServerThread(this, client, protocolHandler).start();
         }
 
@@ -75,6 +79,11 @@ public class Server {
         return true;
     }
 
+    /**
+     * Unregister thread
+     *
+     * @param id the id of the thread
+     */
     public static void unregister(String id) {
         ids.remove(id);
     }
