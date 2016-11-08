@@ -81,4 +81,17 @@ public interface WordSweeperService {
      */
     @GET("/wordsweeper/rest/game/reset/{gameId}/{playerName}")
     Call<Game> resetGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
+
+    /**
+     * Reposition board call.
+     *
+     * @param gameId       the game id
+     * @param playerName   the player name
+     * @param rowChange    the row change
+     * @param columnChange the column change
+     * @return the call
+     */
+    @GET("/wordsweeper/rest/player/reposition/{gameId}/{playerName}/{rowChange}/{columnChange}")
+    Call<Game> repositionBoard(@Path("gameId") String gameId, @Path("playerName") String playerName,
+                               @Path("rowChange") int rowChange, @Path("columnChange") int columnChange);
 }

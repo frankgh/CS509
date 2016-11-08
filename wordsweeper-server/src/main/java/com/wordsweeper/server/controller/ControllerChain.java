@@ -4,9 +4,13 @@ import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
+import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+import retrofit2.Call;
+
+import java.io.IOException;
 
 /**
  * ControllerChain is in charge of chaining up all the controllers.
@@ -84,6 +88,7 @@ public abstract class ControllerChain implements IProtocolHandler {
      * Get a generic unsuccessful response
      *
      * @param request the request
+     * @param reason  the reason
      * @return the empty unsuccessful response
      */
     protected Response getUnsuccessfulResponse(Request request, String reason) {
@@ -122,5 +127,44 @@ public abstract class ControllerChain implements IProtocolHandler {
             }
         }
         model.updateGame(game);
+    }
+
+    /**
+     * Process internal response.
+     *
+     * @param client  the client
+     * @param request the request
+     * @param call    the call
+     * @return the response
+     */
+    protected Response processInternal(ClientState client, Request request, Call<Game> call) {
+        Game game = null;
+        try {
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
+        } catch (IOException e) {
+            System.err.println("Error connecting to the webservice");
+        }
+
+        /* The request failed, return unsuccessful response */
+        if (game == null) {
+            return getUnsuccessfulResponse(request, "Unable to join the game");
+        }
+
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+        Response response = getObjectFactory().createResponse();
+        response.setId(request.getId());
+        response.setSuccess(true);
+        response.setBoardResponse(boardResponse);
+
+        broadcastResponse(response, client.id(), game);
+
+        // send this response back to the client which sent us the request.
+        return response;
     }
 }

@@ -14,7 +14,7 @@ import retrofit2.Call;
 import java.io.IOException;
 
 /**
- * Controller on server in charge of relying exitGame requests
+ * Controller on server in charge of relaying exitGame requests
  * to the API, and packaging up the API response to send to all
  * the players joined to the game. Additionally, this controller
  * implements IShutdownHandler and makes sure that the state of

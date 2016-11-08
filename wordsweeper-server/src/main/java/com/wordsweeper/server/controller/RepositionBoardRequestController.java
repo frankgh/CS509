@@ -9,20 +9,20 @@ import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
 
 /**
- * Controller on server in charge of relaying resetGame requests
+ * Controller on server in charge of relaying repositionBoard requests
  * to the API, and packaging up the API response to send to all
  * the players joined to the game
  *
  * @author francisco
  */
-public class ResetGameRequestController extends ControllerChain {
+public class RepositionBoardRequestController extends ControllerChain {
 
     /**
-     * Instantiates a new Reset game request controller.
+     * Instantiates a new Reposition board request controller.
      *
      * @param model the model
      */
-    public ResetGameRequestController(ServerModel model) {
+    public RepositionBoardRequestController(ServerModel model) {
         this.model = model;
     }
 
@@ -30,7 +30,7 @@ public class ResetGameRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
     public boolean canProcess(Request request) {
-        return request != null && request.getResetGameRequest() != null;
+        return request != null && request.getRepositionBoardRequest() != null;
     }
 
     /* (non-Javadoc)
@@ -43,15 +43,11 @@ public class ResetGameRequestController extends ControllerChain {
             return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
         }
 
-        /* Only the managing player can reset the game */
-        if (!model.isManagingPlayer(client)) {
-            return getUnsuccessfulResponse(request, "Only the managing player is allowed to reset the game"); /* Return empty response */
-        }
-
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
-        Call<Game> call = WordSweeperServiceFactory.getService()
-                .resetGame(gameId, playerName);
+
+        Call<Game> call = WordSweeperServiceFactory.getService().repositionBoard(gameId, playerName,
+                request.getRepositionBoardRequest().getRowChange(), request.getRepositionBoardRequest().getColChange());
 
         return processInternal(client, request, call);
     }

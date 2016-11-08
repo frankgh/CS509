@@ -13,7 +13,7 @@ import retrofit2.Call;
 import java.io.IOException;
 
 /**
- * Controller on server in charge of relying createGame requests
+ * Controller on server in charge of relaying createGame requests
  * to the API, and packaging up the API response to send it to
  * the joining player.
  *
