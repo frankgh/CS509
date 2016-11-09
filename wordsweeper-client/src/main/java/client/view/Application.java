@@ -19,6 +19,7 @@ import client.controller.JoinGameController;
 import client.model.Model;
 
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 
 public class Application extends JFrame {
@@ -36,6 +37,9 @@ public class Application extends JFrame {
 	
 	JScrollPane clientRequests;
 	JScrollPane serverOutput;
+	private JTextField name;
+	private JTextField password;
+	private JTextField game_id;
 	
 	/**
 	 * Create the frame.
@@ -49,6 +53,29 @@ public class Application extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		
+		clientRequests = new JScrollPane();
+		
+		JLabel lblOutputFromServer = new JLabel("Output From Server");
+		
+		serverOutput = new JScrollPane();
+		
+		requestArea = new JTextArea(100, 20);
+		clientRequests.setViewportView(requestArea);
+		
+		responseArea = new JTextArea();
+		serverOutput.setViewportView(responseArea);
+		
+		name = new JTextField();
+		name.setColumns(10);
+		
+		password = new JTextField();
+		password.setColumns(10);
+		
+		game_id = new JTextField();
+		game_id.setColumns(10);
+		
+
 		JButton btnCreateGame = new JButton("Create Game");
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -62,18 +89,18 @@ public class Application extends JFrame {
 				new JoinGameController(Application.this, model).process();
 			}
 		});
-		clientRequests = new JScrollPane();
 		
-		JLabel lblOutputFromServer = new JLabel("Output From Server");
+		JPanel panel = new JPanel();
 		
-		serverOutput = new JScrollPane();
+		JButton btnName = new JButton("Name");
+		btnName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		
-		requestArea = new JTextArea(100, 20);
-		clientRequests.setViewportView(requestArea);
+		JButton btnPassword = new JButton("Password");
 		
-		responseArea = new JTextArea();
-		serverOutput.setViewportView(responseArea);
-		
+		JButton btnGameid = new JButton("GameID");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -81,26 +108,52 @@ public class Application extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(clientRequests, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+						.addComponent(lblOutputFromServer)
+						.addComponent(serverOutput, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnCreateGame)
-							.addPreferredGap(ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
-							.addComponent(btnJoinGame))
-						.addComponent(lblOutputFromServer)
-						.addComponent(serverOutput, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnName, 0, 0, Short.MAX_VALUE)
+								.addComponent(name, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(password, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnPassword, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnGameid, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+								.addComponent(game_id, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnJoinGame, Alignment.TRAILING)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnCreateGame)
-						.addComponent(btnJoinGame))
-					.addGap(18)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnCreateGame)
+							.addComponent(btnJoinGame))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnName)
+								.addComponent(btnPassword)
+								.addComponent(btnGameid))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(password, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(game_id, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(clientRequests, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(lblOutputFromServer)
-					.addPreferredGap(ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(serverOutput, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
 		);
 		contentPane.setLayout(gl_contentPane);
@@ -124,5 +177,20 @@ public class Application extends JFrame {
 	/** Navigation access to actionable elements in the GUI. */
 	public JTextArea getResponseArea() {
 		return responseArea;
+	}
+	
+	public String getName(){
+		String nameS = name.getText();
+		return nameS;
+	}
+	
+	public String getPassword(){
+		String passowrdS = password.getText();		
+		return passowrdS;
+	}
+	
+	public String getGameID(){
+		String game_idS = game_id.getText();		
+		return game_idS;
 	}
 }

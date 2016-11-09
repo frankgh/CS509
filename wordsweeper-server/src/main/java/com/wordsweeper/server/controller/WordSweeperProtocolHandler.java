@@ -1,9 +1,9 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.JAXBUtil;
+import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.Response;
 import server.ClientState;
 import server.IShutdownHandler;
 
@@ -44,6 +44,6 @@ public class WordSweeperProtocolHandler implements IShutdownHandler {
     }
 
     public void logout(ClientState st) {
-        new ClientDisconnectController().process(st);
+        new ClientDisconnectController(model).process(st);
     }
 }

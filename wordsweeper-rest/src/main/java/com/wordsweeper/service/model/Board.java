@@ -14,7 +14,7 @@ import java.util.List;
 public class Board {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the board */
 
@@ -24,8 +24,11 @@ public class Board {
     @Column(name = "columns")
     int columns; /* The number of columns in the board */
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     List<Cell> cellList; /* A list of all the cells that make up the board */
+
+    @Embedded
+    Location bonusCellLocation; /* The location of the bonus cell */
 
     protected Board() {
     }
@@ -46,7 +49,7 @@ public class Board {
      *
      * @return the number of letters in the board
      */
-    public int getLetterCount() {
+    int getLetterCount() {
         return rows * columns;
     }
 
@@ -119,14 +122,27 @@ public class Board {
      */
     private void generateMultiplierCell() {
         int multiplierCellIndex = RandomUtil.nextInt(cellList.size());
+        bonusCellLocation = new Location(getRow(multiplierCellIndex), getColumn(multiplierCellIndex));
+    }
 
-        for (int i = 0; i < cellList.size(); i++) {
-            if (i == multiplierCellIndex) {
-                cellList.get(i).setMultiplier(Cell.MAX_CELL_MULTIPLIER);
-            } else {
-                cellList.get(i).setMultiplier(Cell.DEFAULT_CELL_MULTIPLIER);
-            }
-        }
+    /**
+     * The column for a given index in the list of cells
+     *
+     * @param index a zero-based index of cells
+     * @return the zero-based column for the given index
+     */
+    public int getColumn(int index) {
+        return index % columns;
+    }
+
+    /**
+     * The row for a given index in the list of cells
+     *
+     * @param index a zero-based index of the cells
+     * @return the zero-based row for the given index
+     */
+    public int getRow(int index) {
+        return index / rows;
     }
 
     int getCellIndexJustBelow(int row, int column) {
@@ -155,5 +171,13 @@ public class Board {
 
     public int getColumns() {
         return columns;
+    }
+
+    public List<Cell> getCellList() {
+        return cellList;
+    }
+
+    public Location getBonusCellLocation() {
+        return bonusCellLocation;
     }
 }

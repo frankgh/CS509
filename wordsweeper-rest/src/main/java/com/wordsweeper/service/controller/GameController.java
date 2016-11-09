@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Created by francisco on 9/15/16.
@@ -18,108 +19,105 @@ import javax.ws.rs.core.Response;
 public class GameController {
 
     @GET
-    @Path("/create/{playerName}{password:(/password/[^/]+?)?}")
-    public Response create(@PathParam("playerName") String playerName, @PathParam("password") String password) {
+    @Path("/create/{playerName}{p:(/password/)?}{password:([^/]+)?}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game create(@PathParam("playerName") String playerName, @PathParam("password") String password) {
 
         Player player = new Player(playerName); /* create a new player for the board */
-        Game game;
+        Game game = new Game(player, StringUtils.isBlank(password) ? null : password); /* create the game */
 
-        if (StringUtils.isBlank(password)) {
-            game = new Game(player); /* create a game with the new player */
-        } else {
-            game = new Game(player, password); /* Create a password protected game */
-        }
+        GameDao gameDao = new GameDaoImpl(); /* Data-access (persistence) object for Game */
+        gameDao.save(game); /* persist the game */
 
-        GameDao gameDao = new GameDaoImpl();
-        gameDao.save(game);
-
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return game;
     }
 
     @GET
-    @Path("/join/{gameId}/{playerName}{password:(/password/[^/]+?)?}")
-    public Response join(@PathParam("gameId") String gameId,
-                         @PathParam("playerName") String playerName,
-                         @PathParam("password") String password) {
+    @Path("/join/{gameId}/{playerName}{p:(/password/)?}{password:([^/]+)?}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game join(@PathParam("gameId") String gameId,
+                     @PathParam("playerName") String playerName,
+                     @PathParam("password") String password) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl(); /* Data-access (persistence) object for Game */
+        Game game = gameDao.findByGameId(gameId);
 
-        if (game.ended() || game.isLocked()) {
+        if (game == null || game.ended() || game.isLocked()) {
             return null;
         }
 
-        boolean addPlayer;
-
-        if (StringUtils.isBlank(password)) {
-            addPlayer = game.addPlayer(playerName); /* join the game */
-        } else {
-            addPlayer = game.addPlayer(playerName, password); /* join a password protected game */
-        }
+        boolean addPlayer = game.addPlayer(playerName,
+                StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
             game.getBoard().reset(); /* finally, reset the board */
+            gameDao.save(game);
         }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return game; /* Return response with the game object */
     }
 
     @GET
     @Path("/lock/{gameId}/{playerName}")
-    public Response lock(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game lock(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        game.lock(playerName);
+        if (game == null) {
+            return null;
+        }
 
-        // TODO: persist game
+        if (StringUtils.equals(game.getManagingPlayerName(), playerName)) {
+            game.lock(playerName);
+            gameDao.save(game);
+        }
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return game;
     }
 
     @GET
     @Path("/exit/{gameId}/{playerName}")
-    public Response exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game exit(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        game.removePlayer(playerName);
-
-        if (game.isEmpty()) {
-            game.end();
+        if (game == null) {
+            return null;
         }
 
-        // TODO: persist game
+        if (game.removePlayer(playerName)) {
 
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+            if (game.isEmpty()) {
+                game.end();
+            }
+
+            gameDao.save(game);
+        }
+
+        return game; /* Return response with the game object */
     }
 
     @GET
-    @Path("/reset/{gameId}")
-    public Response reset(@PathParam("gameId") String gameId) {
+    @Path("/reset/{gameId}/{playerName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game reset(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName) {
 
-        // only managing user
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
 
-        // TODO: actually load the game here
-        Game game = new Game(null);
+        if (game == null) {
+            return null;
+        }
 
-        game.reset(); /* resets board and player scores */
+        if (StringUtils.equals(game.getManagingPlayerName(), playerName)) {
+            game.reset(); /* resets board and player scores */
+            gameDao.save(game);
+        }
 
-        // TODO: persist board here
-
-
-        return Response /* Return response with the game object */
-                .ok(game)
-                .build();
+        return game; /* Return response with the game object */
     }
 }

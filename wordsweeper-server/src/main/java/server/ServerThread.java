@@ -1,9 +1,9 @@
 package server;
 
-import com.wordsweeper.server.xml.ConnectResponse;
+import com.wordsweeper.server.util.JAXBUtil;
+import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import com.wordsweeper.server.util.JAXBUtil;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,7 +24,6 @@ public class ServerThread extends Thread implements ClientState {
     final Server server;             // Server for which we are operating.
     final String id;                 // Associated unique ID for this thread.
     Object data;                     // User-defined object associated with each thread.
-    private Request request;
 
     /**
      * Create objects to handle input/output to client.
@@ -62,7 +61,12 @@ public class ServerThread extends Thread implements ClientState {
             return;
         }
 
-        Response responseWrapper = new Response(new ConnectResponse(id), request.getId());
+        ObjectFactory objectFactory = new ObjectFactory();
+        Response responseWrapper = objectFactory.createResponse();
+        responseWrapper.setId(request.getId());
+        responseWrapper.setSuccess(true);
+        responseWrapper.setConnectResponse(objectFactory.createConnectResponse());
+        responseWrapper.getConnectResponse().setId(id);
 
         // Return connect response with our (statistically) unique ID.
         if (!sendMessage(responseWrapper)) {

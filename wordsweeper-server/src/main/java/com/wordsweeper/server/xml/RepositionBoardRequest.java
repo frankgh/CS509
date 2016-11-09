@@ -1,7 +1,6 @@
 
 package com.wordsweeper.server.xml;
 
-import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -20,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="gameId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="rowChange" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *       &lt;attribute name="colChange" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *       &lt;attribute name="rowChange" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="colChange" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -39,9 +38,9 @@ public class RepositionBoardRequest {
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
     @XmlAttribute(name = "rowChange")
-    protected BigInteger rowChange;
+    protected Integer rowChange;
     @XmlAttribute(name = "colChange")
-    protected BigInteger colChange;
+    protected Integer colChange;
 
     /**
      * Gets the value of the name property.
@@ -96,10 +95,10 @@ public class RepositionBoardRequest {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public BigInteger getRowChange() {
+    public Integer getRowChange() {
         return rowChange;
     }
 
@@ -108,10 +107,10 @@ public class RepositionBoardRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public void setRowChange(BigInteger value) {
+    public void setRowChange(Integer value) {
         this.rowChange = value;
     }
 
@@ -120,10 +119,10 @@ public class RepositionBoardRequest {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public BigInteger getColChange() {
+    public Integer getColChange() {
         return colChange;
     }
 
@@ -132,10 +131,10 @@ public class RepositionBoardRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
-    public void setColChange(BigInteger value) {
+    public void setColChange(Integer value) {
         this.colChange = value;
     }
 

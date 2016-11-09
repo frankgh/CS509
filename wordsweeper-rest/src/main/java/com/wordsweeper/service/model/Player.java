@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Player {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -42,5 +42,13 @@ public class Player {
 
     public void setOffset(Location location) {
         this.offset = location;
+    }
+
+    public Location getOffset() {
+        return offset;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

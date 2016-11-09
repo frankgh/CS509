@@ -23,5 +23,11 @@ public class Location {
         this.column = column;
     }
 
+    public int getColumn() {
+        return column;
+    }
 
+    public int getRow() {
+        return row;
+    }
 }
