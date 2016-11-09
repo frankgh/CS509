@@ -11,40 +11,41 @@ import java.util.List;
  * The interface Word sweeper service.
  *
  * @author francisco
+ * @author Celia
  */
 public interface WordSweeperService {
 
     /**
-     * Create game call.
+     * CreateGame API call.
      *
      * @param playerName the player name
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/create/{playerName}")
     Call<Game> createGame(@Path("playerName") String playerName);
 
     /**
-     * Create game with password call.
+     * CreateGame with password API call.
      *
      * @param playerName the player name
      * @param password   the password
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/create/{playerName}/password/{password}")
     Call<Game> createGameWithPassword(@Path("playerName") String playerName, @Path(value = "password") String password);
 
     /**
-     * Join game call.
+     * JoinGame API call.
      *
      * @param gameId     the game id
      * @param playerName the player name
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/join/{gameId}/{playerName}")
     Call<Game> joinGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
 
     /**
-     * Join game with password call.
+     * JoinGame with password API call.
      *
      * @param gameId     the game id
      * @param playerName the player name
@@ -55,48 +56,53 @@ public interface WordSweeperService {
     Call<Game> joinGameWithPassword(@Path("gameId") String gameId, @Path("playerName") String playerName, @Path("password") String password);
 
     /**
-     * Lock game call.
+     * LockGame API call.
      *
      * @param gameId     the game id
      * @param playerName the player name
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/lock/{gameId}/{playerName}")
     Call<Game> lockGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
 
     /**
-     * Exit game call.
+     * ExitGame API call.
      *
      * @param gameId     the game id
      * @param playerName the player name
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/exit/{gameId}/{playerName}")
     Call<Game> exitGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
 
     /**
-     * Reset game call.
+     * ResetGame API call.
      *
      * @param gameId     the game id
      * @param playerName the player name
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/game/reset/{gameId}/{playerName}")
     Call<Game> resetGame(@Path("gameId") String gameId, @Path("playerName") String playerName);
 
     /**
-     * Reposition board call.
+     * RepositionBoard API call.
      *
      * @param gameId       the game id
      * @param playerName   the player name
      * @param rowChange    the row change
      * @param columnChange the column change
-     * @return the call
+     * @return the updated game status
      */
     @GET("/wordsweeper/rest/player/reposition/{gameId}/{playerName}/{rowChange}/{columnChange}")
     Call<Game> repositionBoard(@Path("gameId") String gameId, @Path("playerName") String playerName,
                                @Path("rowChange") int rowChange, @Path("columnChange") int columnChange);
 
+    /**
+     * ListGames API call
+     *
+     * @return the list of games
+     */
     @GET("/wordsweeper/rest/admin/game/list")
     Call<List<Game>> listGames();
 }

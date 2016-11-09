@@ -14,7 +14,7 @@ public class EmptyHandler extends ControllerChain {
 
     public Response process(ClientState state, Request request) {
         System.out.println("Not handled");
-        return null;
+        return getUnsuccessfulResponse(request, "Not handled");
     }
 
     public boolean canProcess(Request request) {

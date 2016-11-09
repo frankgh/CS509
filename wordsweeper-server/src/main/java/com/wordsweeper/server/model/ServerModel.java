@@ -80,7 +80,7 @@ public class ServerModel {
      * @return the list
      */
     public List<ClientState> idsByGameId(String gameId) {
-        return gameIdToGameSessionMap.get(gameId).clientStateList;
+        return gameIdToGameSessionMap.containsKey(gameId) ? gameIdToGameSessionMap.get(gameId).clientStateList : null;
     }
 
     /**

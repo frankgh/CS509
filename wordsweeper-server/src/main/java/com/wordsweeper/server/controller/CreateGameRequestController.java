@@ -4,13 +4,9 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-
-import java.io.IOException;
 
 /**
  * Controller on server in charge of relaying createGame requests
@@ -19,7 +15,7 @@ import java.io.IOException;
  *
  * @author francisco
  */
-public class CreateGameRequestController extends ControllerChain {
+public class CreateGameRequestController extends ControllerChain implements IControllerCommand {
 
     /**
      * Instantiates a new Create game request controller.
@@ -47,7 +43,6 @@ public class CreateGameRequestController extends ControllerChain {
             return getUnsuccessfulResponse(request, "The player is already in a game");
         }
 
-        Game game = null;
         Call<Game> call;
 
         if (request.getCreateGameRequest().getPassword() != null) {
@@ -58,38 +53,19 @@ public class CreateGameRequestController extends ControllerChain {
             call = WordSweeperServiceFactory.getService().createGame(request.getCreateGameRequest().getName());
         }
 
-        try {
-            retrofit2.Response<Game> apiResponse = call.execute();
+        return processInternal(client, request, call);
+    }
 
-            if (apiResponse.isSuccessful()) {
-                game = apiResponse.body();
-            } else {
-                return handleAPIError(request, apiResponse);
-            }
-        } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
-        }
-
-        if (game == null) {
-            return getUnsuccessfulResponse(request, "Unable to create the game");
-        }
-
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IControllerCommand#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    public Response execute(ClientState client, Request request, Game game) {
         client.setData(request.getCreateGameRequest().getName());
         if (!model.createGame(client, game.getUniqueId())) { /* associate a clientState to the game */
             client.setData(null);
             return getUnsuccessfulResponse(request, "Unable to create the game");
         }
 
-        /* Map the game to a BoardResponse object */
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
-
-        /* Create the response object */
-        Response response = getObjectFactory().createResponse();
-        response.setId(request.getId());
-        response.setSuccess(true);
-        response.setBoardResponse(boardResponse);
-
-        // send this response back to the client which sent us the request.
-        return response;
+        return null;
     }
 }

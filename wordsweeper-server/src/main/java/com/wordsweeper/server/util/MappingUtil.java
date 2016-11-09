@@ -99,14 +99,14 @@ public class MappingUtil {
      * @return a list game response objects
      */
     public static ListGamesResponse mapGameListToListGamesResponse(List<Game> gameList) {
-        ObjectFactory factory =new ObjectFactory();
+        ObjectFactory factory = new ObjectFactory();
         ListGamesResponse listGamesResponse = factory.createListGamesResponse();
 
         if (gameList == null) {
             return listGamesResponse;
         }
 
-        for (Game game : gameList){
+        for (Game game : gameList) {
             GameBrief gameBrief = factory.createGameBrief();
             gameBrief.setGameId(game.getUniqueId());
             gameBrief.setPlayers(game.getPlayerList().size());

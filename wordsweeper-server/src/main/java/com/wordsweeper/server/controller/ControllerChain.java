@@ -11,6 +11,7 @@ import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * ControllerChain is in charge of chaining up all the controllers.
@@ -121,9 +122,14 @@ public abstract class ControllerChain implements IProtocolHandler {
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
         // hint: rely on your game to store player names...
-        for (ClientState state : model.idsByGameId(game.getUniqueId())) {
-            if (!state.id().equals(clientId)) {
-                state.sendMessage(response);
+
+        List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
+
+        if (clientStateList != null) {
+            for (ClientState state : clientStateList) {
+                if (!state.id().equals(clientId)) {
+                    state.sendMessage(response);
+                }
             }
         }
         model.updateGame(game);
@@ -156,7 +162,19 @@ public abstract class ControllerChain implements IProtocolHandler {
             return getUnsuccessfulResponse(request, "Unable to join the game");
         }
 
+        /* Execute controller specific command */
+        if (this instanceof IControllerCommand) {
+            Response response = ((IControllerCommand) this).execute(client, request, game);
+
+            if (response != null) {
+                return response;
+            }
+        }
+
+        /* Map the game to a BoardResponse object */
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+
+        /* Create the response object */
         Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);

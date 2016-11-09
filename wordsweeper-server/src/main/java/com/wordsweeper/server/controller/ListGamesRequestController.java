@@ -52,7 +52,7 @@ public class ListGamesRequestController extends ControllerChain {
         }
 
         if (gameList == null) {
-            return getUnsuccessfulResponse(request,"Unable to load list of games");
+            return getUnsuccessfulResponse(request, "Unable to load list of games");
         }
 
         ListGamesResponse listGamesResponse = MappingUtil.mapGameListToListGamesResponse(gameList);
