@@ -1,20 +1,35 @@
 package com.wordsweeper.server.util;
 
-import com.wordsweeper.server.model.Cell;
-import com.wordsweeper.server.model.Game;
-import com.wordsweeper.server.model.Player;
+import com.wordsweeper.server.api.WordSweeperServiceFactory;
+import com.wordsweeper.server.api.model.APIError;
+import com.wordsweeper.server.api.model.Cell;
+import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.api.model.Player;
 import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
+import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
+import retrofit2.Converter;
+import retrofit2.Response;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by francisco on 10/12/16.
+ *
+ * @author francisco
  */
 public class MappingUtil {
 
+    /**
+     * Map game to board response board response.
+     *
+     * @param source the source
+     * @return the board response
+     */
     public static BoardResponse mapGameToBoardResponse(Game source) {
 
         BoardResponse boardResponse = new ObjectFactory().createBoardResponse();
@@ -56,4 +71,23 @@ public class MappingUtil {
 
         return boardResponse;
     }
+
+    /**
+     * Parse the API Error.
+     *
+     * @param response the response
+     * @return the api error
+     */
+    public static APIError parseError(Response<?> response) {
+        Converter<ResponseBody, APIError> converter =
+                WordSweeperServiceFactory.retrofit()
+                        .responseBodyConverter(APIError.class, new Annotation[0]);
+
+        try {
+            return converter.convert(response.errorBody());
+        } catch (IOException e) {
+            return new APIError();
+        }
+    }
+
 }

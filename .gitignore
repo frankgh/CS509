@@ -7,3 +7,4 @@
 target/
 out/
 .metadata
+.DS_Store

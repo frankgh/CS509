@@ -21,7 +21,7 @@ public class ClientLauncher {
     public static void main(String[] args) throws Exception {
         // FIRST thing to do is register the protocol being used. There will be a single class protocol
         // that will be defined and which everyone will use. For now, demonstrate with skeleton protocol.
-        if (!Message.configure("wordsweeper.xsd")) {
+        if (!Message.configure("wordsweeper-client/wordsweeper.xsd")) {
             System.exit(0);
         }
 
