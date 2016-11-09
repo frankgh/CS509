@@ -19,6 +19,13 @@ public class LocationTest {
         
         location.setColumn(1);
         assertEquals(1, location.getColumn());
+        
+        Location location1 = new Location();
+        location1.setRow(1);
+        location1.setColumn(1);
+        assertEquals(1, location1.getRow());
+        assertEquals(1, location1.getColumn());
+        
     }
 
 }

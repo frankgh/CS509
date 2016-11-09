@@ -18,7 +18,7 @@ public class Game {
     private List<Player> playerList;
 
     private String uniqueId;
-
+    
     public String getManagingPlayerName() {
         return managingPlayerName;
     }

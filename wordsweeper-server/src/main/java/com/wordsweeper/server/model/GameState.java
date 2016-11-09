@@ -13,5 +13,16 @@ public class GameState {
 		serverThreadIDs.add(serverThreadID);
 			}
 	
-		
+	public String getGameID(){
+		return this.gameId;
+	}
+	
+	public List<String> getServerThreadIDs(){
+		return this.serverThreadIDs;
+	}
+	
+	public void addPlayer(String serverThreadID){
+		this.serverThreadIDs.add(serverThreadID);
+	}
+	
 }
