@@ -6,26 +6,48 @@ import javax.persistence.*;
 
 /**
  * Created by francisco on 9/13/16.
+ *
+ * @author francisco
  */
 @Entity
 @Table(name = "cell")
 public class Cell {
 
+    /**
+     * The constant DEFAULT_CELL_MULTIPLIER.
+     */
     public static final int DEFAULT_CELL_MULTIPLIER = 1;
+    /**
+     * The constant MAX_CELL_MULTIPLIER.
+     */
     public static final int MAX_CELL_MULTIPLIER = 10;
 
+    /**
+     * The Id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id; /* The id of the cell */
 
+    /**
+     * The Letter.
+     */
     @Embedded
     Letter letter;
 
+    /**
+     * Instantiates a new Cell.
+     */
     public Cell() {
         this.letter = new Letter(RandomUtil.getRandomCharacter(), 1);
     }
 
+    /**
+     * Gets letter.
+     *
+     * @return the letter
+     */
     public Letter getLetter() {
         return letter;
     }

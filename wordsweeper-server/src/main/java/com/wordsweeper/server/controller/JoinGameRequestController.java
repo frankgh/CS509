@@ -1,40 +1,49 @@
 package com.wordsweeper.server.controller;
 
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
-import com.wordsweeper.server.model.Game;
+import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-import server.ClientState;
-import server.IProtocolHandler;
-import server.Server;
 
 import java.io.IOException;
 
 /**
- * Controller on server to package up the current state of the model
- * as an updateResponse message and send it back to the client.
+ * Controller on server in charge of relaying joinGame requests
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game
+ *
+ * @author francisco
  */
-public class JoinGameRequestController implements IProtocolHandler {
+public class JoinGameRequestController extends ControllerChain {
 
-    ServerModel model;
-
+    /**
+     * Instantiates a new Join game request controller.
+     *
+     * @param model the model
+     */
     public JoinGameRequestController(ServerModel model) {
         this.model = model;
     }
 
-    public synchronized Response process(ClientState client, Request request) {
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
+    public boolean canProcess(Request request) {
+        return request != null && request.getJoinGameRequest() != null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
+    public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
-            // Rogue client wants to create a game without exiting his previous game
-            Response response = new ObjectFactory().createResponse();
-            response.setId(request.getId());
-            response.setSuccess(false); /* success to false */
-            return response;
+            return getUnsuccessfulResponse(request, "The player is already in a game"); /* Return empty response */
         }
 
         Game game = null;
@@ -52,36 +61,34 @@ public class JoinGameRequestController implements IProtocolHandler {
         }
 
         try {
-            game = call.execute().body();
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
 
         if (game == null) {
-            // TODO: handle this request
-            return null;
+            return getUnsuccessfulResponse(request, "Unable to join the game");
         }
 
+        client.setData(request.getJoinGameRequest().getName());
         if (!model.joinGame(client, game)) {
-            // TODO: handle this condition
-            return null;
+            client.setData(null);
+            return getUnsuccessfulResponse(request, "Unable to join the game");
         }
 
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
-
-        Response response = new ObjectFactory().createResponse();
+        Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);
 
-        // all other players on game (excepting this particular client) need to be told of this
-        // same response. Note this is inefficient and should be replaced by more elegant functioning
-        // hint: rely on your game to store player names...
-        for (String id : model.idsByGameId(game.getUniqueId())) {
-            if (!id.equals(client.id())) {
-                Server.getState(id).sendMessage(response);
-            }
-        }
+        broadcastResponse(response, client.id(), game);
 
         // send this response back to the client which sent us the request.
         return response;

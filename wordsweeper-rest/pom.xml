@@ -153,7 +153,7 @@
             <properties>
                 <tomcat.manager.url>http://localhost:8080/manager/text</tomcat.manager.url>
                 <tomcat.deploy.user>tomcat-script</tomcat.deploy.user>
-                <tomcat.deploy.password>T0mc@t</tomcat.deploy.password>
+                <tomcat.deploy.password>tomcat-cs509</tomcat.deploy.password>
             </properties>
         </profile>
     </profiles>

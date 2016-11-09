@@ -6,32 +6,37 @@ import java.util.Random;
 import com.wordsweeper.server.model.*;
 =======
 import com.wordsweeper.server.api.WordSweeperServiceFactory;
-import com.wordsweeper.server.model.Game;
+import com.wordsweeper.server.api.model.Game;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
 >>>>>>> refs/remotes/origin/master
 import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-import server.ClientState;
-import server.IProtocolHandler;
 
 import java.io.IOException;
 
 /**
- * Controller on server to package up the current state of the model
- * as an updateResponse message and send it back to the client.
+ * Controller on server in charge of relaying createGame requests
+ * to the API, and packaging up the API response to send it to
+ * the joining player.
+ *
+ * @author francisco
  */
-public class CreateGameRequestController implements IProtocolHandler {
+public class CreateGameRequestController extends ControllerChain {
 
-    ServerModel model;
-
+    /**
+     * Instantiates a new Create game request controller.
+     *
+     * @param model the model
+     */
     public CreateGameRequestController(ServerModel model) {
         this.model = model;
     }
 
+<<<<<<< HEAD
     public static String generateGameId(int length){
     	String alphabet = 
     	        new String("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
@@ -61,14 +66,23 @@ public class CreateGameRequestController implements IProtocolHandler {
     	}
     
     
+=======
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+	 */
+    public boolean canProcess(Request request) {
+        return request != null && request.getCreateGameRequest() != null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+	 */
+>>>>>>> refs/remotes/origin/master
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
             // Rogue client wants to create a game without exiting his previous game
-            Response response = new ObjectFactory().createResponse();
-            response.setId(request.getId());
-            response.setSuccess(false); /* success to false */
-            return response;
+            return getUnsuccessfulResponse(request, "The player is already in a game");
         }
 
 <<<<<<< HEAD
@@ -99,26 +113,32 @@ public class CreateGameRequestController implements IProtocolHandler {
         }
 
         try {
-            game = call.execute().body();
+            retrofit2.Response<Game> apiResponse = call.execute();
+
+            if (apiResponse.isSuccessful()) {
+                game = apiResponse.body();
+            } else {
+                return handleAPIError(request, apiResponse);
+            }
         } catch (IOException e) {
             System.err.println("Error connecting to the webservice");
         }
 
         if (game == null) {
-            // TODO: handle this request
-            return null;
+            return getUnsuccessfulResponse(request, "Unable to create the game");
         }
 
-
-        if (!model.createGame(client, game)) { /* associate a clientState to the game */
-            return null;
+        client.setData(request.getCreateGameRequest().getName());
+        if (!model.createGame(client, game.getUniqueId())) { /* associate a clientState to the game */
+            client.setData(null);
+            return getUnsuccessfulResponse(request, "Unable to create the game");
         }
 
         /* Map the game to a BoardResponse object */
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
 
         /* Create the response object */
-        Response response = new ObjectFactory().createResponse();
+        Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);

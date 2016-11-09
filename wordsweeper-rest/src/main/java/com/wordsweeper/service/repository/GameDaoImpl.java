@@ -43,7 +43,6 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
         query.setParameter("uniqueId", gameId);
 
         List<Game> gameList = query.getResultList();
-
         return gameList != null && gameList.size() > 0 ? gameList.get(0) : null;
     }
 

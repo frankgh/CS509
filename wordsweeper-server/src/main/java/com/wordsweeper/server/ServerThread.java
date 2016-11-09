@@ -1,5 +1,8 @@
-package server;
+package com.wordsweeper.server;
 
+import com.wordsweeper.server.controller.IProtocolHandler;
+import com.wordsweeper.server.controller.IShutdownHandler;
+import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
@@ -15,6 +18,8 @@ import java.util.UUID;
 
 /**
  * Thread to handle individual requests from a client.
+ *
+ * @author heineman
  */
 public class ServerThread extends Thread implements ClientState {
     final Socket client;             // Socket used by thread to communicate with client.
@@ -107,7 +112,7 @@ public class ServerThread extends Thread implements ClientState {
     /**
      * Associate new object data as the user-defined data for the thread and return the old previous value.
      */
-    public Object setData(Object newData) {
+    public synchronized Object setData(Object newData) {
         Object old = data;
         data = newData;
         return old;
@@ -116,7 +121,7 @@ public class ServerThread extends Thread implements ClientState {
     /**
      * Retrieve user-defined data associated with this thread.
      */
-    public Object getData() {
+    public synchronized Object getData() {
         return data;
     }
 
