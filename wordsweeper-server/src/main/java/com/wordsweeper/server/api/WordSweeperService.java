@@ -5,6 +5,8 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
+import java.util.List;
+
 /**
  * The interface Word sweeper service.
  *
@@ -94,4 +96,8 @@ public interface WordSweeperService {
     @GET("/wordsweeper/rest/player/reposition/{gameId}/{playerName}/{rowChange}/{columnChange}")
     Call<Game> repositionBoard(@Path("gameId") String gameId, @Path("playerName") String playerName,
                                @Path("rowChange") int rowChange, @Path("columnChange") int columnChange);
+
+    @GET("/wordsweeper/rest/admin/game/list")
+    Call<List<Game>> listGames();
 }
+
