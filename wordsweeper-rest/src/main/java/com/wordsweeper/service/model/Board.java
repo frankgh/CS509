@@ -129,8 +129,8 @@ public class Board {
         }
     }
 
-    private int getCellIndexJustBelow(int row, int column) {
-        return (columns * row) + column;
+    int getCellIndexJustBelow(int row, int column) {
+        return (columns * (row+1)) + column;
     }
 
     /**

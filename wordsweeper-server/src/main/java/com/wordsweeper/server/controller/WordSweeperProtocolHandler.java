@@ -36,7 +36,7 @@ public class WordSweeperProtocolHandler implements IShutdownHandler {
             return new CreateGameRequestController(model).process(st, request);
         } else if (request.getJoinGameRequest() != null) {
             return new JoinGameRequestController(model).process(st, request);
-        }
+        } 
 
         // unknown? no idea what to do
         System.err.println("Unable to handle message");
