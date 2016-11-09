@@ -22,6 +22,9 @@ public class ServerLauncher {
         ServerModel serverModel = new ServerModel();
 
         WordSweeperProtocolHandler handler = new WordSweeperProtocolHandler(serverModel);
+        // Admin handlers
+        handler.registerHandler(new ListGamesRequestController(serverModel));
+        // Client handlers
         handler.registerHandler(new ExitGameRequestController(serverModel));
         handler.registerHandler(new ResetGameRequestController(serverModel));
         handler.registerHandler(new RepositionBoardRequestController(serverModel));
