@@ -398,7 +398,50 @@ public class Game {
                         board.getColumns() - PLAYER_BOARD_COLUMNS))));
     }
 
-    public boolean findWord(Player playerName, String word, List<Location> locations) {
+    /**
+     * Find the word in the locations, making sure that player stays within
+     * his bounds.
+     *
+     * @param player the player
+     * @param word   the word
+     * @return true if the word exists, false otherwise
+     */
+    public boolean findWord(Player player, Word word) {
+
+        if (!validateWord(player, word)) {
+            return false;
+        }
+
+
         return false;
+    }
+
+    /**
+     * Determine whether a word is valid
+     *
+     * @param word the word to validate
+     * @return true if the word is valid, false if not
+     */
+    public boolean validateWord(Player player, Word word) {
+
+        StringBuilder sb = new StringBuilder(49);
+
+        for (int i = 0; i < word.locations.size(); i++) {
+            Location location = word.locations.get(i);
+
+            // TODO: Make sure all letters are adjacent
+            if (i < word.locations.size() - 1 &&
+                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+                return false;
+            }
+
+            if (!player.isLocationInBoard(location)) {
+                return false;
+            } else {
+                sb.append(board.getLetterAtLocation(location).printCharacter());
+            }
+        }
+
+        return StringUtils.equals(word.word, sb.toString());
     }
 }

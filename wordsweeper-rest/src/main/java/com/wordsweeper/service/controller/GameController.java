@@ -3,6 +3,7 @@ package com.wordsweeper.service.controller;
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
 import com.wordsweeper.service.model.RequestError;
+import com.wordsweeper.service.model.Word;
 import com.wordsweeper.service.repository.GameDao;
 import com.wordsweeper.service.repository.GameDaoImpl;
 import com.wordsweeper.service.util.Util;
@@ -250,7 +251,9 @@ public class GameController {
                     .build();
         }
 
-        if (!game.findWord(player, word, Util.parseCellPositions(cellPositions))) {
+        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
+
+        if (!game.findWord(player, wordWrapper)) {
 
         }
 
