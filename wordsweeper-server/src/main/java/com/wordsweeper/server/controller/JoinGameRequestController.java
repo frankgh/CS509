@@ -15,7 +15,7 @@ import retrofit2.Call;
  *
  * @author francisco
  */
-public class JoinGameRequestController extends ControllerChain implements IControllerCommand {
+public class JoinGameRequestController extends ControllerChain {
 
     /**
      * Instantiates a new Join game request controller.
@@ -59,7 +59,7 @@ public class JoinGameRequestController extends ControllerChain implements IContr
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IControllerCommand#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     public Response execute(ClientState client, Request request, Game game) {
         client.setData(request.getJoinGameRequest().getName());

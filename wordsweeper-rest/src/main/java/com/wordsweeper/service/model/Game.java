@@ -22,11 +22,11 @@ public class Game {
     /**
      * The Status active.
      */
-    static final int STATUS_ACTIVE = 0;
+    public static final int STATUS_ACTIVE = 1;
     /**
      * The Status inactive.
      */
-    static final int STATUS_INACTIVE = 1;
+    static final int STATUS_INACTIVE = 0;
     /**
      * The Default board size.
      */

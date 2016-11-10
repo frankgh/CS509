@@ -57,10 +57,10 @@ public class MappingUtil {
 
             word = new ArrayList<String>();
 
-            for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
-                for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
+            for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
+                for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
 
-                    int index = (i * source.getBoard().getColumns()) + j;
+                    int index = (j * source.getBoard().getColumns()) + i;
 
                     word.add(source.getBoard().getCellList().get(index).printCharacter());
                 }

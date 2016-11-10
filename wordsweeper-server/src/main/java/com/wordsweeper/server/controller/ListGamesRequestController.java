@@ -63,4 +63,11 @@ public class ListGamesRequestController extends ControllerChain {
 
         return response;
     }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    protected Response execute(ClientState client, Request request, Game game) {
+        return null;
+    }
 }

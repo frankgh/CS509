@@ -68,6 +68,17 @@ public abstract class ControllerChain implements IProtocolHandler {
      */
     public abstract Response process(ClientState state, Request request);
 
+
+    /**
+     * Executes a per controller process during processInternal
+     *
+     * @param client  the client
+     * @param request the request
+     * @param game    the game
+     * @return the response
+     */
+    protected abstract Response execute(ClientState client, Request request, Game game);
+
     /**
      * Get the object factory for the WordSweeper XML Protocol
      *
@@ -159,23 +170,20 @@ public abstract class ControllerChain implements IProtocolHandler {
 
         /* The request failed, return unsuccessful response */
         if (game == null) {
-            return getUnsuccessfulResponse(request, "Unable to join the game");
+            return getUnsuccessfulResponse(request, "Unable to process request");
         }
 
         /* Execute controller specific command */
-        if (this instanceof IControllerCommand) {
-            Response response = ((IControllerCommand) this).execute(client, request, game);
-
-            if (response != null) {
-                return response;
-            }
+        Response response = execute(client, request, game);
+        if (response != null) {
+            return response;
         }
 
         /* Map the game to a BoardResponse object */
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
 
         /* Create the response object */
-        Response response = getObjectFactory().createResponse();
+        response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);

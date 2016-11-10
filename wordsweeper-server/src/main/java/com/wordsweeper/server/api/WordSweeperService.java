@@ -105,5 +105,14 @@ public interface WordSweeperService {
      */
     @GET("/wordsweeper/rest/admin/game/list")
     Call<List<Game>> listGames();
+
+    /**
+     * ShowGameState API call.
+     *
+     * @param gameId the game id
+     * @return the current game status
+     */
+    @GET("/wordsweeper/rest/admin/game/{gameId}")
+    Call<Game> showGameState(@Path("gameId") String gameId);
 }
 
