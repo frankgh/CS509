@@ -70,4 +70,17 @@ public class ListGamesRequestController extends ControllerChain {
     protected Response execute(ClientState client, Request request, Game game) {
         return null;
     }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected void setOnFailureResponse(Request request, Response response) {
+    } // DO NOTHING
 }

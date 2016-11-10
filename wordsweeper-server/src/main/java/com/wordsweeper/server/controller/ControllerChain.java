@@ -8,6 +8,7 @@ import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
 import java.io.IOException;
@@ -68,7 +69,6 @@ public abstract class ControllerChain implements IProtocolHandler {
      */
     public abstract Response process(ClientState state, Request request);
 
-
     /**
      * Executes a per controller process during processInternal
      *
@@ -78,6 +78,25 @@ public abstract class ControllerChain implements IProtocolHandler {
      * @return the response
      */
     protected abstract Response execute(ClientState client, Request request, Game game);
+
+    /**
+     * Instead of returning a BoardResponse to the client, you can customize the
+     * response you want to send to your client. Use setOnSuccessResponse to customize
+     * this response. Return true if the response was customized, false otherwise
+     *
+     * @param request  the request
+     * @param response the response
+     * @return true if the response was customized, false otherwise
+     */
+    protected abstract boolean setOnSuccessResponse(Request request, Response response);
+
+    /**
+     * Sets the response if the request failed
+     *
+     * @param request  the request
+     * @param response the response
+     */
+    protected abstract void setOnFailureResponse(Request request, Response response);
 
     /**
      * Get the object factory for the WordSweeper XML Protocol
@@ -108,6 +127,9 @@ public abstract class ControllerChain implements IProtocolHandler {
         response.setId(request.getId());
         response.setSuccess(false); /* success to false */
         response.setReason(reason);
+
+        setOnFailureResponse(request, response);
+
         return response;
     }
 
@@ -137,12 +159,22 @@ public abstract class ControllerChain implements IProtocolHandler {
         List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
 
         if (clientStateList != null) {
+            boolean sendSetManagingUserResponse = model.updateManagingPlayer(game);
+
             for (ClientState state : clientStateList) {
                 if (!state.id().equals(clientId)) {
                     state.sendMessage(response);
                 }
+
+                if (sendSetManagingUserResponse &&
+                        StringUtils.equals(game.getManagingPlayerName(), (String) state.getData())) {
+                    // TODO: Implement this when xsd is updated
+//                    SetManagingUserResponse setManagingUserResponse = new SetManagingUserResponse();
+//                    state.sendMessage(response);
+                }
             }
         }
+
         model.updateGame(game);
     }
 
@@ -183,14 +215,30 @@ public abstract class ControllerChain implements IProtocolHandler {
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
 
         /* Create the response object */
-        response = getObjectFactory().createResponse();
-        response.setId(request.getId());
-        response.setSuccess(true);
+        response = getBasicResponse(request);
         response.setBoardResponse(boardResponse);
 
+        /* Broadcast the response to all the players in the game */
         broadcastResponse(response, client.id(), game);
 
+        if (setOnSuccessResponse(request, response)) {
+            response.setBoardResponse(null);
+        }
+
         // send this response back to the client which sent us the request.
+        return response;
+    }
+
+    /**
+     * Get the basic Response with the response ID and success set to True
+     *
+     * @param request the request
+     * @return the basic response
+     */
+    protected Response getBasicResponse(Request request) {
+        Response response = getObjectFactory().createResponse();
+        response.setId(request.getId());
+        response.setSuccess(true);
         return response;
     }
 }

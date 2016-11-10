@@ -99,6 +99,19 @@ public interface WordSweeperService {
                                @Path("rowChange") int rowChange, @Path("columnChange") int columnChange);
 
     /**
+     * FindWord API call.
+     *
+     * @param gameId        the game id
+     * @param playerName    the player name
+     * @param word          the word
+     * @param cellPositions the cellPositions
+     * @return the updated game status
+     */
+    @GET("/wordsweeper/rest/game/findword/{gameId}/{playerName}/{word}/{cellPositions}")
+    Call<Game> findWord(@Path("gameId") String gameId, @Path("playerName") String playerName,
+                        @Path("word") String word, @Path("cellPositions") String cellPositions);
+
+    /**
      * ListGames API call
      *
      * @return the list of games

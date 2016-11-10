@@ -4,6 +4,7 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.xml.JoinGameResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
@@ -68,5 +69,21 @@ public class JoinGameRequestController extends ControllerChain {
             return getUnsuccessfulResponse(request, "Unable to join the game");
         }
         return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
+
+    /* (non-Javadoc)
+         * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+         */
+    protected void setOnFailureResponse(Request request, Response response) {
+        JoinGameResponse joinGameResponse = getObjectFactory().createJoinGameResponse();
+        joinGameResponse.setGameId(request.getJoinGameRequest().getGameId());
+        response.setJoinGameResponse(joinGameResponse);
     }
 }

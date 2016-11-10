@@ -5,6 +5,7 @@ import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.xml.Request;
+import com.wordsweeper.server.xml.ResetGameResponse;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
 
@@ -61,5 +62,21 @@ public class ResetGameRequestController extends ControllerChain {
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
         return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected void setOnFailureResponse(Request request, Response response) {
+        ResetGameResponse resetGameResponse = getObjectFactory().createResetGameResponse();
+        resetGameResponse.setGameId(request.getResetGameRequest().getGameId());
+        response.setResetGameResponse(resetGameResponse);
     }
 }

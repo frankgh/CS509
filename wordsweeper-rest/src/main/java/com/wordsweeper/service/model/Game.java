@@ -254,9 +254,13 @@ public class Game {
      * @param player the player
      */
     private void randomizePlayerLocation(Player player) {
+        /* we need to add +1 because nextInt returns a value
+         * between 0 (inclusive) and the specified value (exclusive).
+         * We add +1 to make it inclusive
+         */
         player.setOffset(new Location(
-                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS),
-                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS)));
+                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS + 1),
+                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS + 1)));
     }
 
     /**
@@ -389,8 +393,12 @@ public class Game {
     public void repositionBoard(Player player, int rowChange, int columnChange) {
         player.setOffset(new Location(
                 Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
-                        board.getRows() - PLAYER_BOARD_ROWS - 1)),
+                        board.getRows() - PLAYER_BOARD_ROWS)),
                 Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
-                        board.getColumns() - PLAYER_BOARD_COLUMNS - 1))));
+                        board.getColumns() - PLAYER_BOARD_COLUMNS))));
+    }
+
+    public boolean findWord(Player playerName, String word, List<Location> locations) {
+        return false;
     }
 }
