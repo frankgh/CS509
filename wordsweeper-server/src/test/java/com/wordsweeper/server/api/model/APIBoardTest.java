@@ -23,7 +23,7 @@ public class APIBoardTest {
 	    b.columns = 7 ;
 		assertEquals(7, b.getColumns());
 		b.rows = 7;
-		assertEquals(7, b.getColumns());
+		assertEquals(7, b.getRows());
 		
 		Location Loc = new Location () ;
 		Loc.column = 1;
