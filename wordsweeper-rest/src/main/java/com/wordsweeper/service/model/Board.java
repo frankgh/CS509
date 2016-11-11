@@ -95,17 +95,6 @@ public class Board {
     }
 
     /**
-     * Determine whether a word is valid
-     *
-     * @param word the word to validate
-     * @return true if the word is valid, false if not
-     */
-    public boolean validateWord(Word word) {
-        // TODO: implement this method
-        return true;
-    }
-
-    /**
      * Reset the board
      */
     public void reset() {

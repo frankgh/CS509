@@ -3,8 +3,11 @@ package com.wordsweeper.service.controller;
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
 import com.wordsweeper.service.model.RequestError;
+import com.wordsweeper.service.model.Word;
 import com.wordsweeper.service.repository.GameDao;
 import com.wordsweeper.service.repository.GameDaoImpl;
+import com.wordsweeper.service.util.Util;
+import com.wordsweeper.service.util.WordTable;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.GET;
@@ -214,5 +217,47 @@ public class GameController {
         }
 
         return Response.ok(game).build(); /* Return response with the game object */
+    }
+
+    @GET
+    @Path("/findword/{gameId}/{playerName}/{word}/{cellPositions}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWord(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName,
+                             @PathParam("word") String word, @PathParam("cellPositions") String cellPositions) {
+
+        if (!WordTable.isWord(word)) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "Invalid word"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
+
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        Player player = game.getPlayer(playerName);
+
+        if (player == null) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_PLAYER_EXISTS, "No such player exists in the game"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
+
+        if (!game.findWord(player, wordWrapper)) {
+
+        }
+
+
+        return null;
     }
 }

@@ -14,7 +14,8 @@ public class BoardTest {
         assertEquals(7,board.getRows());
         assertEquals(49,board.getLetterCount());
         assertEquals(31,board.getCellIndexJustBelow(3,3));
-       
+        
+        
         
 	}
 	

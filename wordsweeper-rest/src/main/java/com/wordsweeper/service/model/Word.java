@@ -3,7 +3,8 @@ package com.wordsweeper.service.model;
 import java.util.List;
 
 /**
- * Created by francisco on 9/13/16.
+ * Represents a word
+ *
  * @author francisco
  */
 public class Word {
@@ -13,18 +14,18 @@ public class Word {
      */
     String word;
     /**
-     * The Cell list.
+     * The Location list.
      */
-    List<Cell> cellList;
+    List<Location> locations;
 
     /**
      * Instantiates a new Word.
      *
-     * @param word     the word
-     * @param cellList the cell list
+     * @param word      the word
+     * @param locations the list of locations
      */
-    public Word(String word, List<Cell> cellList) {
+    public Word(String word, List<Location> locations) {
         this.word = word;
-        this.cellList = cellList;
+        this.locations = locations;
     }
 }

@@ -80,7 +80,7 @@ public class ServerModel {
      * @return the list
      */
     public List<ClientState> idsByGameId(String gameId) {
-        return gameIdToGameSessionMap.get(gameId).clientStateList;
+        return gameIdToGameSessionMap.containsKey(gameId) ? gameIdToGameSessionMap.get(gameId).clientStateList : null;
     }
 
     /**
@@ -149,6 +149,29 @@ public class ServerModel {
 
         GameSession gameSession = clientStateIdToGameSessionMap.get(client.id());
         return StringUtils.equals(gameSession.managingPlayer, (String) client.getData());
+    }
+
+    /**
+     * Update the managing player
+     *
+     * @param game the game
+     * @return true if the managing player changed, false otherwise
+     */
+    public boolean updateManagingPlayer(Game game) {
+
+        synchronized (gameIdToGameSessionMap) {
+            GameSession gameSession = gameIdToGameSessionMap.get(game.getUniqueId());
+
+            if (gameSession == null) {
+                return false;
+            }
+
+            if (!StringUtils.equals(gameSession.managingPlayer, game.getManagingPlayerName())) {
+                gameSession.managingPlayer = game.getManagingPlayerName();
+                return true;
+            }
+            return false;
+        }
     }
 
     /**

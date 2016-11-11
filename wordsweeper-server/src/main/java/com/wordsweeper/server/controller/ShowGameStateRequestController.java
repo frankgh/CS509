@@ -1,31 +1,46 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
+import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+import retrofit2.Call;
 
 /**
- * Empty Handler
+ * Controller on server in charge of relaying showGameState requests
+ * to the API, and packaging up the API response
  *
- * @author heineman
  * @author francisco
  */
-public class EmptyHandler extends ControllerChain {
+public class ShowGameStateRequestController extends ControllerChain {
+
+    /**
+     * Instantiates a new Show game state request controller.
+     *
+     * @param model the model
+     */
+    public ShowGameStateRequestController(ServerModel model) {
+        this.model = model;
+    }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
     public boolean canProcess(Request request) {
-        return true;
+        return request != null && request.getShowGameStateRequest() != null;
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
 	 */
     public Response process(ClientState state, Request request) {
-        System.out.println("Not handled");
-        return getUnsuccessfulResponse(request, "Not handled");
+
+        Call<Game> call = WordSweeperServiceFactory.getService()
+                .showGameState(request.getShowGameStateRequest().getGameId());
+
+        return processInternal(state, request, call);
     }
 
     /* (non-Javadoc)
