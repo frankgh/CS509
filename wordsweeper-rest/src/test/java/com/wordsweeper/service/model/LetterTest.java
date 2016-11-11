@@ -17,6 +17,10 @@ public class LetterTest {
         letter = new Letter('B', 10);
         assertEquals('B', letter.getCharacter());
         assertEquals(10, letter.getScore());
+        
+        letter = new Letter();
+        letter.setScore(5);
+        assertEquals(5, letter.getScore());
     }
 
 }

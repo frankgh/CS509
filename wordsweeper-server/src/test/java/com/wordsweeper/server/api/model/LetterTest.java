@@ -1,4 +1,4 @@
-package com.wordsweeper.service.model;
+package com.wordsweeper.server.api.model;
 
 import org.junit.Test;
 
