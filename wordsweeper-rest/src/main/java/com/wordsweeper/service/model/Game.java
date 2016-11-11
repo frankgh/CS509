@@ -426,22 +426,24 @@ public class Game {
 
         StringBuilder sb = new StringBuilder(49);
 
-        for (int i = 0; i < word.locations.size(); i++) {
-            Location location = word.locations.get(i);
-
-            // TODO: Make sure all letters are adjacent
-            if (i < word.locations.size() - 1 &&
-                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
-                return false;
-            }
-
-            if (!player.isLocationInBoard(location)) {
-                return false;
-            } else {
-                sb.append(board.getLetterAtLocation(location).printCharacter());
-            }
-        }
-
-        return StringUtils.equals(word.word, sb.toString());
+//        for (int i = 0; i < word.locations.size(); i++) {
+//            Location location = word.locations.get(i);
+//
+//            // TODO: Make sure all letters are adjacent
+//            if (i < word.locations.size() - 1 &&
+//                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+//                return false;
+//            }
+//
+//            if (!player.isLocationInBoard(location)) {
+//                return false;
+//            } else {
+//                sb.append(board.getLetterAtLocation(location).printCharacter());
+//            }
+//        }
+//
+//        return StringUtils.equals(word.word, sb.toString());
+return true;   
     }
+    
 }

@@ -48,33 +48,25 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
-	 */
+*/
     public boolean canProcess(Request request) {
         return false;
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
-	 */
+*/
     public Response process(ClientState state, Request request) {
 
         System.out.println("Request Received:");
         JAXBUtil.prettyPrintln(request);
         ControllerChain handler = chain;
 
-<<<<<<< HEAD
-        if (request.getCreateGameRequest() != null) {
-            return new CreateGameRequestController(model).process(st, request);
-        } else if (request.getJoinGameRequest() != null) {
-            return new JoinGameRequestController(model).process(st, request);
-        } 
-=======
         while (handler != null) {
             if (handler.canProcess(request))
                 return handler.process(state, request);
             handler = (ControllerChain) handler.next;
         }
->>>>>>> refs/remotes/origin/master
 
         System.err.println("Unable to handle message");
         return null;
