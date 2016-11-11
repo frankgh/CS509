@@ -6,6 +6,8 @@ import com.wordsweeper.server.api.model.Cell;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.api.model.Player;
 import com.wordsweeper.server.xml.BoardResponse;
+import com.wordsweeper.server.xml.GameBrief;
+import com.wordsweeper.server.xml.ListGamesResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
@@ -55,10 +57,10 @@ public class MappingUtil {
 
             word = new ArrayList<String>();
 
-            for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
-                for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
+            for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
+                for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
 
-                    int index = (i * source.getBoard().getColumns()) + j;
+                    int index = (j * source.getBoard().getColumns()) + i;
 
                     word.add(source.getBoard().getCellList().get(index).printCharacter());
                 }
@@ -90,4 +92,28 @@ public class MappingUtil {
         }
     }
 
+    /**
+     * Convert a list of games into a list game response objects
+     *
+     * @param gameList
+     * @return a list game response objects
+     */
+    public static ListGamesResponse mapGameListToListGamesResponse(List<Game> gameList) {
+        ObjectFactory factory = new ObjectFactory();
+        ListGamesResponse listGamesResponse = factory.createListGamesResponse();
+
+        if (gameList == null) {
+            return listGamesResponse;
+        }
+
+        for (Game game : gameList) {
+            GameBrief gameBrief = factory.createGameBrief();
+            gameBrief.setGameId(game.getUniqueId());
+            gameBrief.setPlayers(game.getPlayerList().size());
+
+            listGamesResponse.getGameBrief().add(gameBrief);
+        }
+
+        return listGamesResponse;
+    }
 }

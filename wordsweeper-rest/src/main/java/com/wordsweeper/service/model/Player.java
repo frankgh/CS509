@@ -98,4 +98,18 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    /**
+     * Determine if a location is within the player's board bounds
+     *
+     * @param location the location
+     * @return true if the location is within the player's bound, false otherwise
+     */
+    public boolean isLocationInBoard(Location location) {
+
+        return location.getRow() >= offset.getRow() &&
+                location.getRow() <= offset.getRow() + Game.PLAYER_BOARD_ROWS &&
+                location.getColumn() >= offset.getColumn() &&
+                location.getColumn() <= offset.getColumn() + Game.PLAYER_BOARD_COLUMNS;
+    }
 }

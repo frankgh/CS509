@@ -12,7 +12,7 @@ import xml.Message;
 public class ClientLauncher {
 
     // If requested by ClientLauncher (pass in '-server' as argument).
-    public static final String serverHost = "72.249.186.243";
+    public static final String serverHost = "cs509.frankgh.com";
 
     /**
      * Note that to simplify the coding of this command-client, it declares that it can throw an Exception,
