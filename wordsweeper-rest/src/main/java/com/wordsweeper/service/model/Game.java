@@ -423,25 +423,26 @@ public class Game {
      * @return true if the word is valid, false if not
      */
     public boolean validateWord(Player player, Word word) {
-
-        StringBuilder sb = new StringBuilder(49);
-
-        for (int i = 0; i < word.locations.size(); i++) {
-            Location location = word.locations.get(i);
-
-            // TODO: Make sure all letters are adjacent
-            if (i < word.locations.size() - 1 &&
-                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
-                return false;
-            }
-
-            if (!player.isLocationInBoard(location)) {
-                return false;
-            } else {
-                sb.append(board.getLetterAtLocation(location).printCharacter());
-            }
-        }
-
-        return StringUtils.equals(word.word, sb.toString());
+//
+//        StringBuilder sb = new StringBuilder(49);
+//
+//        for (int i = 0; i < word.locations.size(); i++) {
+//            Location location = word.locations.get(i);
+//
+//            // TODO: Make sure all letters are adjacent
+//            if (i < word.locations.size() - 1 &&
+//                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+//                return false;
+//            }
+//
+//            if (!player.isLocationInBoard(location)) {
+//                return false;
+//            } else {
+//                sb.append(board.getLetterAtLocation(location).printCharacter());
+//            }
+//        }
+//
+//        return StringUtils.equals(word.word, sb.toString());
+    	return false;
     }
 }

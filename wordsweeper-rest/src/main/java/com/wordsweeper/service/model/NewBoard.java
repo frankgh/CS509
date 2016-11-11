@@ -7,7 +7,7 @@ import org.junit.Test;
 public class NewBoard {
 	Board board = new Board (7);
 	@Test
-	public void testBoard(7) {
+	public void testBoard() {
 		fail("Not yet implemented");
 	}
 
