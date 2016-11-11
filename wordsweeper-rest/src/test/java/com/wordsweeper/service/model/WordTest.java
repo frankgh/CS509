@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by francisco on 10/4/16.
  */
-public class LetterTest {
+public class WordTest {
     @Test
     public void constructor() throws Exception {
         Letter letter = new Letter('A', 5);
@@ -17,13 +17,6 @@ public class LetterTest {
         letter = new Letter('B', 10);
         assertEquals('B', letter.getCharacter());
         assertEquals(10, letter.getScore());
-<<<<<<< HEAD
-=======
-        
-        letter = new Letter();
-        letter.setScore(5);
-        assertEquals(5, letter.getScore());
->>>>>>> refs/remotes/origin/george
     }
 
 }
