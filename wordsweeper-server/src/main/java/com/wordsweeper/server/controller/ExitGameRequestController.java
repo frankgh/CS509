@@ -77,7 +77,11 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
 	 */
     protected boolean setOnSuccessResponse(Request request, Response response) {
         ExitGameResponse exitGameResponse = getObjectFactory().createExitGameResponse();
-        exitGameResponse.setGameId(request.getExitGameRequest().getGameId());
+        if (request.getExitGameRequest() != null) {
+            exitGameResponse.setGameId(request.getExitGameRequest().getGameId());
+        } else {
+            exitGameResponse.setGameId("CLIENT_DISCONNECT");
+        }
         return true;
     }
 

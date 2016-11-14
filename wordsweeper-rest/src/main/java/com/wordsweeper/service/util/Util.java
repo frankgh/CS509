@@ -29,7 +29,7 @@ public class Util {
             return new ArrayList<>();
         }
 
-        String[] cellPositionSplit = cellPositions.split("|");
+        String[] cellPositionSplit = cellPositions.split("\\|");
 
         if (cellPositionSplit.length == 0) {
             return new ArrayList<>();
@@ -47,7 +47,8 @@ public class Util {
             Integer column = parseInteger(loc[1]);
 
             if (row != null && column != null) {
-                locationList.add(new Location(row, column));
+                // Substract 1 for zero-based indexes
+                locationList.add(new Location(row - 1, column - 1));
             }
         }
 

@@ -39,6 +39,14 @@ public class Game {
      * The Player board columns.
      */
     static final int PLAYER_BOARD_COLUMNS = 4;
+    /**
+     * The Max player to board ratio.
+     */
+    static final double MAX_PLAYER_TO_BOARD_RATIO = 3.0;
+    /**
+     * The Player ratio multiplier.
+     */
+    static final double PLAYER_RATIO_MULTIPLIER = 16.0;
 
     /**
      * The Id.
@@ -190,6 +198,13 @@ public class Game {
 
         randomizePlayerLocation(player);
 
+        if (((double) playerList.size() * PLAYER_RATIO_MULTIPLIER) /
+                (double) board.size() >= MAX_PLAYER_TO_BOARD_RATIO) {
+            // When the number of players to board ratio becomes too large,
+            // we increase the board size
+            board.grow(1);
+        }
+
         return true;
     }
 
@@ -245,6 +260,15 @@ public class Game {
         for (Player player : playerList) {
             player.setScore(0);
             randomizePlayerLocation(player);
+        }
+    }
+
+    /**
+     * Resets the scores of all players in the game
+     */
+    public void resetPlayersScores() {
+        for (Player player : playerList) {
+            player.setScore(0);
         }
     }
 
@@ -399,21 +423,18 @@ public class Game {
     }
 
     /**
-     * Find the word in the locations, making sure that player stays within
-     * his bounds.
+     * Calculate the score of a word using the following formula:
+     * 2^N * SUM( 2^M * Pi ) * cellMultiplier
+     * Where N is the number of words in the letter,
+     * M is the number of players that share the cell,
+     * cellMultiplier is the multiplier of the bonus cell if the word
+     * contains the bonus cell.
      *
-     * @param player the player
-     * @param word   the word
-     * @return true if the word exists, false otherwise
+     * @param word the word
+     * @return the score of the word
      */
-    public boolean findWord(Player player, Word word) {
-
-        if (!validateWord(player, word)) {
-            return false;
-        }
-
-
-        return false;
+    public int calculateWordScore(Word word) {
+        return 0;
     }
 
     /**
@@ -429,19 +450,18 @@ public class Game {
         for (int i = 0; i < word.locations.size(); i++) {
             Location location = word.locations.get(i);
 
-            // TODO: Make sure all letters are adjacent
             if (i < word.locations.size() - 1 &&
                     !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
                 return false;
             }
 
-            if (!player.isLocationInBoard(location)) {
+            if (!player.isLocationInPlayerBoard(location)) {
                 return false;
             } else {
                 sb.append(board.getLetterAtLocation(location).printCharacter());
             }
         }
 
-        return StringUtils.equals(word.word, sb.toString());
+        return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
 }

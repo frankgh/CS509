@@ -8,7 +8,6 @@ import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
-import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
 import java.io.IOException;
@@ -157,25 +156,17 @@ public abstract class ControllerChain implements IProtocolHandler {
         // hint: rely on your game to store player names...
 
         List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
+        model.updateGame(game);
 
-        if (clientStateList != null) {
-            boolean sendSetManagingUserResponse = model.updateManagingPlayer(game);
-
-            for (ClientState state : clientStateList) {
-                if (!state.id().equals(clientId)) {
-                    state.sendMessage(response);
-                }
-
-                if (sendSetManagingUserResponse &&
-                        StringUtils.equals(game.getManagingPlayerName(), (String) state.getData())) {
-                    // TODO: Implement this when xsd is updated
-//                    SetManagingUserResponse setManagingUserResponse = new SetManagingUserResponse();
-//                    state.sendMessage(response);
-                }
-            }
+        if (clientStateList == null) {
+            return;
         }
 
-        model.updateGame(game);
+        for (ClientState state : clientStateList) {
+            if (!state.id().equals(clientId)) {
+                state.sendMessage(response);
+            }
+        }
     }
 
     /**
