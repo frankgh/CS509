@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Celia
  */
-public class ListGamesRequestController extends ControllerChain {
+public class ListGamesRequestController extends ControllerChain implements IAdminController {
 
     /**
      * Instantiates a new List games request.

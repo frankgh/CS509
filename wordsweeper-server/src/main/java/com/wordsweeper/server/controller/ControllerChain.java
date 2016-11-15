@@ -202,8 +202,10 @@ public abstract class ControllerChain implements IProtocolHandler {
             return response;
         }
 
+        boolean isAdminClient = (this instanceof IAdminController);
+
         /* Map the game to a BoardResponse object */
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, isAdminClient);
 
         /* Create the response object */
         response = getBasicResponse(request);
