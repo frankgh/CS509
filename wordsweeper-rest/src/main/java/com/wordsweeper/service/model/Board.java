@@ -175,7 +175,7 @@ public class Board {
      * @param column the column
      * @return the index of the cell just below the given row and column
      */
-    private int getCellIndexJustBelow(int row, int column) {
+    protected int getCellIndexJustBelow(int row, int column) {
         return getCellIndex(row + 1, column);
     }
 
