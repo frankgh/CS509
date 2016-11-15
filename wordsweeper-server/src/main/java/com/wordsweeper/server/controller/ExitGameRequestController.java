@@ -53,6 +53,12 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
 	 */
     public Response process(ClientState client, Request request) {
+
+        /* If the client is not in a game return an unsuccessful response */
+        if (!model.isClientInGame(client)) {
+            return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
+        }
+
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
 

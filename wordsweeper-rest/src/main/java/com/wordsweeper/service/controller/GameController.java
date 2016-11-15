@@ -228,7 +228,7 @@ public class GameController {
 
         if (!WordTable.isWord(word)) {
             return Response
-                    .ok(new RequestError(RequestError.INVALID_WORD, "Invalid word"))
+                    .ok(new RequestError(RequestError.INVALID_WORD, "I can't find that word in my dictionary"))
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
