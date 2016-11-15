@@ -62,8 +62,7 @@ public class RepositionBoardRequestController extends ControllerChain {
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, false);
 
         /* Create the response object */
-        Response response = getBasicResponse(request);
-        response.setBoardResponse(boardResponse);
+        Response response = getBasicResponse(request, boardResponse);
 
         // send this response back to the client which sent us the request.
         return response;
