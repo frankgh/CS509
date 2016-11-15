@@ -14,6 +14,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -126,6 +129,15 @@ public class ServerThread extends Thread implements ClientState {
     }
 
     /**
+     * Get the remote socket address
+     *
+     * @return the remote socket address
+     */
+    public String getRemoteSocketAddress() {
+        return client.getRemoteSocketAddress().toString();
+    }
+
+    /**
      * Send a response object to the client.
      *
      * @param response the response
@@ -141,7 +153,11 @@ public class ServerThread extends Thread implements ClientState {
             e.printStackTrace();
         }
 
-        System.out.println("Sending Response to " + id + ":");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        System.out.println(dateFormat.format(cal.getTime()) + " Sending Response to " + id +
+                " at " + getRemoteSocketAddress() + ":");
         JAXBUtil.prettyPrintln(response);
         toClient.println(sw.toString());
         return !toClient.checkError();
@@ -181,8 +197,11 @@ public class ServerThread extends Thread implements ClientState {
             if (line == null) {
                 return null;
             }
-            StringBuilder buf = new StringBuilder(line);
-            while (!buf.substring(buf.length() - terminator.length(), buf.length()).equals(terminator)) {
+            // The default capacity of 16 is way too low
+            StringBuilder buf = new StringBuilder(1024);
+            buf.append(line);
+
+            while (!terminator.equals(buf.substring(buf.length() - terminator.length()))) {
                 line = in.readLine();
                 if (line == null) {
                     return null;

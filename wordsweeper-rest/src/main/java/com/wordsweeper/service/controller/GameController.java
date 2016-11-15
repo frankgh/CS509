@@ -91,7 +91,8 @@ public class GameController {
                 StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
-            game.getBoard().reset(); /* finally, reset the board */
+            // game.getBoard().reset(); /* finally, reset the board */
+            game.resetPlayersScores(); /* and reset player scores */
             gameDao.save(game);
         } else {
             return Response
@@ -227,7 +228,7 @@ public class GameController {
 
         if (!WordTable.isWord(word)) {
             return Response
-                    .ok(new RequestError(RequestError.INVALID_WORD, "Invalid word"))
+                    .ok(new RequestError(RequestError.INVALID_WORD, "I can't find that word in my dictionary"))
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
@@ -253,11 +254,18 @@ public class GameController {
 
         Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
 
-        if (!game.findWord(player, wordWrapper)) {
-
+        if (game.validateWord(player, wordWrapper)) {
+            int wordScore = game.calculateWordScore(wordWrapper);
+            game.getBoard().claimWord(wordWrapper);
+            player.setScore(player.getScore() + wordScore);
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "Invalid word"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
         }
 
-
-        return null;
+        return Response.ok(game).build(); /* Return response with the game object */
     }
 }

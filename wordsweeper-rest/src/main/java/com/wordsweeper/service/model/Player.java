@@ -68,7 +68,7 @@ public class Player {
      *
      * @param score the score
      */
-    protected void setScore(int score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -105,11 +105,11 @@ public class Player {
      * @param location the location
      * @return true if the location is within the player's bound, false otherwise
      */
-    public boolean isLocationInBoard(Location location) {
+    public boolean isLocationInPlayerBoard(Location location) {
 
         return location.getRow() >= offset.getRow() &&
-                location.getRow() <= offset.getRow() + Game.PLAYER_BOARD_ROWS &&
+                location.getRow() < offset.getRow() + Game.PLAYER_BOARD_ROWS &&
                 location.getColumn() >= offset.getColumn() &&
-                location.getColumn() <= offset.getColumn() + Game.PLAYER_BOARD_COLUMNS;
+                location.getColumn() < offset.getColumn() + Game.PLAYER_BOARD_COLUMNS;
     }
 }

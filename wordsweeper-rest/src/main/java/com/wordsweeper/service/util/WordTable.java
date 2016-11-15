@@ -24,7 +24,7 @@ public class WordTable {
     /**
      * The constant resourcesFolder.
      */
-    public static final String resourcesFolder = "com.wordsweeper.service";
+    public static final String resourcesFolder = "com/wordsweeper/service";
 
     /**
      * Load up word table. Note that there may be superfluous spaces throughout for formatting
@@ -35,7 +35,9 @@ public class WordTable {
     public static void loadWordTable() throws IOException {
         table = new Hashtable<>();
 
-        Iterator<String> it = new StringFileIterator(new File(resourcesFolder, wordTable));
+        ClassLoader classLoader = WordTable.class.getClassLoader();
+        Iterator<String> it = new StringFileIterator(
+                new File(classLoader.getResource(resourcesFolder + "/" + wordTable).getFile()));
         while (it.hasNext()) {
             String word = it.next();
             word = word.trim();

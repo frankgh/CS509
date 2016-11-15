@@ -29,10 +29,11 @@ public class MappingUtil {
     /**
      * Map game to board response board response.
      *
-     * @param source the source
+     * @param source               the source
+     * @param includeBoardContents whether to include the board contents
      * @return the board response
      */
-    public static BoardResponse mapGameToBoardResponse(Game source) {
+    public static BoardResponse mapGameToBoardResponse(Game source, boolean includeBoardContents) {
 
         BoardResponse boardResponse = new ObjectFactory().createBoardResponse();
 
@@ -41,33 +42,31 @@ public class MappingUtil {
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
-        List<String> word = new ArrayList<String>();
+        if (includeBoardContents) {
+            List<String> word = new ArrayList<String>();
 
-        for (Cell cell : source.getBoard().getCellList()) {
-            word.add(cell.printCharacter());
+            for (Cell cell : source.getBoard().getCellList()) {
+                word.add(cell.printCharacter());
+            }
+
+            boardResponse.setContents(StringUtils.join(word, ","));
         }
-
-        boardResponse.setContents(StringUtils.join(word, ","));
 
         for (Player player : source.getPlayerList()) {
             com.wordsweeper.server.xml.Player mPlayer = new com.wordsweeper.server.xml.Player();
-            mPlayer.setName(player.getName());
-            mPlayer.setScore(player.getScore());
-            mPlayer.setPosition(player.getOffset().toString());
-
-            word = new ArrayList<String>();
+            List<String> word = new ArrayList<String>();
 
             for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {
                 for (int i = player.getOffset().getColumn(); i < player.getOffset().getColumn() + 4; i++) {
-
-                    int index = (j * source.getBoard().getColumns()) + i;
-
+                    int index = (j * source.getBoard().getColumns()) + i; /* index for the cell */
                     word.add(source.getBoard().getCellList().get(index).printCharacter());
                 }
             }
 
+            mPlayer.setName(player.getName());
+            mPlayer.setScore(player.getScore());
+            mPlayer.setPosition(player.getOffset().toString());
             mPlayer.setBoard(StringUtils.join(word, ","));
-
             boardResponse.getPlayer().add(mPlayer);
         }
 

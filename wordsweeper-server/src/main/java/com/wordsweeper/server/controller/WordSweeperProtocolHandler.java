@@ -1,10 +1,15 @@
 package com.wordsweeper.server.controller;
 
+import com.wordsweeper.server.ServerThread;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.JAXBUtil;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * WordSweeperProtocolHandler is in charge of registering handlers and processing
@@ -58,7 +63,15 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
 */
     public Response process(ClientState state, Request request) {
 
-        System.out.println("Request Received:");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        if (state instanceof ServerThread) {
+            System.out.println(dateFormat.format(cal.getTime()) + " Request Received from " + state.id() +
+                    " at " + ((ServerThread) state).getRemoteSocketAddress() + ":");
+        } else {
+            System.out.println(dateFormat.format(cal.getTime()) + " Request Received from " + state.id() + ":");
+        }
         JAXBUtil.prettyPrintln(request);
         ControllerChain handler = chain;
 
