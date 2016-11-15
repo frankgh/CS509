@@ -4,6 +4,8 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.util.MappingUtil;
+import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
@@ -56,7 +58,15 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
-        return null;
+        /* Map the game to a BoardResponse object */
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, false);
+
+        /* Create the response object */
+        Response response = getBasicResponse(request);
+        response.setBoardResponse(boardResponse);
+
+        // send this response back to the client which sent us the request.
+        return response;
     }
 
     /* (non-Javadoc)
