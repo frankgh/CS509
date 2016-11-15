@@ -82,6 +82,7 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
         } else {
             exitGameResponse.setGameId("CLIENT_DISCONNECT");
         }
+        response.setExitGameResponse(exitGameResponse);
         return true;
     }
 
@@ -89,5 +90,6 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
      * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
+        // DO NOTHING
     }
 }

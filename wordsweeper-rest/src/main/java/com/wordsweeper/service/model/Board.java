@@ -307,6 +307,11 @@ public class Board {
 
     }
 
+    /**
+     * Move up all the cells below the cell in location
+     *
+     * @param location the location
+     */
     private void bubbleUp(Location location) {
 
         if (!isLocationInBoard(location)) {
@@ -316,7 +321,7 @@ public class Board {
         if (!isLocationInBoard(location.getRow() + 1, location.getColumn())) {
             return;
         }
-        
+
         bubbleUp(new Location(location.getRow() + 1, location.getColumn()));
 
         int belowIx = getCellIndexJustBelow(location.getRow(), location.getColumn());
