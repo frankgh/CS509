@@ -12,13 +12,13 @@ import xml.Message;
 public class ClientLauncher {
 
     // If requested by ClientLauncher (pass in '-server' as argument).
-	public static final String serverHost = "cs509.frankgh.com";
+    public static final String serverHost = "cs509.frankgh.com";
 
     /**
      * Note that to simplify the coding of this command-client, it declares that it can throw an Exception,
      * which is typically the failed connection to a server.
      */
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         // FIRST thing to do is register the protocol being used. There will be a single class protocol
         // that will be defined and which everyone will use. For now, demonstrate with skeleton protocol.
         if (!Message.configure("wordsweeper.xsd")) {
@@ -26,7 +26,7 @@ public class ClientLauncher {
         }
 
         // select dedicated server with '-server' options
-        String host = "cs509.frankgh.com";
+        String host = "localhost";
         if (args.length > 0 && args[0].equals("-server")) {
             host = serverHost;
         }

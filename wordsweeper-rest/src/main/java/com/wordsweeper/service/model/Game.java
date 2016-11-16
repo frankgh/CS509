@@ -22,11 +22,11 @@ public class Game {
     /**
      * The Status active.
      */
-    static final int STATUS_ACTIVE = 0;
+    public static final int STATUS_ACTIVE = 1;
     /**
      * The Status inactive.
      */
-    static final int STATUS_INACTIVE = 1;
+    static final int STATUS_INACTIVE = 0;
     /**
      * The Default board size.
      */
@@ -39,6 +39,14 @@ public class Game {
      * The Player board columns.
      */
     static final int PLAYER_BOARD_COLUMNS = 4;
+    /**
+     * The Max player to board ratio.
+     */
+    static final double MAX_PLAYER_TO_BOARD_RATIO = 3.0;
+    /**
+     * The Player ratio multiplier.
+     */
+    static final double PLAYER_RATIO_MULTIPLIER = 16.0;
 
     /**
      * The Id.
@@ -190,6 +198,13 @@ public class Game {
 
         randomizePlayerLocation(player);
 
+        if (((double) playerList.size() * PLAYER_RATIO_MULTIPLIER) /
+                (double) board.size() >= MAX_PLAYER_TO_BOARD_RATIO) {
+            // When the number of players to board ratio becomes too large,
+            // we increase the board size
+            board.grow(1);
+        }
+
         return true;
     }
 
@@ -249,14 +264,27 @@ public class Game {
     }
 
     /**
+     * Resets the scores of all players in the game
+     */
+    public void resetPlayersScores() {
+        for (Player player : playerList) {
+            player.setScore(0);
+        }
+    }
+
+    /**
      * Randomizes the location of a player
      *
      * @param player the player
      */
     private void randomizePlayerLocation(Player player) {
+        /* we need to add +1 because nextInt returns a value
+         * between 0 (inclusive) and the specified value (exclusive).
+         * We add +1 to make it inclusive
+         */
         player.setOffset(new Location(
-                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS),
-                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS)));
+                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS + 1),
+                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS + 1)));
     }
 
     /**
@@ -389,8 +417,52 @@ public class Game {
     public void repositionBoard(Player player, int rowChange, int columnChange) {
         player.setOffset(new Location(
                 Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
-                        board.getRows() - PLAYER_BOARD_ROWS - 1)),
+                        board.getRows() - PLAYER_BOARD_ROWS)),
                 Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
-                        board.getColumns() - PLAYER_BOARD_COLUMNS - 1))));
+                        board.getColumns() - PLAYER_BOARD_COLUMNS))));
+    }
+
+    /**
+     * Calculate the score of a word using the following formula:
+     * 2^N * 10 * SUM( 2^M * Pi ) * cellMultiplier
+     * Where N is the number of words in the letter
+     * M is the number of players that share the cell if N is greater than 1
+     * Pi is the letter frequency
+     * cellMultiplier is the multiplier of the bonus cell if the word
+     * contains the bonus cell.
+     *
+     * @param word the word
+     * @return the score of the word
+     */
+    public int calculateWordScore(Word word) {
+        return 0;
+    }
+
+    /**
+     * Determine whether a word is valid
+     *
+     * @param word the word to validate
+     * @return true if the word is valid, false if not
+     */
+    public boolean validateWord(Player player, Word word) {
+
+        StringBuilder sb = new StringBuilder(49);
+
+        for (int i = 0; i < word.locations.size(); i++) {
+            Location location = word.locations.get(i);
+
+            if (i < word.locations.size() - 1 &&
+                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+                return false;
+            }
+
+            if (!player.isLocationInPlayerBoard(location)) {
+                return false;
+            } else {
+                sb.append(board.getLetterAtLocation(location).printCharacter());
+            }
+        }
+
+        return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
 }

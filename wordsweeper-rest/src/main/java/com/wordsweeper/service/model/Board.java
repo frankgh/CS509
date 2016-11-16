@@ -76,15 +76,6 @@ public class Board {
     }
 
     /**
-     * Returns the number of rows times the number of columns
-     *
-     * @return the number of letters in the board
-     */
-    int getLetterCount() {
-        return rows * columns;
-    }
-
-    /**
      * Grows the board by the specified amount of rows and columns
      *
      * @param amount the amount of columns and rows to increase
@@ -95,23 +86,12 @@ public class Board {
     }
 
     /**
-     * Determine whether a word is valid
-     *
-     * @param word the word to validate
-     * @return true if the word is valid, false if not
-     */
-    public boolean validateWord(Word word) {
-        // TODO: implement this method
-        return true;
-    }
-
-    /**
      * Reset the board
      */
     public void reset() {
-        this.cellList = new ArrayList<>(getLetterCount());
+        this.cellList = new ArrayList<>(size());
 
-        for (int i = 0; i < getLetterCount(); i++) {
+        for (int i = 0; i < size(); i++) {
             addCell();
         }
 
@@ -127,7 +107,7 @@ public class Board {
     private void growX(int amount) {
         columns += amount;
 
-        for (int i = 0; i < (amount * columns); i++) {
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < amount; j++) {
                 addCell(((rows + amount) * i) + rows + j);
             }
@@ -143,7 +123,7 @@ public class Board {
     private void growY(int amount) {
         rows += amount;
 
-        for (int i = 0; i < amount * rows; i++) {
+        for (int i = 0; i < amount * columns; i++) {
             addCell();
         }
     }
@@ -176,8 +156,27 @@ public class Board {
         return index / rows;
     }
 
-    private int getCellIndexJustBelow(int row, int column) {
+    /**
+     * Map a row and column into an index for the cellList
+     *
+     * @param row    the row
+     * @param column the column
+     * @return the index of the array
+     */
+    private int getCellIndex(int row, int column) {
         return (columns * row) + column;
+    }
+
+    /**
+     * Map a row and column into the index of the cellList right below
+     * another cell
+     *
+     * @param row    the row
+     * @param column the column
+     * @return the index of the cell just below the given row and column
+     */
+    private int getCellIndexJustBelow(int row, int column) {
+        return getCellIndex(row + 1, column);
     }
 
     /**
@@ -215,6 +214,15 @@ public class Board {
     }
 
     /**
+     * The size of the board
+     *
+     * @return the size of the board
+     */
+    public int size() {
+        return rows * columns;
+    }
+
+    /**
      * Gets cell list.
      *
      * @return the cell list
@@ -230,5 +238,101 @@ public class Board {
      */
     public Location getBonusCellLocation() {
         return bonusCellLocation;
+    }
+
+
+    /**
+     * Gets a letter at a given location
+     *
+     * @param location the letter location
+     * @return the letter at the given location, or null if the location is invalid
+     */
+    public Letter getLetterAtLocation(Location location) {
+        int index = getCellIndex(location.getRow(), location.getColumn());
+
+        if (index >= 0 && index < cellList.size()) {
+            return cellList.get(index).getLetter();
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine if two locations are adjacent in this board.
+     *
+     * @param location1 the first location
+     * @param location2 the second location
+     * @return true if the locations are adjacent, false otherwise
+     */
+    public boolean areLocationsAdjacent(Location location1, Location location2) {
+
+        return isLocationInBoard(location1) && /* Make sure location1 is in the board */
+                isLocationInBoard(location2) && /* Make sure location2 is in the board */
+                Math.abs(location1.getRow() - location2.getRow()) <= 1 &&
+                Math.abs(location1.getColumn() - location2.getColumn()) <= 1;
+    }
+
+    /**
+     * Determine if a location is within the board's bounds
+     *
+     * @param location the location
+     * @return true if the location is within the board's bound, false otherwise
+     */
+    public boolean isLocationInBoard(Location location) {
+        return isLocationInBoard(location.getRow(), location.getColumn());
+    }
+
+    /**
+     * Determine if a location is within the board's bounds
+     *
+     * @param row    the row
+     * @param column the column
+     * @return true if the location is within the board's bound, false otherwise
+     */
+    private boolean isLocationInBoard(int row, int column) {
+        return row >= 0 && row < getRows() && column >= 0 && column < getColumns();
+    }
+
+    /**
+     * Claim the word and replace with new cells
+     *
+     * @param word the word to claim
+     */
+    public void claimWord(Word word) {
+
+        for (Location location : word.locations) {
+            bubbleUp(location); /* move up all the cells below */
+            cellList.remove(getCellIndex(location.getRow(), location.getColumn()));
+        }
+
+    }
+
+    /**
+     * Move up all the cells below the cell in location
+     *
+     * @param location the location
+     */
+    private void bubbleUp(Location location) {
+
+        if (!isLocationInBoard(location)) {
+            return;
+        }
+
+        if (!isLocationInBoard(location.getRow() + 1, location.getColumn())) {
+            return;
+        }
+
+        bubbleUp(new Location(location.getRow() + 1, location.getColumn()));
+
+        int belowIx = getCellIndexJustBelow(location.getRow(), location.getColumn());
+        int index = getCellIndex(location.getRow(), location.getColumn());
+
+        Cell cell = cellList.remove(belowIx);
+
+        if (location.getRow() + 2 == getRows()) {
+            addCell(belowIx);
+        }
+
+        cellList.add(index + 1, cell);
     }
 }

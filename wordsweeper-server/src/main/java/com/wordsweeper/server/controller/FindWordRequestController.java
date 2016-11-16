@@ -4,25 +4,26 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
+import com.wordsweeper.server.xml.Cell;
+import com.wordsweeper.server.xml.FindWordResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
+import java.util.Iterator;
+
 /**
- * Controller on server in charge of relaying repositionBoard requests
- * to the API, and packaging up the API response to send to all
- * the players joined to the game
- *
- * @author francisco
+ * Created by francisco on 11/10/16.
  */
-public class RepositionBoardRequestController extends ControllerChain {
+public class FindWordRequestController extends ControllerChain {
 
     /**
-     * Instantiates a new Reposition board request controller.
+     * Instantiates a new Find word request controller.
      *
      * @param model the model
      */
-    public RepositionBoardRequestController(ServerModel model) {
+    public FindWordRequestController(ServerModel model) {
         this.model = model;
     }
 
@@ -30,7 +31,7 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
     public boolean canProcess(Request request) {
-        return request != null && request.getRepositionBoardRequest() != null;
+        return request != null && request.getFindWordRequest() != null;
     }
 
     /* (non-Javadoc)
@@ -43,11 +44,33 @@ public class RepositionBoardRequestController extends ControllerChain {
             return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
         }
 
+        if (StringUtils.isBlank(request.getFindWordRequest().getWord())) {
+            return getUnsuccessfulResponse(request, "Invalid word"); /* Return empty response */
+        }
+
+        if (request.getFindWordRequest().getCell() == null ||
+                request.getFindWordRequest().getCell().isEmpty()) {
+            return getUnsuccessfulResponse(request, "Invalid word"); /* Return empty response */
+        }
+
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
+        StringBuilder sb = new StringBuilder(256);
 
-        Call<Game> call = WordSweeperServiceFactory.getService().repositionBoard(gameId, playerName,
-                request.getRepositionBoardRequest().getRowChange(), request.getRepositionBoardRequest().getColChange());
+        final Iterable<Cell> iterable = request.getFindWordRequest().getCell();
+        final Iterator<Cell> iterator = iterable.iterator();
+
+        final Cell first = iterator.next();
+        sb.append(first.getPosition());
+
+        while (iterator.hasNext()) {
+            sb.append("|");
+            final Cell cell = iterator.next();
+            sb.append(cell.getPosition());
+        }
+
+        Call<Game> call = WordSweeperServiceFactory.getService()
+                .findWord(gameId, playerName, request.getFindWordRequest().getWord(), sb.toString());
 
         return processInternal(client, request, call);
     }
@@ -56,7 +79,7 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
-        return null; /* DO NOTHING */
+        return null;
     }
 
     /* (non-Javadoc)
@@ -70,5 +93,11 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
-    } // DO NOTHING
+        FindWordResponse findWordResponse = getObjectFactory().createFindWordResponse();
+        findWordResponse.setGameId(request.getFindWordRequest().getGameId());
+        findWordResponse.setName(request.getFindWordRequest().getName());
+        findWordResponse.setScore(0);
+
+        response.setFindWordResponse(findWordResponse);
+    }
 }

@@ -11,6 +11,7 @@ import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * ControllerChain is in charge of chaining up all the controllers.
@@ -68,6 +69,35 @@ public abstract class ControllerChain implements IProtocolHandler {
     public abstract Response process(ClientState state, Request request);
 
     /**
+     * Executes a per controller process during processInternal
+     *
+     * @param client  the client
+     * @param request the request
+     * @param game    the game
+     * @return the response
+     */
+    protected abstract Response execute(ClientState client, Request request, Game game);
+
+    /**
+     * Instead of returning a BoardResponse to the client, you can customize the
+     * response you want to send to your client. Use setOnSuccessResponse to customize
+     * this response. Return true if the response was customized, false otherwise
+     *
+     * @param request  the request
+     * @param response the response
+     * @return true if the response was customized, false otherwise
+     */
+    protected abstract boolean setOnSuccessResponse(Request request, Response response);
+
+    /**
+     * Sets the response if the request failed
+     *
+     * @param request  the request
+     * @param response the response
+     */
+    protected abstract void setOnFailureResponse(Request request, Response response);
+
+    /**
      * Get the object factory for the WordSweeper XML Protocol
      *
      * @return the object factory
@@ -96,6 +126,9 @@ public abstract class ControllerChain implements IProtocolHandler {
         response.setId(request.getId());
         response.setSuccess(false); /* success to false */
         response.setReason(reason);
+
+        setOnFailureResponse(request, response);
+
         return response;
     }
 
@@ -121,12 +154,19 @@ public abstract class ControllerChain implements IProtocolHandler {
         // all other players on game (excepting this particular client) need to be told of this
         // same response. Note this is inefficient and should be replaced by more elegant functioning
         // hint: rely on your game to store player names...
-        for (ClientState state : model.idsByGameId(game.getUniqueId())) {
+
+        List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
+        model.updateGame(game);
+
+        if (clientStateList == null) {
+            return;
+        }
+
+        for (ClientState state : clientStateList) {
             if (!state.id().equals(clientId)) {
                 state.sendMessage(response);
             }
         }
-        model.updateGame(game);
     }
 
     /**
@@ -153,18 +193,46 @@ public abstract class ControllerChain implements IProtocolHandler {
 
         /* The request failed, return unsuccessful response */
         if (game == null) {
-            return getUnsuccessfulResponse(request, "Unable to join the game");
+            return getUnsuccessfulResponse(request, "Unable to process request");
         }
 
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+        /* Execute controller specific command */
+        Response response = execute(client, request, game);
+        if (response != null) {
+            return response;
+        }
+
+        boolean isAdminClient = (this instanceof IAdminController);
+
+        /* Map the game to a BoardResponse object */
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, isAdminClient);
+
+        /* Create the response object */
+        response = getBasicResponse(request, boardResponse);
+
+        /* Broadcast the response to all the players in the game */
+        broadcastResponse(response, client.id(), game);
+
+        if (setOnSuccessResponse(request, response)) {
+            response.setBoardResponse(null);
+        }
+
+        // send this response back to the client which sent us the request.
+        return response;
+    }
+
+    /**
+     * Get the basic Response with the response ID and success set to True
+     *
+     * @param request       the request
+     * @param boardResponse the boardResponse
+     * @return the basic response
+     */
+    protected Response getBasicResponse(Request request, BoardResponse boardResponse) {
         Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
         response.setBoardResponse(boardResponse);
-
-        broadcastResponse(response, client.id(), game);
-
-        // send this response back to the client which sent us the request.
         return response;
     }
 }

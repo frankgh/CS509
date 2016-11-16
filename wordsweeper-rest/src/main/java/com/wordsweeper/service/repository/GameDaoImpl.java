@@ -48,6 +48,11 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
     @Override
     public List<Game> findAll() {
-        return getEntityManager().createQuery("from Game", Game.class).getResultList();
+
+        TypedQuery<Game> query = getEntityManager()
+                .createQuery("FROM Game WHERE status = :status", Game.class);
+        query.setParameter("status", Game.STATUS_ACTIVE);
+
+        return query.getResultList();
     }
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by francisco on 10/12/16.
+ *
  * @author francisco
  */
 public class Letter {
@@ -42,11 +43,9 @@ public class Letter {
      * @return the string
      */
     public String printCharacter() {
-        String c = new String(getCharacter());
-
-        if (StringUtils.equalsIgnoreCase(c, "Q")) {
+        if (StringUtils.equalsIgnoreCase(character, "Q")) {
             return "Qu";
         }
-        return c;
+        return character;
     }
 }
