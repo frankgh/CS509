@@ -15,7 +15,7 @@ import xml.Message;
 public class AdminClientLauncher {
 
 	// If requested by ClientLauncher (pass in '-server' as argument).
-    public static final String serverHost = "72.249.186.243";
+    public static final String serverHost = "cs509.frankgh.com";
     
     public static void main(String[] args) throws Exception {
     	
@@ -24,7 +24,7 @@ public class AdminClientLauncher {
         }
 
     	// select dedicated server with '-server' options
-        String host = "localhost";
+        String host = "cs509.frankgh.com";
         if (args.length > 0 && args[0].equals("-server")) {
             host = serverHost;
         }

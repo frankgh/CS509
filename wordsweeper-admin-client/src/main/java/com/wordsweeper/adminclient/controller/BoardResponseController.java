@@ -21,24 +21,24 @@ public class BoardResponseController {
 	public void process(Message response) {
 		// this refers to the outer node of the Message DOM (in this case, updateResponse).
 		Node boardResponse = response.contents.getFirstChild();
+		
 		NamedNodeMap map = boardResponse.getAttributes();
-		
-//		need a loop to add all the ID to the list
-		String gameId = map.getNamedItem("gameId").getNodeValue();
-		app.getResponseArea().addElement(gameId);
-		
 		String boardcontents = map.getNamedItem("contents").getNodeValue();
-		app.getConnection().setText(boardcontents);
+		app.setContent(boardcontents);
 
+//		String gameId = map.getNamedItem("gameId").getNodeValue();
+//		app.setGameIDNumber().setText(gameId);
+		
+//		The actual get gameID list loop
 //		NodeList list = boardResponse.getChildNodes();
 //		for (int i = 0; i < list.getLength(); i++) {
 //			Node n = list.item(i);
-//			String pname = n.getAttributes().getNamedItem("name").getNodeValue();
-//			app.getResponseArea().addElement("  " + pname  + "\n");
+//			String gameId = n.getAttributes().getNamedItem("gameId").getNodeValue();
+//			app.getResponseArea().addElement(gameId);
 //		}
-//		
-//		// at this point, you would normally start processing this...
-//		app.getResponseArea().addElement(response.toString());
+		
+
+		
 		
 	}
 

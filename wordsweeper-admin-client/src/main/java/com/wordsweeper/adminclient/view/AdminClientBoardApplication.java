@@ -64,9 +64,11 @@ public class AdminClientBoardApplication extends JFrame{
 		JButton RefreshBoard = new JButton("Refresh Board");
 		RefreshBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Object[][] data = stringTo2D(txtBoard.getText());
-				String[] columnNames = {"1","2","3","4","5","6","7"};
-				TableBoard = new JTable(data,columnNames);
+				AdminClientApplication app = new AdminClientApplication(model);
+				new CheckGameController(app, model).process();
+//				Object[][] data = stringTo2D(txtBoard.getText());
+//				String[] columnNames = {"1","2","3","4","5","6","7"};
+//				TableBoard = new JTable(data,columnNames);
 				scrollBoard.setViewportView(TableBoard);
 				TableBoard.setRowHeight(50);
 				JTableHeader header = TableBoard.getTableHeader();
@@ -74,9 +76,9 @@ public class AdminClientBoardApplication extends JFrame{
 				DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 				centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 				header.setDefaultRenderer(new HeaderRenderer(TableBoard));
-				for(int i= 0;i<data.length;i++){
-					TableBoard.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-				}
+//				for(int i= 0;i<data.length;i++){
+//					TableBoard.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+//				}
 				header.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 				TableBoard.setPreferredScrollableViewportSize(new Dimension(300,300));
 				TableBoard.setFillsViewportHeight(true);
@@ -199,6 +201,14 @@ public class AdminClientBoardApplication extends JFrame{
 		    	   }
 		       }
 		return alpha; 
+	}
+	
+	public JTable setContent(String Content){
+		Object[][] data = stringTo2D(Content);
+		String[] columnNames = {"1","2","3","4","5","6","7"};
+		TableBoard = new JTable(data,columnNames);
+		
+		return TableBoard;
 	}
 	private static class HeaderRenderer implements TableCellRenderer {
 
