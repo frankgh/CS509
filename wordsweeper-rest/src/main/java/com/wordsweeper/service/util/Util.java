@@ -43,8 +43,8 @@ public class Util {
             String[] loc = cellPosition.split(",");
             if (loc.length != 2) continue;
 
-            Integer row = parseInteger(loc[0]);
-            Integer column = parseInteger(loc[1]);
+            Integer row = parseInteger(loc[1]);
+            Integer column = parseInteger(loc[0]);
 
             if (row != null && column != null) {
                 // Substract 1 for zero-based indexes
