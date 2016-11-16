@@ -11,12 +11,15 @@ public class LetterTest {
     @Test
     public void constructor() throws Exception {
         Letter letter = new Letter('A', 5);
-        assertEquals('A', letter.getCharacter());
+        assertEquals("A", letter.printCharacter());
         assertEquals(5, letter.getScore());
 
-        letter = new Letter('B', 10);
-        assertEquals('B', letter.getCharacter());
+        letter = new Letter('Q', 10);
         assertEquals(10, letter.getScore());
+        letter.setScore(5);
+        assertEquals('Q', letter.getCharacter());
+        assertEquals("Qu", letter.printCharacter());
+        assertEquals(5, letter.getScore());
 
     }
 

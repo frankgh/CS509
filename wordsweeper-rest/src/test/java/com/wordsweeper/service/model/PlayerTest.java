@@ -3,6 +3,8 @@ package com.wordsweeper.service.model;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by francisco on 10/4/16.
@@ -22,6 +24,17 @@ public class PlayerTest {
        
         player.setScore(3);
         assertEquals(3, player.getScore());
+        
+        player.setOffset(new Location(0,0));
+        Location location1 = new Location();
+        location1.setRow(3);
+        location1.setColumn(3);
+        assertTrue(player.isLocationInPlayerBoard(location1));
+        
+        location1.setRow(4);
+        location1.setColumn(4);
+        assertFalse(player.isLocationInPlayerBoard(location1));
+        
     }	
 
 }
