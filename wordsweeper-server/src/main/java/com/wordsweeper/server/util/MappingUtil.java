@@ -42,7 +42,7 @@ public class MappingUtil {
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
-//        if (includeBoardContents) {
+        if (includeBoardContents) {
             List<String> wordContents = new ArrayList<String>();
 
             for (Cell cell : source.getBoard().getCellList()) {
@@ -50,7 +50,7 @@ public class MappingUtil {
             }
 
             boardResponse.setContents(StringUtils.join(wordContents, ","));
-//        }
+        }
 
         for (Player player : source.getPlayerList()) {
             com.wordsweeper.server.xml.Player mPlayer = new com.wordsweeper.server.xml.Player();
