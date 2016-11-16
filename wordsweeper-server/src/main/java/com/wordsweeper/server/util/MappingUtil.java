@@ -42,15 +42,15 @@ public class MappingUtil {
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
-        if (includeBoardContents) {
-            List<String> word = new ArrayList<String>();
+//        if (includeBoardContents) {
+            List<String> wordContents = new ArrayList<String>();
 
             for (Cell cell : source.getBoard().getCellList()) {
-                word.add(cell.printCharacter());
+                wordContents.add(cell.printCharacter());
             }
 
-            boardResponse.setContents(StringUtils.join(word, ","));
-        }
+            boardResponse.setContents(StringUtils.join(wordContents, ","));
+//        }
 
         for (Player player : source.getPlayerList()) {
             com.wordsweeper.server.xml.Player mPlayer = new com.wordsweeper.server.xml.Player();
