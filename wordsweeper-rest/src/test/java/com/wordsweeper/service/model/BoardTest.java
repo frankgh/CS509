@@ -2,9 +2,9 @@ package com.wordsweeper.service.model;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 
 import org.junit.Test;
+
 
 public class BoardTest {
 	@Test
@@ -15,7 +15,11 @@ public class BoardTest {
         assertEquals(49,board.getLetterCount());
         assertEquals(31,board.getCellIndexJustBelow(3,3));
         
-        
+        Location Loc = new Location () ;
+		Loc.column = 2;
+		Loc.row = 5;
+		board.bonusCellLocation = Loc;
+		assertEquals(board.getBonusCellLocation(), Loc);
         
 	}
 	
