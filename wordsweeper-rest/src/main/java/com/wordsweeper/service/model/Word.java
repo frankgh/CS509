@@ -28,4 +28,8 @@ public class Word {
         this.word = word;
         this.locations = locations;
     }
+    
+    public int getWordLength(){
+    	return this.locations.size();
+    }
 }

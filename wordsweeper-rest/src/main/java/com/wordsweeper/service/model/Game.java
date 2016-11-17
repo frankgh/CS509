@@ -434,7 +434,37 @@ public class Game {
      * @return the score of the word
      */
     public int calculateWordScore(Word word) {
-        return 0;
+    	int numOfPlayers = this.playerList.size();
+    	int wordSize = word.locations.size();
+
+    	int N = word.getWordLength();
+    	int[] M = new int[wordSize];
+
+    	// find frequency of cell, to get M	
+    	for(int i = 0; i < numOfPlayers; i++){
+    		Player player = this.playerList.get(i);
+    		for(int k = 0; k < wordSize; k++){
+    			Location cellLoc = word.locations.get(k);
+    			if(player.isLocationInPlayerBoard(cellLoc))
+    				M[k]++;
+    		}
+    	}
+
+    	int sum = 0;
+    	boolean multiplier = false;
+    	Location bonusCell = this.board.bonusCellLocation;
+    	
+    	// calculate the sum and check for multiplier cell
+    	for(int i = 0; i < wordSize; i++){
+    		if(word.locations.get(i).equals(bonusCell))
+    			multiplier = true;
+    		sum += Math.pow(2, M[i]) * Math.PI;
+    	}
+    	sum *= Math.pow(2, N);
+    	if(multiplier)
+    		sum *= 10;
+
+    	return sum;
     }
 
     /**
