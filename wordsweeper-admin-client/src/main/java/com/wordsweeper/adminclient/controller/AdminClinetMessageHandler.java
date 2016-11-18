@@ -4,10 +4,11 @@ import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import com.wordsweeper.adminclient.view.AdminClientBoardApplication;
 
-public class AdminClientBoardMessageHandler implements IMessageHandler{
-	AdminClientBoardApplication app;
+public class AdminClinetMessageHandler implements IMessageHandler{
 	
-	public AdminClientBoardMessageHandler(AdminClientBoardApplication app) {
+	AdminClientApplication app;
+	
+	public AdminClinetMessageHandler(AdminClientApplication app) {
 		this.app = app;
 	}
 
@@ -15,14 +16,21 @@ public class AdminClientBoardMessageHandler implements IMessageHandler{
 		String type = response.contents.getFirstChild().getLocalName();
 
 		// process each response that comes in with its own controller.
-		if (type.equals ("boardResponse")) {
+		if (type.equals ("listGamesResponse")) {
 			// What happens now that we are connected?
-			new BoardDetailResponseController(app, app.model).process(response);
+			new ListGamesResponseController(app, app.model).process(response);
+		} else if (type.equals ("connectResponse")) {
+			app.getConnection().setText(response.toString());
+		} else if (type.equals("boardResponse")) {
+//			???????????????????????
+			new BoardResponseController(app, app.model).process(response);
+		}
+		
 
 		// only here to show messages as they are received by the client
 		// this isn't needed.
 		System.out.println(response);
-		}
-	
 	}
+	
+
 }

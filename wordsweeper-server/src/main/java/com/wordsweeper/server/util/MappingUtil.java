@@ -43,13 +43,13 @@ public class MappingUtil {
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
         if (includeBoardContents) {
-            List<String> word = new ArrayList<String>();
+            List<String> wordContents = new ArrayList<String>();
 
             for (Cell cell : source.getBoard().getCellList()) {
-                word.add(cell.printCharacter());
+                wordContents.add(cell.printCharacter());
             }
 
-            boardResponse.setContents(StringUtils.join(word, ","));
+            boardResponse.setContents(StringUtils.join(wordContents, ","));
         }
 
         for (Player player : source.getPlayerList()) {

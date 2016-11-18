@@ -56,7 +56,7 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
-        return null;
+        return null; /* DO NOTHING */
     }
 
     /* (non-Javadoc)

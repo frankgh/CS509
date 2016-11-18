@@ -208,8 +208,7 @@ public abstract class ControllerChain implements IProtocolHandler {
         BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, isAdminClient);
 
         /* Create the response object */
-        response = getBasicResponse(request);
-        response.setBoardResponse(boardResponse);
+        response = getBasicResponse(request, boardResponse);
 
         /* Broadcast the response to all the players in the game */
         broadcastResponse(response, client.id(), game);
@@ -225,13 +224,15 @@ public abstract class ControllerChain implements IProtocolHandler {
     /**
      * Get the basic Response with the response ID and success set to True
      *
-     * @param request the request
+     * @param request       the request
+     * @param boardResponse the boardResponse
      * @return the basic response
      */
-    protected Response getBasicResponse(Request request) {
+    protected Response getBasicResponse(Request request, BoardResponse boardResponse) {
         Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
+        response.setBoardResponse(boardResponse);
         return response;
     }
 }

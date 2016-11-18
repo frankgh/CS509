@@ -15,18 +15,11 @@ public class RefreshGameListController {
 	}
 
 //	/** Make the request on the server and wait for response. */
-//	public void process() {
-//		// send the request to create the game.
-//		String xmlString = Message.requestHeader() + "<refreshGameListRequest /></request>";
-//		Message m = new Message (xmlString);
-//
-//		app.getServerAccess().sendRequest(m);
-//	}
-	
-//	For Test GUI works, use the create game requests 
+ 
 	public void process() {
 		// send the request to create the game.
-		String xmlString = Message.requestHeader() + "<createGameRequest name='samplePlayer'/></request>";
+//		String xmlString = Message.requestHeader() + "<createGameRequest name='samplePlayer'/></request>";
+		String xmlString = Message.requestHeader() + "<listGamesRequest/></request>";
 		Message m = new Message (xmlString);
 
 		// Request the lock (this might not succeed).
