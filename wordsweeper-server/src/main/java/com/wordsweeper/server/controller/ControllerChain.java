@@ -188,7 +188,7 @@ public abstract class ControllerChain implements IProtocolHandler {
                 return handleAPIError(request, apiResponse);
             }
         } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
+            System.err.println("Error connecting to webservice");
         }
 
         /* The request failed, return unsuccessful response */

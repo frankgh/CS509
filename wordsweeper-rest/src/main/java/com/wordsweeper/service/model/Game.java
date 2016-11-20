@@ -446,7 +446,11 @@ public class Game {
      */
     public boolean validateWord(Player player, Word word) {
 
-        StringBuilder sb = new StringBuilder(49);
+        if (word.containsDuplicateCells()) {
+            return false;
+        }
+
+        StringBuilder sb = new StringBuilder(32);
 
         for (int i = 0; i < word.locations.size(); i++) {
             Location location = word.locations.get(i);
