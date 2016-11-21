@@ -258,6 +258,7 @@ public class GameController {
             int wordScore = game.calculateWordScore(wordWrapper);
             game.getBoard().claimWord(wordWrapper);
             player.setScore(player.getScore() + wordScore);
+            player.setLatestScore(wordScore);
             gameDao.save(game);
         } else {
             return Response

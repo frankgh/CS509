@@ -79,8 +79,12 @@ public class FindWordRequestController extends ControllerChain {
         FindWordResponse findWordResponse = getObjectFactory().createFindWordResponse();
         findWordResponse.setGameId(game.getUniqueId());
         findWordResponse.setName(playerName);
-        // TODO: find a way to get the score
-        findWordResponse.setScore(0);
+
+        for (com.wordsweeper.server.api.model.Player player : game.getPlayerList()) {
+            if (StringUtils.equals(player.getName(), playerName)) {
+                findWordResponse.setScore(player.getLatestScore());
+            }
+        }
 
         response.setFindWordResponse(findWordResponse);
         response.setBoardResponse(null);

@@ -47,7 +47,7 @@ public class Game {
      * The Player ratio multiplier.
      */
     static final double PLAYER_RATIO_MULTIPLIER = 16.0;
-    
+
     /**
      * Point allocation for alphabet's letters
      * 											 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
@@ -445,12 +445,12 @@ public class Game {
     	int wordSize = word.locations.size();
     	int N = word.getWordLength();
     	int[] M = new int[wordSize];
-    	int sum = 0;    	    	
+    	int sum = 0;
     	boolean multiplier = false;
     	Location bonusCell = this.board.bonusCellLocation;
 
     	if(N > 1){
-    		// calculate how many players share each cell	
+    		// calculate how many players share each cell
     		for(int k = 0; k < numOfPlayers; k++){
     			Player player = this.playerList.get(k);
     			for(int i = 0; i < wordSize; i++){
@@ -463,14 +463,14 @@ public class Game {
     		for(int i = 0; i < wordSize; i++){
     			if(word.locations.get(i).equals(bonusCell))
     				multiplier = true;
-    			sum += Math.pow(2, M[i]-1) * calcLetterScore(word.word.charAt(i)); 
+    			sum += Math.pow(2, M[i]-1) * calcLetterScore(word.word.charAt(i));
     		}
     	} else {
     		// calculate the sum and check for multiplier cell
     		for(int i = 0; i < wordSize; i++){
     			if(word.locations.get(i).equals(bonusCell))
     				multiplier = true;
-    			sum += calcLetterScore(word.word.charAt(i)); 
+    			sum += calcLetterScore(word.word.charAt(i));
     		}
     	}
 
@@ -509,12 +509,12 @@ public class Game {
 
         return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
-    
-    public int calcLetterScore(char c){
+
+    int calcLetterScore(char c){
 		int Pi = (int) c;
-		if(Pi > 90) 
+		if(Pi > 90)
 			Pi -= 97;
-		else 
+		else
 			Pi -= 65;
 		return LETTER_SCORES[Pi];
     }
