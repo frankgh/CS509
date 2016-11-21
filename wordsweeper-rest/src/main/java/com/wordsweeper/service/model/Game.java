@@ -47,6 +47,12 @@ public class Game {
      * The Player ratio multiplier.
      */
     static final double PLAYER_RATIO_MULTIPLIER = 16.0;
+    
+    /**
+     * Point allocation for alphabet's letters
+     * 											 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+     */
+    static final int[] LETTER_SCORES = new int[]{2,4,3,3,1,4,4,2,2,7,5,3,3,2,2,4,8,2,2,1,3,5,3,7,4,8};
 
     /**
      * The Id.
@@ -437,35 +443,39 @@ public class Game {
     public int calculateWordScore(Word word) {
     	int numOfPlayers = this.playerList.size();
     	int wordSize = word.locations.size();
-
     	int N = word.getWordLength();
     	int[] M = new int[wordSize];
+    	int sum = 0;    	    	
+    	boolean multiplier = false;
+    	Location bonusCell = this.board.bonusCellLocation;
 
-    	// find frequency of cell, to get M	
-    	for(int i = 0; i < numOfPlayers; i++){
-    		Player player = this.playerList.get(i);
-    		for(int k = 0; k < wordSize; k++){
-    			Location cellLoc = word.locations.get(k);
-    			if(player.isLocationInPlayerBoard(cellLoc))
-    				M[k]++;
+    	if(N > 1){
+    		// calculate how many players share each cell	
+    		for(int k = 0; k < numOfPlayers; k++){
+    			Player player = this.playerList.get(k);
+    			for(int i = 0; i < wordSize; i++){
+    				Location cellLoc = word.locations.get(i);
+    				if(player.isLocationInPlayerBoard(cellLoc))
+    					M[i]++;
+    			}
+    		}
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += Math.pow(2, M[i]-1) * calcLetterScore(word.word.charAt(i)); 
+    		}
+    	} else {
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += calcLetterScore(word.word.charAt(i)); 
     		}
     	}
 
-    	int sum = 0;
-    	boolean multiplier = false;
-    	Location bonusCell = this.board.bonusCellLocation;
-    	
-    	// calculate the sum and check for multiplier cell
-    	for(int i = 0; i < wordSize; i++){
-    		if(word.locations.get(i).equals(bonusCell))
-    			multiplier = true;
-    		sum += Math.pow(2, M[i]) * Math.PI;
-    	}
     	sum *= Math.pow(2, N);
-    	if(multiplier)
-    		sum *= 10;
-
-    	return sum;
+    	return (multiplier) ? sum * 10 : sum;
     }
 
     /**
@@ -494,5 +504,14 @@ public class Game {
         }
 
         return StringUtils.equalsIgnoreCase(word.word, sb.toString());
+    }
+    
+    public int calcLetterScore(char c){
+		int Pi = (int) c;
+		if(Pi > 90) 
+			Pi -= 97;
+		else 
+			Pi -= 65;
+		return LETTER_SCORES[Pi];
     }
 }
