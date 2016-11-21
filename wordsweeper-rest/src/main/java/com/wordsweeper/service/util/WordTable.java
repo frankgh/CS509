@@ -40,7 +40,7 @@ public class WordTable {
         String resourcePath = resourcesFolder.replace("/", getPathDelim()) + getPathDelim() + wordTable;
         resourcePath = classLoader.getResource(resourcePath).getFile();
         resourcePath = URLDecoder.decode(resourcePath, "UTF-8");
-        
+
         Iterator<String> it = new StringFileIterator(new File(resourcePath));
         while (it.hasNext()) {
             String word = it.next();
@@ -72,13 +72,13 @@ public class WordTable {
         s = s.toLowerCase();
         return table.containsKey(s);
     }
-    
+
     /**
      * Gets the correct delimiter
-     * 
+     *
      * @return the path delim
      */
     private static String getPathDelim() {
-    	return System.getProperty("file.separator", "/");
+        return System.getProperty("file.separator", "/");
     }
 }
