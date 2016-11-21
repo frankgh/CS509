@@ -29,8 +29,13 @@ public class Word {
         this.locations = locations;
     }
 
-    public int getWordLength(){
-    	return this.locations.size();
+    /**
+     * Get word length int.
+     *
+     * @return the int
+     */
+    public int getWordLength() {
+        return this.locations.size();
     }
 
     /**
