@@ -431,7 +431,7 @@ public class Game {
     /**
      * Calculate the score of a word using the following formula:
      * 2^N * 10 * SUM( 2^M * Pi ) * cellMultiplier
-     * Where N is the number of words in the letter
+     * Where N is the number of tiles in the word
      * M is the number of players that share the cell if M is greater than 1
      * Pi is the letter frequency
      * cellMultiplier is the multiplier of the bonus cell if the word
@@ -474,6 +474,7 @@ public class Game {
     		}
     	}
 
+    	sum *= 10;
     	sum *= Math.pow(2, N);
     	return (multiplier) ? sum * 10 : sum;
     }
