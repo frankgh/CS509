@@ -8,6 +8,7 @@ import com.wordsweeper.server.xml.BoardResponse;
 import com.wordsweeper.server.xml.ObjectFactory;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
+import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
 import java.io.IOException;
@@ -151,19 +152,19 @@ public abstract class ControllerChain implements IProtocolHandler {
      * @param game     the game
      */
     protected void broadcastResponse(Response response, String clientId, Game game) {
-        // all other players on game (excepting this particular client) need to be told of this
-        // same response. Note this is inefficient and should be replaced by more elegant functioning
-        // hint: rely on your game to store player names...
 
+        model.updateGame(game); /* Update game details */
+
+        // all other players on game (excepting this particular client) need to be told of this
+        // same response.
         List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
-        model.updateGame(game);
 
         if (clientStateList == null) {
             return;
         }
 
         for (ClientState state : clientStateList) {
-            if (!state.id().equals(clientId)) {
+            if (!StringUtils.equals(state.id(), clientId)) {
                 state.sendMessage(response);
             }
         }
@@ -188,7 +189,7 @@ public abstract class ControllerChain implements IProtocolHandler {
                 return handleAPIError(request, apiResponse);
             }
         } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
+            System.err.println("Error connecting to webservice");
         }
 
         /* The request failed, return unsuccessful response */

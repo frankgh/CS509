@@ -1,11 +1,14 @@
 package com.wordsweeper.service.model;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 
 /**
  * The type Location.
+ *
  * @author francisco
  */
 @Embeddable
@@ -57,12 +60,33 @@ public class Location {
     public int getRow() {
         return row;
     }
-    
+
     protected void setRow(int row) {
     	this.row = row;
     }
-    
+
     protected void setColumn(int column) {
     	this.column = column;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+	 */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(column)
+                .append(row)
+                .hashCode();
+    }
+
+    /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null &&
+                obj instanceof Location &&
+                obj.hashCode() == hashCode();
     }
 }

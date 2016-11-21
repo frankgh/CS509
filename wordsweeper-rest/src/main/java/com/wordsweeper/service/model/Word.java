@@ -28,8 +28,27 @@ public class Word {
         this.word = word;
         this.locations = locations;
     }
-    
+
     public int getWordLength(){
     	return this.locations.size();
+    }
+
+    /**
+     * Determine if the word contains duplicate cells in the list
+     *
+     * @return true if there are duplicate cells, false otherwise
+     */
+    public boolean containsDuplicateCells() {
+
+        for (int i = 0; i < locations.size() - 1; i++) {
+            for (int j = i + 1; j < locations.size(); j++) {
+
+                if (locations.get(j).equals(locations.get(i))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

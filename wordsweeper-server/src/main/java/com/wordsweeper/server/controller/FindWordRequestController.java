@@ -4,14 +4,13 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.xml.Cell;
-import com.wordsweeper.server.xml.FindWordResponse;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.server.util.MappingUtil;
+import com.wordsweeper.server.xml.*;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by francisco on 11/10/16.
@@ -55,22 +54,10 @@ public class FindWordRequestController extends ControllerChain {
 
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
-        StringBuilder sb = new StringBuilder(256);
-
-        final Iterable<Cell> iterable = request.getFindWordRequest().getCell();
-        final Iterator<Cell> iterator = iterable.iterator();
-
-        final Cell first = iterator.next();
-        sb.append(first.getPosition());
-
-        while (iterator.hasNext()) {
-            sb.append("|");
-            final Cell cell = iterator.next();
-            sb.append(cell.getPosition());
-        }
+        String cellPositions = getCellPositions(request.getFindWordRequest().getCell());
 
         Call<Game> call = WordSweeperServiceFactory.getService()
-                .findWord(gameId, playerName, request.getFindWordRequest().getWord(), sb.toString());
+                .findWord(gameId, playerName, request.getFindWordRequest().getWord(), cellPositions);
 
         return processInternal(client, request, call);
     }
@@ -79,7 +66,27 @@ public class FindWordRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
-        return null;
+        /* Map the game to a BoardResponse object */
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, false);
+
+        /* Create the response object */
+        Response response = getBasicResponse(request, boardResponse);
+
+        /* Broadcast the response to all the players in the game */
+        broadcastResponse(response, StringUtils.EMPTY, game);
+
+        String playerName = (String) client.getData();
+        FindWordResponse findWordResponse = getObjectFactory().createFindWordResponse();
+        findWordResponse.setGameId(game.getUniqueId());
+        findWordResponse.setName(playerName);
+        // TODO: find a way to get the score
+        findWordResponse.setScore(0);
+
+        response.setFindWordResponse(findWordResponse);
+        response.setBoardResponse(null);
+
+        // send this response back to the client which sent us the request.
+        return response;
     }
 
     /* (non-Javadoc)
@@ -99,5 +106,27 @@ public class FindWordRequestController extends ControllerChain {
         findWordResponse.setScore(0);
 
         response.setFindWordResponse(findWordResponse);
+    }
+
+    /**
+     * Convert the list of cells to a string representing the list
+     *
+     * @param cellList the list of cells
+     * @return the string representing the cell positions
+     */
+    private String getCellPositions(List<Cell> cellList) {
+        StringBuilder sb = new StringBuilder(256);
+        final Iterator<Cell> iterator = cellList.iterator();
+        final Cell first = iterator.next();
+
+        sb.append(first.getPosition());
+
+        while (iterator.hasNext()) {
+            sb.append("|");
+            final Cell cell = iterator.next();
+            sb.append(cell.getPosition());
+        }
+
+        return sb.toString();
     }
 }

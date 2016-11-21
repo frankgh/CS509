@@ -38,7 +38,7 @@ public class MappingUtil {
         BoardResponse boardResponse = new ObjectFactory().createBoardResponse();
 
         boardResponse.setGameId(source.getUniqueId());
-        boardResponse.setSize(source.getBoard().getRows() * source.getBoard().getColumns());
+        boardResponse.setSize(source.getBoard().getRows());
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
