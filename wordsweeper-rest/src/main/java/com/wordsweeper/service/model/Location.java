@@ -61,6 +61,24 @@ public class Location {
         return row;
     }
 
+    /**
+     * Sets row.
+     *
+     * @param row the row
+     */
+    protected void setRow(int row) {
+        this.row = row;
+    }
+
+    /**
+     * Sets column.
+     *
+     * @param column the column
+     */
+    protected void setColumn(int column) {
+        this.column = column;
+    }
+
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
 	 */
@@ -73,7 +91,7 @@ public class Location {
     }
 
     /* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+     * @see java.lang.Object#toString()
 	 */
     @Override
     public boolean equals(Object obj) {

@@ -30,6 +30,15 @@ public class Word {
     }
 
     /**
+     * Get word length int.
+     *
+     * @return the int
+     */
+    public int getWordLength() {
+        return this.locations.size();
+    }
+
+    /**
      * Determine if the word contains duplicate cells in the list
      *
      * @return true if there are duplicate cells, false otherwise
