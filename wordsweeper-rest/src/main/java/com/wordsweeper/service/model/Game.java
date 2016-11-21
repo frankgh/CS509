@@ -426,7 +426,7 @@ public class Game {
      * Calculate the score of a word using the following formula:
      * 2^N * 10 * SUM( 2^M * Pi ) * cellMultiplier
      * Where N is the number of words in the letter
-     * M is the number of players that share the cell if N is greater than 1
+     * M is the number of players that share the cell if M is greater than 1
      * Pi is the letter frequency
      * cellMultiplier is the multiplier of the bonus cell if the word
      * contains the bonus cell.

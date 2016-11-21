@@ -18,12 +18,6 @@ public class Letter {
     @Column(name = "character")
     @NotNull
     char character;
-    /**
-     * The Score.
-     */
-    @Column(name = "score")
-    @NotNull
-    int score;
 
     /**
      * Instantiates a new Letter.
@@ -35,20 +29,9 @@ public class Letter {
      * Instantiates a new Letter.
      *
      * @param character the character
-     * @param score     the score
      */
-    Letter(char character, int score) {
-        this.score = score;
+    Letter(char character) {
         this.character = character;
-    }
-
-    /**
-     * Sets score.
-     *
-     * @param score the score
-     */
-    public void setScore(int score) {
-        this.score = score;
     }
 
     /**
@@ -58,15 +41,6 @@ public class Letter {
      */
     public char getCharacter() {
         return character;
-    }
-
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
-    public int getScore() {
-        return score;
     }
 
     /**
