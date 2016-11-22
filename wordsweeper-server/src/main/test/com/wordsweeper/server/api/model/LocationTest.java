@@ -2,8 +2,6 @@ package com.wordsweeper.server.api.model;
 
 import org.junit.Test;
 
-import com.wordsweeper.server.api.model.Letter;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -15,11 +13,11 @@ public class LocationTest {
         Location loc = new Location();
         loc.column = 3;
         loc.row = 5;
-        
+
         assertEquals(5, loc.getRow());
         assertEquals(3, loc.getColumn());
-        
-        assertEquals("6,4", loc.toString());
+
+        assertEquals((loc.column + 1) + "," + (loc.row + 1), loc.toString());
     }
 
 }
