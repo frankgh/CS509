@@ -13,9 +13,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timeStamp>${maven.build.timestamp}</timeStamp>
+        <wordsweeper.rest.server.url>http://localhost:8080</wordsweeper.rest.server.url>
     </properties>
 
     <build>
+        <testSourceDirectory>src/main/test</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -59,6 +61,22 @@
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/ws.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

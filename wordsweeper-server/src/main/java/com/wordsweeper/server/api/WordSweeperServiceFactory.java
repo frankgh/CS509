@@ -1,6 +1,7 @@
 package com.wordsweeper.server.api;
 
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.StringUtils;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -10,6 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @author Francisco Guerrero afguerrerohernan@wpi.edu
  */
 public class WordSweeperServiceFactory {
+
+    static final String WORDSWEEPER_SERVER_URL_KEY = "wordsweeper.rest.server.url";
 
     /**
      * The constant LOG_TAG.
@@ -21,17 +24,18 @@ public class WordSweeperServiceFactory {
      */
     private static final WordSweeperService service;
 
+    /**
+     * The retrofit service.
+     */
     private static final Retrofit retrofit;
 
     static {
 
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         OkHttpClient client = new OkHttpClient.Builder().build();
+        String url = StringUtils.defaultIfBlank(System.getProperty(WORDSWEEPER_SERVER_URL_KEY), "http://localhost:8080");
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080/wordsweeper/rest/") // TODO: hardcoded URL
+                .baseUrl(url)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

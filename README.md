@@ -12,6 +12,37 @@ deploying the war file.
 - [Tomcat](http://tomcat.apache.org/)
 - [Maven](https://maven.apache.org/)
 
+### Tomcat Configuration
+
+This is a one-time only configuration of Tomcat. 
+
+#### Create a Tomcat User
+
+Tomcat users are defined in the file – 
+`$TOMCAT_HOME/conf/tomcat-users.xml`, by default, there is NO user,
+it means no one can access the Tomcat manager page.
+
+To enable users to access the Tomcat manager page, add a user as the 
+role `manager-gui`.
+
+##### `$TOMCAT_HOME/conf/tomcat-users.xml` 
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  <role rolename="tomcat"/>
+  <role rolename="role1"/>
+  <user username="tomcat" password="tomcat" roles="tomcat"/>
+  <user username="both" password="tomcat" roles="tomcat,role1"/>
+  <user username="role1" password="tomcat" roles="role1"/>
+-->
+  <role rolename="manager-script"/>
+  <user password="tomcat-cs509" roles="manager-script" username="tomcat-script"/>
+</tomcat-users>
+```
+
+Save it and restart Tomcat, now you should able to deploy using the maven command below
+
 ### Third Party Libraries
 - Jersey Containers
 - Jackson (for JSON)
