@@ -2,6 +2,7 @@ package com.wordsweeper.service.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -36,8 +37,11 @@ public class WordTable {
         table = new Hashtable<>();
 
         ClassLoader classLoader = WordTable.class.getClassLoader();
-        Iterator<String> it = new StringFileIterator(
-                new File(classLoader.getResource(resourcesFolder + "/" + wordTable).getFile()));
+        String resourcePath = resourcesFolder.replace("/", getPathDelim()) + getPathDelim() + wordTable;
+        resourcePath = classLoader.getResource(resourcePath).getFile();
+        resourcePath = URLDecoder.decode(resourcePath, "UTF-8");
+
+        Iterator<String> it = new StringFileIterator(new File(resourcePath));
         while (it.hasNext()) {
             String word = it.next();
             word = word.trim();
@@ -67,5 +71,14 @@ public class WordTable {
 
         s = s.toLowerCase();
         return table.containsKey(s);
+    }
+
+    /**
+     * Gets the correct delimiter
+     *
+     * @return the path delim
+     */
+    private static String getPathDelim() {
+        return System.getProperty("file.separator", "/");
     }
 }

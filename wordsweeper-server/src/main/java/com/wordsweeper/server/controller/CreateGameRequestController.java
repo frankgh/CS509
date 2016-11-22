@@ -28,14 +28,14 @@ public class CreateGameRequestController extends ControllerChain {
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
-	 */
+*/
     public boolean canProcess(Request request) {
         return request != null && request.getCreateGameRequest() != null;
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
-	 */
+*/
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {
@@ -58,7 +58,7 @@ public class CreateGameRequestController extends ControllerChain {
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
-	 */
+*/
     public Response execute(ClientState client, Request request, Game game) {
         client.setData(request.getCreateGameRequest().getName());
         if (!model.createGame(client, game.getUniqueId())) { /* associate a clientState to the game */
@@ -71,14 +71,15 @@ public class CreateGameRequestController extends ControllerChain {
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
-	 */
+*/
     protected boolean setOnSuccessResponse(Request request, Response response) {
         return false; // DO NOTHING
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
-	 */
+*/
     protected void setOnFailureResponse(Request request, Response response) {
     } // DO NOTHING
 }
+

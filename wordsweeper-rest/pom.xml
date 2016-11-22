@@ -10,6 +10,7 @@
     <name>wordsweeper-rest</name>
 
     <build>
+        <testSourceDirectory>src/main/test</testSourceDirectory>
         <finalName>wordsweeper-rest</finalName>
         <plugins>
             <plugin>

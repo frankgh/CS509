@@ -19,7 +19,7 @@ public class AdminClientLauncher {
     
     public static void main(String[] args) throws Exception {
     	
-    	if (!Message.configure("wordsweeper.xsd")) {
+    	if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-admin-client/wordsweeper.xsd")) {
             System.exit(0);
         }
 

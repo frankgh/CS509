@@ -10,23 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 public class Letter {
 
     /**
-     * The Score.
-     */
-    String score;
-
-    /**
      * The Character.
      */
     String character;
-
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
-    public String getScore() {
-        return score;
-    }
 
     /**
      * Gets character.

@@ -14,10 +14,6 @@ import javax.persistence.*;
 public class Cell {
 
     /**
-     * The constant DEFAULT_CELL_MULTIPLIER.
-     */
-    public static final int DEFAULT_CELL_MULTIPLIER = 1;
-    /**
      * The constant MAX_CELL_MULTIPLIER.
      */
     public static final int MAX_CELL_MULTIPLIER = 10;
@@ -40,7 +36,7 @@ public class Cell {
      * Instantiates a new Cell.
      */
     public Cell() {
-        this.letter = new Letter(RandomUtil.getRandomCharacter(), 1);
+        this.letter = new Letter(RandomUtil.getRandomCharacter());
     }
 
     /**

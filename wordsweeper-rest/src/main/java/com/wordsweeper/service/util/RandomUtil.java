@@ -10,7 +10,7 @@ import java.security.SecureRandom;
  * @author francisco
  */
 public class RandomUtil {
-    final static String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final static String alphabet = "AAABCDEEEFGHIIIJKLMNOOOPQRSTUUUVWXYZ";
     final static SecureRandom random = new SecureRandom();
 
     /**

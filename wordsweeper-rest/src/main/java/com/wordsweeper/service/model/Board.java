@@ -4,6 +4,8 @@ import com.wordsweeper.service.util.RandomUtil;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -175,7 +177,7 @@ public class Board {
      * @param column the column
      * @return the index of the cell just below the given row and column
      */
-    private int getCellIndexJustBelow(int row, int column) {
+    protected int getCellIndexJustBelow(int row, int column) {
         return getCellIndex(row + 1, column);
     }
 
@@ -300,9 +302,26 @@ public class Board {
      */
     public void claimWord(Word word) {
 
-        for (Location location : word.locations) {
+        List<Location> locations = word.locations;
+
+        // sort locations by higher rows first
+        Collections.sort(locations, new Comparator<Location>() {
+            @Override
+            public int compare(Location o1, Location o2) {
+                return o2.getRow() - o1.getRow();
+            }
+        });
+
+        // then bubble them up
+        for (Location location : locations) {
             bubbleUp(location); /* move up all the cells below */
-            cellList.remove(getCellIndex(location.getRow(), location.getColumn()));
+
+            int cellIndex = getCellIndex(location.getRow(), location.getColumn());
+            cellList.remove(cellIndex);
+
+            if (!isLocationInBoard(location.getRow() + 1, location.getColumn())) {
+                addCell(cellIndex);
+            }
         }
 
     }

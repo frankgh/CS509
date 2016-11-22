@@ -2,6 +2,7 @@ package com.wordsweeper.server.api.model;
 
 /**
  * Created by francisco on 10/12/16.
+ *
  * @author francisco
  */
 public class Player {
@@ -20,6 +21,11 @@ public class Player {
      * The Score.
      */
     int score;
+
+    /**
+     * The score of the latest word
+     */
+    int latestScore;
 
     /**
      * Gets name.
@@ -46,5 +52,14 @@ public class Player {
      */
     public int getScore() {
         return score;
+    }
+
+    /**
+     * Gets latest score.
+     *
+     * @return the latest score
+     */
+    public int getLatestScore() {
+        return latestScore;
     }
 }

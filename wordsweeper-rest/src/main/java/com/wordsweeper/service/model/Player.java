@@ -38,6 +38,12 @@ public class Player {
     int score;
 
     /**
+     * The Latest score.
+     */
+    @Transient
+    int latestScore;
+
+    /**
      * Instantiates a new Player.
      */
     public Player() {
@@ -73,6 +79,15 @@ public class Player {
     }
 
     /**
+     * Sets latest score.
+     *
+     * @param latestScore the latest score
+     */
+    public void setLatestScore(int latestScore) {
+        this.latestScore = latestScore;
+    }
+
+    /**
      * Sets offset.
      *
      * @param location the location
@@ -97,6 +112,15 @@ public class Player {
      */
     public int getScore() {
         return score;
+    }
+
+    /**
+     * Gets latest score.
+     *
+     * @return the latest score
+     */
+    public int getLatestScore() {
+        return latestScore;
     }
 
     /**
