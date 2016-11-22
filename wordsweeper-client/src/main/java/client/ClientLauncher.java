@@ -26,7 +26,7 @@ public class ClientLauncher {
         }
 
         // select dedicated server with '-server' options
-        String host = "localhost";
+        String host = "cs509.frankgh.com";
         if (args.length > 0 && args[0].equals("-server")) {
             host = serverHost;
         }
