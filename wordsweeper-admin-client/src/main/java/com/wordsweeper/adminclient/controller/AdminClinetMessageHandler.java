@@ -2,7 +2,6 @@ package com.wordsweeper.adminclient.controller;
 import xml.Message;
 import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
-import com.wordsweeper.adminclient.view.AdminClientBoardApplication;
 
 public class AdminClinetMessageHandler implements IMessageHandler{
 	

@@ -25,17 +25,21 @@ public class BoardResponseController {
 		NamedNodeMap map = boardResponse.getAttributes();
 		String boardcontents = map.getNamedItem("contents").getNodeValue();
 		app.setContent(boardcontents);
-
+		
 //		String gameId = map.getNamedItem("gameId").getNodeValue();
 //		app.setGameIDNumber().setText(gameId);
 		
 //		The actual get gameID list loop
-//		NodeList list = boardResponse.getChildNodes();
-//		for (int i = 0; i < list.getLength(); i++) {
-//			Node n = list.item(i);
-//			String gameId = n.getAttributes().getNamedItem("gameId").getNodeValue();
-//			app.getResponseArea().addElement(gameId);
-//		}
+		NodeList list = boardResponse.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			Node n = list.item(i);
+			String pname = n.getAttributes().getNamedItem("name").getNodeValue();
+			String score = n.getAttributes().getNamedItem("score").getNodeValue();
+			String position = n.getAttributes().getNamedItem("position").getNodeValue();
+			Object[] info = new Object[]{pname,score,position};
+			
+			app.setPlayerInfo(info);
+		}
 		
 
 		
