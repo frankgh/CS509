@@ -4,14 +4,10 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
+import com.wordsweeper.server.xml.ExitGameResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-
-import java.io.IOException;
 
 /**
  * Controller on server in charge of relaying exitGame requests
@@ -57,37 +53,49 @@ public class ExitGameRequestController extends ControllerChain implements IShutd
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
 	 */
     public Response process(ClientState client, Request request) {
+
+        /* If the client is not in a game return an unsuccessful response */
+        if (!model.isClientInGame(client)) {
+            return getUnsuccessfulResponse(request, "The player has not joined a game"); /* Return empty response */
+        }
+
         String gameId = model.getGameId(client);
         String playerName = (String) client.getData();
 
-        Game game = null;
         Call<Game> call = WordSweeperServiceFactory.getService().exitGame(gameId, playerName);
 
-        try {
-            retrofit2.Response<Game> apiResponse = call.execute();
+        return processInternal(client, request, call);
+    }
 
-            if (apiResponse.isSuccessful()) {
-                game = apiResponse.body();
-            } else {
-                return handleAPIError(request, apiResponse);
-            }
-        } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
-        }
-
-        if (game == null || !model.exitGame(client)) {
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    public Response execute(ClientState client, Request request, Game game) {
+        if (!model.exitGame(client)) {
             return getUnsuccessfulResponse(request, "Unable to exit the game");
         }
 
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
-        Response response = new ObjectFactory().createResponse();
-        response.setId(request.getId());
-        response.setSuccess(true);
-        response.setBoardResponse(boardResponse);
+        return null;
+    }
 
-        broadcastResponse(response, client.id(), game);
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        ExitGameResponse exitGameResponse = getObjectFactory().createExitGameResponse();
+        if (request.getExitGameRequest() != null) {
+            exitGameResponse.setGameId(request.getExitGameRequest().getGameId());
+        } else {
+            exitGameResponse.setGameId("CLIENT_DISCONNECT");
+        }
+        response.setExitGameResponse(exitGameResponse);
+        return true;
+    }
 
-        // send this response back to the client which sent us the request.
-        return response;
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected void setOnFailureResponse(Request request, Response response) {
+        // DO NOTHING
     }
 }

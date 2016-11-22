@@ -22,11 +22,11 @@ public class Game {
     /**
      * The Status active.
      */
-    static final int STATUS_ACTIVE = 0;
+    public static final int STATUS_ACTIVE = 1;
     /**
      * The Status inactive.
      */
-    static final int STATUS_INACTIVE = 1;
+    static final int STATUS_INACTIVE = 0;
     /**
      * The Default board size.
      */
@@ -39,6 +39,20 @@ public class Game {
      * The Player board columns.
      */
     static final int PLAYER_BOARD_COLUMNS = 4;
+    /**
+     * The Max player to board ratio.
+     */
+    static final double MAX_PLAYER_TO_BOARD_RATIO = 3.0;
+    /**
+     * The Player ratio multiplier.
+     */
+    static final double PLAYER_RATIO_MULTIPLIER = 16.0;
+
+    /**
+     * Point allocation for alphabet's letters
+     * 											 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+     */
+    static final int[] LETTER_SCORES = new int[]{2,4,3,3,1,4,4,2,2,7,5,3,3,2,2,4,8,2,2,1,3,5,3,7,4,8};
 
     /**
      * The Id.
@@ -190,6 +204,13 @@ public class Game {
 
         randomizePlayerLocation(player);
 
+        if (((double) playerList.size() * PLAYER_RATIO_MULTIPLIER) /
+                (double) board.size() >= MAX_PLAYER_TO_BOARD_RATIO) {
+            // When the number of players to board ratio becomes too large,
+            // we increase the board size
+            board.grow(1);
+        }
+
         return true;
     }
 
@@ -249,14 +270,27 @@ public class Game {
     }
 
     /**
+     * Resets the scores of all players in the game
+     */
+    public void resetPlayersScores() {
+        for (Player player : playerList) {
+            player.setScore(0);
+        }
+    }
+
+    /**
      * Randomizes the location of a player
      *
      * @param player the player
      */
     private void randomizePlayerLocation(Player player) {
+        /* we need to add +1 because nextInt returns a value
+         * between 0 (inclusive) and the specified value (exclusive).
+         * We add +1 to make it inclusive
+         */
         player.setOffset(new Location(
-                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS),
-                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS)));
+                RandomUtil.nextInt(board.getRows() - PLAYER_BOARD_ROWS + 1),
+                RandomUtil.nextInt(board.getColumns() - PLAYER_BOARD_COLUMNS + 1)));
     }
 
     /**
@@ -389,8 +423,100 @@ public class Game {
     public void repositionBoard(Player player, int rowChange, int columnChange) {
         player.setOffset(new Location(
                 Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
-                        board.getRows() - PLAYER_BOARD_ROWS - 1)),
+                        board.getRows() - PLAYER_BOARD_ROWS)),
                 Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
-                        board.getColumns() - PLAYER_BOARD_COLUMNS - 1))));
+                        board.getColumns() - PLAYER_BOARD_COLUMNS))));
+    }
+
+    /**
+     * Calculate the score of a word using the following formula:
+     * 2^N * 10 * SUM( 2^M * Pi ) * cellMultiplier
+     * Where N is the number of tiles in the word
+     * M is the number of players that share the cell if M is greater than 1
+     * Pi is the letter frequency
+     * cellMultiplier is the multiplier of the bonus cell if the word
+     * contains the bonus cell.
+     *
+     * @param word the word
+     * @return the score of the word
+     */
+    public int calculateWordScore(Word word) {
+    	int numOfPlayers = this.playerList.size();
+    	int wordSize = word.locations.size();
+    	int N = word.getWordLength();
+    	int[] M = new int[wordSize];
+    	int sum = 0;
+    	boolean multiplier = false;
+    	Location bonusCell = this.board.bonusCellLocation;
+
+    	if(N > 1){
+    		// calculate how many players share each cell
+    		for(int k = 0; k < numOfPlayers; k++){
+    			Player player = this.playerList.get(k);
+    			for(int i = 0; i < wordSize; i++){
+    				Location cellLoc = word.locations.get(i);
+    				if(player.isLocationInPlayerBoard(cellLoc))
+    					M[i]++;
+    			}
+    		}
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += Math.pow(2, M[i]-1) * calcLetterScore(word.word.charAt(i));
+    		}
+    	} else {
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += calcLetterScore(word.word.charAt(i));
+    		}
+    	}
+
+    	sum *= 10;
+    	sum *= Math.pow(2, N);
+    	return (multiplier) ? sum * 10 : sum;
+    }
+
+    /**
+     * Determine whether a word is valid
+     *
+     * @param word the word to validate
+     * @return true if the word is valid, false if not
+     */
+    public boolean validateWord(Player player, Word word) {
+
+        if (word.containsDuplicateCells()) {
+            return false;
+        }
+
+        StringBuilder sb = new StringBuilder(32);
+
+        for (int i = 0; i < word.locations.size(); i++) {
+            Location location = word.locations.get(i);
+
+            if (i < word.locations.size() - 1 &&
+                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+                return false;
+            }
+
+            if (!player.isLocationInPlayerBoard(location)) {
+                return false;
+            } else {
+                sb.append(board.getLetterAtLocation(location).printCharacter());
+            }
+        }
+
+        return StringUtils.equalsIgnoreCase(word.word, sb.toString());
+    }
+
+    int calcLetterScore(char c){
+		int Pi = (int) c;
+		if(Pi > 90)
+			Pi -= 97;
+		else
+			Pi -= 65;
+		return LETTER_SCORES[Pi];
     }
 }

@@ -3,7 +3,8 @@ package com.wordsweeper.service.model;
 import java.util.List;
 
 /**
- * Created by francisco on 9/13/16.
+ * Represents a word
+ *
  * @author francisco
  */
 public class Word {
@@ -13,18 +14,46 @@ public class Word {
      */
     String word;
     /**
-     * The Cell list.
+     * The Location list.
      */
-    List<Cell> cellList;
+    List<Location> locations;
 
     /**
      * Instantiates a new Word.
      *
-     * @param word     the word
-     * @param cellList the cell list
+     * @param word      the word
+     * @param locations the list of locations
      */
-    public Word(String word, List<Cell> cellList) {
+    public Word(String word, List<Location> locations) {
         this.word = word;
-        this.cellList = cellList;
+        this.locations = locations;
+    }
+
+    /**
+     * Get word length int.
+     *
+     * @return the int
+     */
+    public int getWordLength() {
+        return this.locations.size();
+    }
+
+    /**
+     * Determine if the word contains duplicate cells in the list
+     *
+     * @return true if there are duplicate cells, false otherwise
+     */
+    public boolean containsDuplicateCells() {
+
+        for (int i = 0; i < locations.size() - 1; i++) {
+            for (int j = i + 1; j < locations.size(); j++) {
+
+                if (locations.get(j).equals(locations.get(i))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

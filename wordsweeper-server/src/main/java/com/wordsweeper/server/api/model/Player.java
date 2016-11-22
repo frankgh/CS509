@@ -23,6 +23,11 @@ public class Player {
     int score;
 
     /**
+     * The score of the latest word
+     */
+    int latestScore;
+
+    /**
      * Gets name.
      *
      * @return the name
@@ -47,5 +52,14 @@ public class Player {
      */
     public int getScore() {
         return score;
+    }
+
+    /**
+     * Gets latest score.
+     *
+     * @return the latest score
+     */
+    public int getLatestScore() {
+        return latestScore;
     }
 }

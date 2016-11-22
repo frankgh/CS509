@@ -4,13 +4,10 @@ import com.wordsweeper.server.api.WordSweeperServiceFactory;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.BoardResponse;
+import com.wordsweeper.server.xml.JoinGameResponse;
 import com.wordsweeper.server.xml.Request;
 import com.wordsweeper.server.xml.Response;
 import retrofit2.Call;
-
-import java.io.IOException;
 
 /**
  * Controller on server in charge of relaying joinGame requests
@@ -66,7 +63,6 @@ public class JoinGameRequestController extends ControllerChain {
             return getUnsuccessfulResponse(request, "The player is already in a game"); /* Return empty response */
         }
 
-        Game game = null;
         Call<Game> call;
 
         if (request.getJoinGameRequest().getPassword() != null) {
@@ -80,37 +76,34 @@ public class JoinGameRequestController extends ControllerChain {
                     request.getJoinGameRequest().getName());
         }
 
-        try {
-            retrofit2.Response<Game> apiResponse = call.execute();
+        return processInternal(client, request, call);
+    }
 
-            if (apiResponse.isSuccessful()) {
-                game = apiResponse.body();
-            } else {
-                return handleAPIError(request, apiResponse);
-            }
-        } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
-        }
-
-        if (game == null) {
-            return getUnsuccessfulResponse(request, "Unable to join the game");
-        }
-
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    public Response execute(ClientState client, Request request, Game game) {
         client.setData(request.getJoinGameRequest().getName());
         if (!model.joinGame(client, game)) {
             client.setData(null);
             return getUnsuccessfulResponse(request, "Unable to join the game");
         }
+        return null;
+    }
 
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
-        Response response = getObjectFactory().createResponse();
-        response.setId(request.getId());
-        response.setSuccess(true);
-        response.setBoardResponse(boardResponse);
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
 
-        broadcastResponse(response, client.id(), game);
-
-        // send this response back to the client which sent us the request.
-        return response;
+    /* (non-Javadoc)
+         * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+         */
+    protected void setOnFailureResponse(Request request, Response response) {
+        JoinGameResponse joinGameResponse = getObjectFactory().createJoinGameResponse();
+        joinGameResponse.setGameId(request.getJoinGameRequest().getGameId());
+        response.setJoinGameResponse(joinGameResponse);
     }
 }

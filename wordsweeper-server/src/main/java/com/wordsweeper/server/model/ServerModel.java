@@ -36,14 +36,12 @@ public class ServerModel {
             return false;
         }
 
-        synchronized (gameIdToGameSessionMap) {
-            GameSession gameSession = new GameSession(gameId);
-            gameSession.managingPlayer = (String) client.getData();
-            gameSession.addClientState(client);
+        GameSession gameSession = new GameSession(gameId);
+        gameSession.managingPlayer = (String) client.getData();
+        gameSession.addClientState(client);
 
-            gameIdToGameSessionMap.put(gameId, gameSession);
-            clientStateIdToGameSessionMap.put(client.id(), gameSession);
-        }
+        gameIdToGameSessionMap.put(gameId, gameSession);
+        clientStateIdToGameSessionMap.put(client.id(), gameSession);
 
         return true;
     }
@@ -80,7 +78,7 @@ public class ServerModel {
      * @return the list
      */
     public List<ClientState> idsByGameId(String gameId) {
-        return gameIdToGameSessionMap.get(gameId).clientStateList;
+        return gameIdToGameSessionMap.containsKey(gameId) ? gameIdToGameSessionMap.get(gameId).clientStateList : null;
     }
 
     /**
@@ -103,6 +101,7 @@ public class ServerModel {
                 client.setData(null);
 
                 if (gameSession.isEmpty()) {
+                    // Remove the game if empty
                     gameIdToGameSessionMap.remove(gameSession.gameId);
                 }
             } else {
@@ -155,30 +154,29 @@ public class ServerModel {
      * Update game with the latest data from the server
      *
      * @param game the game
-     * @return true if the game has updates, false otherwise
+     * @return true if the game session has updates, false otherwise
      */
     public boolean updateGame(Game game) {
+        GameSession gameSession = gameIdToGameSessionMap.get(game.getUniqueId());
 
-        synchronized (gameIdToGameSessionMap) {
-            GameSession gameSession = gameIdToGameSessionMap.get(game.getUniqueId());
-
-            if (gameSession == null) {
-                return false;
-            }
-
-            boolean hasUpdates = false;
-
-            if (!StringUtils.equals(gameSession.managingPlayer, game.getManagingPlayerName())) {
-                gameSession.managingPlayer = game.getManagingPlayerName();
-                hasUpdates = true;
-            }
-
-            if (gameSession.isEmpty()) {
-                gameIdToGameSessionMap.remove(game.getUniqueId());
-                hasUpdates = true;
-            }
-
-            return hasUpdates;
+        if (gameSession == null) {
+            return false;
         }
+
+        boolean hasUpdates =
+                !StringUtils.equals(gameSession.managingPlayer, game.getManagingPlayerName())
+                        || gameSession.isEmpty();
+
+        if (hasUpdates) {
+            synchronized (gameIdToGameSessionMap) {
+                gameSession.managingPlayer = game.getManagingPlayerName();
+
+                if (gameSession.isEmpty()) {
+                    gameIdToGameSessionMap.remove(game.getUniqueId());
+                }
+            }
+        }
+
+        return hasUpdates;
     }
 }

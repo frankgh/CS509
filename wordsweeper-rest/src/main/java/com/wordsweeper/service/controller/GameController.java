@@ -3,8 +3,11 @@ package com.wordsweeper.service.controller;
 import com.wordsweeper.service.model.Game;
 import com.wordsweeper.service.model.Player;
 import com.wordsweeper.service.model.RequestError;
+import com.wordsweeper.service.model.Word;
 import com.wordsweeper.service.repository.GameDao;
 import com.wordsweeper.service.repository.GameDaoImpl;
+import com.wordsweeper.service.util.Util;
+import com.wordsweeper.service.util.WordTable;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.GET;
@@ -88,7 +91,8 @@ public class GameController {
                 StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
-            game.getBoard().reset(); /* finally, reset the board */
+            // game.getBoard().reset(); /* finally, reset the board */
+            game.resetPlayersScores(); /* and reset player scores */
             gameDao.save(game);
         } else {
             return Response
@@ -210,6 +214,56 @@ public class GameController {
             return Response
                     .ok(new RequestError(RequestError.UNAUTHORIZED, "You are not authorized to perform this task"))
                     .status(Response.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        return Response.ok(game).build(); /* Return response with the game object */
+    }
+
+    @GET
+    @Path("/findword/{gameId}/{playerName}/{word}/{cellPositions}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWord(@PathParam("gameId") String gameId, @PathParam("playerName") String playerName,
+                             @PathParam("word") String word, @PathParam("cellPositions") String cellPositions) {
+
+        if (!WordTable.isWord(word)) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "I can't find that word in my dictionary"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        GameDao gameDao = new GameDaoImpl();
+        Game game = gameDao.findByGameId(gameId);
+
+        if (game == null || game.ended()) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_GAME_EXISTS, "The game does not exist"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        Player player = game.getPlayer(playerName);
+
+        if (player == null) {
+            return Response
+                    .ok(new RequestError(RequestError.NO_SUCH_PLAYER_EXISTS, "No such player exists in the game"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
+
+        if (game.validateWord(player, wordWrapper)) {
+            int wordScore = game.calculateWordScore(wordWrapper);
+            game.getBoard().claimWord(wordWrapper);
+            player.setScore(player.getScore() + wordScore);
+            player.setLatestScore(wordScore);
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "Invalid word"))
+                    .status(Response.Status.NOT_FOUND)
                     .build();
         }
 

@@ -24,14 +24,17 @@ public class ServerLauncher {
         ServerModel serverModel = new ServerModel();
 
         WordSweeperProtocolHandler handler = new WordSweeperProtocolHandler(serverModel);
-        // Admin handlers
+        // Register Admin handlers
         handler.registerHandler(new ListGamesRequestController(serverModel));
-        // Client handlers
+        handler.registerHandler(new ShowGameStateRequestController(serverModel));
+        // Register Client handlers
         handler.registerHandler(new ExitGameRequestController(serverModel));
+        handler.registerHandler(new LockGameRequestController(serverModel));
         handler.registerHandler(new ResetGameRequestController(serverModel));
         handler.registerHandler(new RepositionBoardRequestController(serverModel));
-        handler.registerHandler(new CreateGameRequestController(serverModel));
+        handler.registerHandler(new FindWordRequestController(serverModel));
         handler.registerHandler(new JoinGameRequestController(serverModel));
+        handler.registerHandler(new CreateGameRequestController(serverModel));
 
         // Start server and have ProtocolHandler be responsible for all XML messages.
         //Server server = new Server(new WordSweeperProtocolHandler(serverModel), 11425);

@@ -20,7 +20,7 @@ import java.util.List;
  * @author Celia
  * @since 2016 -11-08
  */
-public class ListGamesRequestController extends ControllerChain {
+public class ListGamesRequestController extends ControllerChain implements IAdminController {
 
     /**
      * Instantiates a new List games request.
@@ -74,7 +74,7 @@ public class ListGamesRequestController extends ControllerChain {
         }
 
         if (gameList == null) {
-            return getUnsuccessfulResponse(request,"Unable to load list of games");
+            return getUnsuccessfulResponse(request, "Unable to load list of games");
         }
 
         ListGamesResponse listGamesResponse = MappingUtil.mapGameListToListGamesResponse(gameList);
@@ -85,4 +85,24 @@ public class ListGamesRequestController extends ControllerChain {
 
         return response;
     }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    protected Response execute(ClientState client, Request request, Game game) {
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected void setOnFailureResponse(Request request, Response response) {
+    } // DO NOTHING
 }

@@ -51,4 +51,24 @@ public class RepositionBoardRequestController extends ControllerChain {
 
         return processInternal(client, request, call);
     }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+	 */
+    protected Response execute(ClientState client, Request request, Game game) {
+        return null; /* DO NOTHING */
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected boolean setOnSuccessResponse(Request request, Response response) {
+        return false; // DO NOTHING
+    }
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+	 */
+    protected void setOnFailureResponse(Request request, Response response) {
+    } // DO NOTHING
 }

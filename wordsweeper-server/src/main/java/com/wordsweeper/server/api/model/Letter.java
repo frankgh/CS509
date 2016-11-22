@@ -10,23 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 public class Letter {
 
     /**
-     * The Score.
-     */
-    String score;
-
-    /**
      * The Character.
      */
     String character;
-
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
-    public String getScore() {
-        return score;
-    }
 
     /**
      * Gets character.
@@ -43,11 +29,9 @@ public class Letter {
      * @return the string
      */
     public String printCharacter() {
-        String c = new String(getCharacter());
-
-        if (StringUtils.equalsIgnoreCase(c, "Q")) {
+        if (StringUtils.equalsIgnoreCase(character, "Q")) {
             return "Qu";
         }
-        return c;
+        return character;
     }
 }

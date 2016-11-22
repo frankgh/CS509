@@ -40,6 +40,11 @@ public class RequestError {
     public final static int UNAUTHORIZED = 401;
 
     /**
+     * The constant INVALID_WORD.
+     */
+    public final static int INVALID_WORD = 405;
+
+    /**
      * The Error code.
      */
     int statusCode;

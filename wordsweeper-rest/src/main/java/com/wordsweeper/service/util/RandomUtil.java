@@ -4,10 +4,13 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 /**
- * Created by francisco on 9/20/16.
+ * RandomUtil provides utility methods to generate random
+ * characters, random integer numbers, and unique IDs.
+ *
+ * @author francisco
  */
 public class RandomUtil {
-    final static String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final static String alphabet = "AAABCDEEEFGHIIIJKLMNOOOPQRSTUUUVWXYZ";
     final static SecureRandom random = new SecureRandom();
 
     /**
