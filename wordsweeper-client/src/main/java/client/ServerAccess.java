@@ -42,6 +42,9 @@ public class ServerAccess {
 	/* Waiting controllers. */
 	Hashtable<String,Tuple> pending = new Hashtable<String,Tuple>();
 
+	/**
+	 * This class implements controller, request and id that can communicate with server.
+	 */
 	class Tuple {
 		IController controller;
 		Message      request;
@@ -61,6 +64,8 @@ public class ServerAccess {
 
 	/**
 	 * Construct ServerAccess object using specified port number.
+	 * @param host the host of server access
+	 * @param port the port of server access
 	 */
 	public ServerAccess(String host, int port) {
 		this.host = host;
@@ -70,7 +75,10 @@ public class ServerAccess {
 	/**
 	 * Start up reader and talker threads. Returns false if unable to contact server.
 	 * When server messages are received, they are handled by the given handler object.
+	 * @param handler the handler for server interface
+	 * @return false if unable to connect to server, otherwise return true.
 	 */
+
 	public boolean connect(final IMessageHandler handler) {
 		try {
 			server = new Socket (host, serverPort);
@@ -86,7 +94,9 @@ public class ServerAccess {
 		return true;
 	}
 
-	/** Request to disconnect from server (internal or external). */
+	/**
+	 * Request to disconnect from server (internal or external).
+	 */
 	public void disconnect() {
 		if (!isActive) { return; }
 		isActive = false;
@@ -103,7 +113,11 @@ public class ServerAccess {
 		}
 	}
 
-	/** Send request to the server. Return success or failure */
+	/**
+	 * Send request to the server. Return success or failure
+	 * @param r the request message.
+	 * @return r if request passing, otherwise return false.
+	 */
 	public synchronized boolean sendRequest(Message r) {
 		if (!isActive) { return false; }
 

@@ -25,6 +25,7 @@ public interface IProtocolHandler {
      *
      * @param state   the ClientState
      * @param request the request
+     * @return the response
      */
     Response process(ClientState state, Request request);
 

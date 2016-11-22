@@ -5,10 +5,19 @@ import xml.Message;
 import client.model.Model;
 import client.view.Application;
 
+/**
+ * This class specifies joining a game for client.
+ */
 public class JoinGameController {
 
 	Application app;
 	Model model;
+
+	/**
+	 *
+	 * @param app application for game WordSweeper
+	 * @param model model for game WordSweeper
+	 */
 
 	public JoinGameController(Application app, Model model) {
 		this.app = app;

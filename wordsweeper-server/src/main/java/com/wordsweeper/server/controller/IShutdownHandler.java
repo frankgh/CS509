@@ -17,6 +17,8 @@ public interface IShutdownHandler {
      * the ProtocolHandler also implements IShutdownHandler.
      * <p>
      * Parameter is the state of the thread being terminated.
+     *
+     * @param state the state
      */
     void logout(ClientState state);
 }
