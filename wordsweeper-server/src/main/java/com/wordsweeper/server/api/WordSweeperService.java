@@ -97,6 +97,11 @@ public interface WordSweeperService {
     Call<Game> repositionBoard(@Path("gameId") String gameId, @Path("playerName") String playerName,
                                @Path("rowChange") int rowChange, @Path("columnChange") int columnChange);
 
+    /**
+     * List games call.
+     *
+     * @return the call
+     */
     @GET("/wordsweeper/rest/admin/game/list")
     Call<List<Game>> listGames();
 }

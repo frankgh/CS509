@@ -15,6 +15,8 @@ public class ServerLauncher {
 
     /**
      * Execute the Server using the default port.
+     *
+     * @param args the input arguments
      */
     public static void main(String[] args) {
 

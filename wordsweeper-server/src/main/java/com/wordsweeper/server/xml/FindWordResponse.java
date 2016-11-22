@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,28 +24,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "findWordResponse")
 public class FindWordResponse {
 
+    /**
+     * The Game id.
+     */
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
+    /**
+     * The Name.
+     */
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    /**
+     * The Score.
+     */
     @XmlAttribute(name = "score", required = true)
     protected long score;
 
     /**
      * Gets the value of the gameId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getGameId() {
         return gameId;
@@ -53,11 +57,8 @@ public class FindWordResponse {
 
     /**
      * Sets the value of the gameId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setGameId(String value) {
         this.gameId = value;
@@ -65,11 +66,8 @@ public class FindWordResponse {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getName() {
         return name;
@@ -77,11 +75,8 @@ public class FindWordResponse {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -89,7 +84,8 @@ public class FindWordResponse {
 
     /**
      * Gets the value of the score property.
-     * 
+     *
+     * @return the score
      */
     public long getScore() {
         return score;
@@ -97,7 +93,8 @@ public class FindWordResponse {
 
     /**
      * Sets the value of the score property.
-     * 
+     *
+     * @param value the value
      */
     public void setScore(long value) {
         this.score = value;

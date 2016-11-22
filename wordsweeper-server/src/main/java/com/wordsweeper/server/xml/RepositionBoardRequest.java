@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -25,30 +25,37 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "repositionBoardRequest")
 public class RepositionBoardRequest {
 
+    /**
+     * The Name.
+     */
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    /**
+     * The Game id.
+     */
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
+    /**
+     * The Row change.
+     */
     @XmlAttribute(name = "rowChange")
     protected Integer rowChange;
+    /**
+     * The Col change.
+     */
     @XmlAttribute(name = "colChange")
     protected Integer colChange;
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getName() {
         return name;
@@ -56,11 +63,8 @@ public class RepositionBoardRequest {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -68,11 +72,8 @@ public class RepositionBoardRequest {
 
     /**
      * Gets the value of the gameId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getGameId() {
         return gameId;
@@ -80,11 +81,8 @@ public class RepositionBoardRequest {
 
     /**
      * Sets the value of the gameId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setGameId(String value) {
         this.gameId = value;
@@ -92,11 +90,8 @@ public class RepositionBoardRequest {
 
     /**
      * Gets the value of the rowChange property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is     {@link Integer }
      */
     public Integer getRowChange() {
         return rowChange;
@@ -104,11 +99,8 @@ public class RepositionBoardRequest {
 
     /**
      * Sets the value of the rowChange property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is     {@link Integer }
      */
     public void setRowChange(Integer value) {
         this.rowChange = value;
@@ -116,11 +108,8 @@ public class RepositionBoardRequest {
 
     /**
      * Gets the value of the colChange property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is     {@link Integer }
      */
     public Integer getColChange() {
         return colChange;
@@ -128,11 +117,8 @@ public class RepositionBoardRequest {
 
     /**
      * Sets the value of the colChange property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is     {@link Integer }
      */
     public void setColChange(Integer value) {
         this.colChange = value;

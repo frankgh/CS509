@@ -95,7 +95,7 @@ public class MappingUtil {
     /**
      * Convert a list of games into a list game response objects
      *
-     * @param gameList
+     * @param gameList the game list
      * @return a list game response objects
      */
     public static ListGamesResponse mapGameListToListGamesResponse(List<Game> gameList) {

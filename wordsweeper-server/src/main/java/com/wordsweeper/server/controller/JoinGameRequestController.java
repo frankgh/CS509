@@ -33,6 +33,15 @@ public class JoinGameRequestController extends ControllerChain {
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
+
+    /**
+     * This is the method that verifying values in request.
+     *
+     * @return boolean This returns yes or no based on values in request.
+     * @param request the request.
+     *
+     */
+
     public boolean canProcess(Request request) {
         return request != null && request.getJoinGameRequest() != null;
     }
@@ -40,6 +49,17 @@ public class JoinGameRequestController extends ControllerChain {
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
 	 */
+
+
+    /**
+     * This is the method that verifying clients' join game status.
+     * @param client the client.
+     * @param request the request.
+     * @return a boardResponse wrapped in a Response object if successful, or unsuccessful response otherwise
+     *
+     */
+
+
     public Response process(ClientState client, Request request) {
 
         if (model.isClientInGame(client)) {

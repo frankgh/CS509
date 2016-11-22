@@ -21,6 +21,9 @@ import client.model.Model;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ * This class implements the tools to create application interface.
+ */
 
 public class Application extends JFrame {
 
@@ -40,9 +43,10 @@ public class Application extends JFrame {
 	private JTextField name;
 	private JTextField password;
 	private JTextField game_id;
-	
+
 	/**
 	 * Create the frame.
+	 * @param model the model of game board.
 	 */
 	public Application(final Model model) {
 		this.model = model;
@@ -178,16 +182,27 @@ public class Application extends JFrame {
 	public JTextArea getResponseArea() {
 		return responseArea;
 	}
-	
+
+	/** @return this name of the component to the specified string.*/
 	public String getName(){
 		String nameS = name.getText();
 		return nameS;
 	}
+
+	/**
+	 *
+	 * @return this password of the component to the specified string.
+	 */
 	
 	public String getPassword(){
 		String passowrdS = password.getText();		
 		return passowrdS;
 	}
+
+	/**
+	 *
+	 * @return this game id of the component to the specified string.
+	 */
 	
 	public String getGameID(){
 		String game_idS = game_id.getText();		

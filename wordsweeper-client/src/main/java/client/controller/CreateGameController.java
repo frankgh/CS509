@@ -5,17 +5,30 @@ import xml.Message;
 import client.model.Model;
 import client.view.Application;
 
+/**
+ * This class implemented a controller that creating game: WordSweeper
+ */
 public class CreateGameController {
 
 	Application app;
 	Model model;
+
+
+	/**
+	 * This constructs a game controller with a specified app and model.
+	 * @param app app for client
+	 * @param model model for this game.
+	 */
 
 	public CreateGameController(Application app, Model model) {
 		this.app = app;
 		this.model = model;
 	}
 
-	/** Make the request on the server and wait for response. */
+	/**
+	 * This process makes the request on the server and wait for response with clients' name, password.
+	 *
+	 */
 	public void process() {
 		String name = app.getName();
 		String password = app.getPassword();

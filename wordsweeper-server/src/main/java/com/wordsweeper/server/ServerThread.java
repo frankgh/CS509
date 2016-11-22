@@ -22,16 +22,42 @@ import java.util.UUID;
  * @author heineman
  */
 public class ServerThread extends Thread implements ClientState {
+    /**
+     * The Client.
+     */
     final Socket client;             // Socket used by thread to communicate with client.
+    /**
+     * The From client.
+     */
     final BufferedReader fromClient; // Used to process strings from client.
+    /**
+     * The To client.
+     */
     final PrintWriter toClient;      // Used to send strings to client.
+    /**
+     * The Handler.
+     */
     final IProtocolHandler handler;  // Handler to process protocol.
+    /**
+     * The Server.
+     */
     final Server server;             // Server for which we are operating.
+    /**
+     * The Id.
+     */
     final String id;                 // Associated unique ID for this thread.
+    /**
+     * The Data.
+     */
     Object data;                     // User-defined object associated with each thread.
 
     /**
      * Create objects to handle input/output to client.
+     *
+     * @param srv the srv
+     * @param s   the s
+     * @param h   the h
+     * @throws IOException the io exception
      */
     ServerThread(Server srv, Socket s, IProtocolHandler h) throws IOException {
         server = srv;
@@ -174,6 +200,10 @@ public class ServerThread extends Thread implements ClientState {
      * Extract the XML message and construct String object based on
      * the terminator string (either "</request>" or "</response>"). Returns
      * null if communication is interrupted in any way.
+     *
+     * @param in         the in
+     * @param terminator the terminator
+     * @return the xml string from reader
      */
     static String getXmlStringFromReader(BufferedReader in, String terminator) {
         try {

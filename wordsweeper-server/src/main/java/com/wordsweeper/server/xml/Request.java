@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -35,8 +35,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -54,28 +52,61 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "request")
 public class Request {
 
+    /**
+     * The Connect request.
+     */
     protected Object connectRequest;
+    /**
+     * The Create game request.
+     */
     protected CreateGameRequest createGameRequest;
+    /**
+     * The Join game request.
+     */
     protected JoinGameRequest joinGameRequest;
+    /**
+     * The Exit game request.
+     */
     protected ExitGameRequest exitGameRequest;
+    /**
+     * The Lock game request.
+     */
     protected LockGameRequest lockGameRequest;
+    /**
+     * The Reset game request.
+     */
     protected ResetGameRequest resetGameRequest;
+    /**
+     * The Find word request.
+     */
     protected FindWordRequest findWordRequest;
+    /**
+     * The Reposition board request.
+     */
     protected RepositionBoardRequest repositionBoardRequest;
+    /**
+     * The List games request.
+     */
     protected Object listGamesRequest;
+    /**
+     * The Show game state request.
+     */
     protected ShowGameStateRequest showGameStateRequest;
+    /**
+     * The Id.
+     */
     @XmlAttribute(name = "id", required = true)
     protected String id;
+    /**
+     * The Version.
+     */
     @XmlAttribute(name = "version")
     protected String version;
 
     /**
      * Gets the value of the connectRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is     {@link Object }
      */
     public Object getConnectRequest() {
         return connectRequest;
@@ -83,11 +114,8 @@ public class Request {
 
     /**
      * Sets the value of the connectRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is     {@link Object }
      */
     public void setConnectRequest(Object value) {
         this.connectRequest = value;
@@ -95,11 +123,8 @@ public class Request {
 
     /**
      * Gets the value of the createGameRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CreateGameRequest }
-     *     
+     *
+     * @return possible object is     {@link CreateGameRequest }
      */
     public CreateGameRequest getCreateGameRequest() {
         return createGameRequest;
@@ -107,11 +132,8 @@ public class Request {
 
     /**
      * Sets the value of the createGameRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CreateGameRequest }
-     *     
+     *
+     * @param value allowed object is     {@link CreateGameRequest }
      */
     public void setCreateGameRequest(CreateGameRequest value) {
         this.createGameRequest = value;
@@ -119,11 +141,8 @@ public class Request {
 
     /**
      * Gets the value of the joinGameRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinGameRequest }
-     *     
+     *
+     * @return possible object is     {@link JoinGameRequest }
      */
     public JoinGameRequest getJoinGameRequest() {
         return joinGameRequest;
@@ -131,11 +150,8 @@ public class Request {
 
     /**
      * Sets the value of the joinGameRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinGameRequest }
-     *     
+     *
+     * @param value allowed object is     {@link JoinGameRequest }
      */
     public void setJoinGameRequest(JoinGameRequest value) {
         this.joinGameRequest = value;
@@ -143,11 +159,8 @@ public class Request {
 
     /**
      * Gets the value of the exitGameRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExitGameRequest }
-     *     
+     *
+     * @return possible object is     {@link ExitGameRequest }
      */
     public ExitGameRequest getExitGameRequest() {
         return exitGameRequest;
@@ -155,11 +168,8 @@ public class Request {
 
     /**
      * Sets the value of the exitGameRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExitGameRequest }
-     *     
+     *
+     * @param value allowed object is     {@link ExitGameRequest }
      */
     public void setExitGameRequest(ExitGameRequest value) {
         this.exitGameRequest = value;
@@ -167,11 +177,8 @@ public class Request {
 
     /**
      * Gets the value of the lockGameRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LockGameRequest }
-     *     
+     *
+     * @return possible object is     {@link LockGameRequest }
      */
     public LockGameRequest getLockGameRequest() {
         return lockGameRequest;
@@ -179,11 +186,8 @@ public class Request {
 
     /**
      * Sets the value of the lockGameRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LockGameRequest }
-     *     
+     *
+     * @param value allowed object is     {@link LockGameRequest }
      */
     public void setLockGameRequest(LockGameRequest value) {
         this.lockGameRequest = value;
@@ -191,11 +195,8 @@ public class Request {
 
     /**
      * Gets the value of the resetGameRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ResetGameRequest }
-     *     
+     *
+     * @return possible object is     {@link ResetGameRequest }
      */
     public ResetGameRequest getResetGameRequest() {
         return resetGameRequest;
@@ -203,11 +204,8 @@ public class Request {
 
     /**
      * Sets the value of the resetGameRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ResetGameRequest }
-     *     
+     *
+     * @param value allowed object is     {@link ResetGameRequest }
      */
     public void setResetGameRequest(ResetGameRequest value) {
         this.resetGameRequest = value;
@@ -215,11 +213,8 @@ public class Request {
 
     /**
      * Gets the value of the findWordRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link FindWordRequest }
-     *     
+     *
+     * @return possible object is     {@link FindWordRequest }
      */
     public FindWordRequest getFindWordRequest() {
         return findWordRequest;
@@ -227,11 +222,8 @@ public class Request {
 
     /**
      * Sets the value of the findWordRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link FindWordRequest }
-     *     
+     *
+     * @param value allowed object is     {@link FindWordRequest }
      */
     public void setFindWordRequest(FindWordRequest value) {
         this.findWordRequest = value;
@@ -239,11 +231,8 @@ public class Request {
 
     /**
      * Gets the value of the repositionBoardRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RepositionBoardRequest }
-     *     
+     *
+     * @return possible object is     {@link RepositionBoardRequest }
      */
     public RepositionBoardRequest getRepositionBoardRequest() {
         return repositionBoardRequest;
@@ -251,11 +240,8 @@ public class Request {
 
     /**
      * Sets the value of the repositionBoardRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RepositionBoardRequest }
-     *     
+     *
+     * @param value allowed object is     {@link RepositionBoardRequest }
      */
     public void setRepositionBoardRequest(RepositionBoardRequest value) {
         this.repositionBoardRequest = value;
@@ -263,11 +249,8 @@ public class Request {
 
     /**
      * Gets the value of the listGamesRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is     {@link Object }
      */
     public Object getListGamesRequest() {
         return listGamesRequest;
@@ -275,11 +258,8 @@ public class Request {
 
     /**
      * Sets the value of the listGamesRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is     {@link Object }
      */
     public void setListGamesRequest(Object value) {
         this.listGamesRequest = value;
@@ -287,11 +267,8 @@ public class Request {
 
     /**
      * Gets the value of the showGameStateRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ShowGameStateRequest }
-     *     
+     *
+     * @return possible object is     {@link ShowGameStateRequest }
      */
     public ShowGameStateRequest getShowGameStateRequest() {
         return showGameStateRequest;
@@ -299,11 +276,8 @@ public class Request {
 
     /**
      * Sets the value of the showGameStateRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ShowGameStateRequest }
-     *     
+     *
+     * @param value allowed object is     {@link ShowGameStateRequest }
      */
     public void setShowGameStateRequest(ShowGameStateRequest value) {
         this.showGameStateRequest = value;
@@ -311,11 +285,8 @@ public class Request {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getId() {
         return id;
@@ -323,11 +294,8 @@ public class Request {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setId(String value) {
         this.id = value;
@@ -335,11 +303,8 @@ public class Request {
 
     /**
      * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getVersion() {
         if (version == null) {
@@ -351,11 +316,8 @@ public class Request {
 
     /**
      * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setVersion(String value) {
         this.version = value;
