@@ -10,16 +10,12 @@ import static org.junit.Assert.assertEquals;
 public class LetterTest {
     @Test
     public void constructor() throws Exception {
-        Letter letter = new Letter('A', 5);
+        Letter letter = new Letter('A');
         assertEquals("A", letter.printCharacter());
-        assertEquals(5, letter.getScore());
 
-        letter = new Letter('Q', 10);
-        assertEquals(10, letter.getScore());
-        letter.setScore(5);
+        letter = new Letter('Q');
         assertEquals('Q', letter.getCharacter());
         assertEquals("Qu", letter.printCharacter());
-        assertEquals(5, letter.getScore());
 
     }
 
