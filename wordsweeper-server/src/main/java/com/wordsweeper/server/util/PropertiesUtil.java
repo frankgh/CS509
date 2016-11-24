@@ -1,6 +1,8 @@
 package com.wordsweeper.server.util;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -27,7 +29,9 @@ public class PropertiesUtil {
                 prop.load(in);
             }
         } catch (IOException e) {
-            System.err.println("Can not read prop file exception: {}" + e);
+            System.err.println("Cannot read prop file exception: {}" + e);
+        } catch (NullPointerException e) {
+            System.err.println("Cannot find prop file exception: {}" + e);
         }
         return prop;
     }

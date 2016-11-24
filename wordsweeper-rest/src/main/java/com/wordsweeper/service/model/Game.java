@@ -419,13 +419,22 @@ public class Game {
      * @param player       the player to reposition
      * @param rowChange    the rowChange
      * @param columnChange the columnChange
+     * @return true if the board was repositioned, false otherwise
      */
-    public void repositionBoard(Player player, int rowChange, int columnChange) {
-        player.setOffset(new Location(
-                Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
-                        board.getRows() - PLAYER_BOARD_ROWS)),
-                Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
-                        board.getColumns() - PLAYER_BOARD_COLUMNS))));
+    public boolean repositionBoard(Player player, int rowChange, int columnChange) {
+
+        int currentRow = player.getOffset().getRow();
+        int currentColumn = player.getOffset().getColumn();
+
+        int newRow = Math.max(0, Math.min(currentRow + rowChange, board.getRows() - PLAYER_BOARD_ROWS));
+        int newColumn = Math.max(0, Math.min(currentColumn + columnChange, board.getColumns() - PLAYER_BOARD_COLUMNS));
+
+        if (currentRow != newRow || currentColumn != newColumn) {
+            player.setOffset(new Location(newRow, newColumn));
+            return true;
+        }
+
+        return false;
     }
 
     /**

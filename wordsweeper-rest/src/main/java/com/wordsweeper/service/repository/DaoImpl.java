@@ -5,14 +5,28 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * Created by francisco on 10/6/16.
+ * Base data access object
+ *
+ * @param <T> the type parameter
+ * @author francisco
  */
 public abstract class DaoImpl<T> implements Dao<T> {
 
-    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("db-manager");
+    /**
+     * The Entity manager factory.
+     */
+    static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("db-manager");
 
-    private EntityManager internalEntityManager;
+    /**
+     * The Internal entity manager.
+     */
+    EntityManager internalEntityManager;
 
+    /**
+     * Gets entity manager.
+     *
+     * @return the entity manager
+     */
     protected EntityManager getEntityManager() {
         if (internalEntityManager == null) {
             synchronized (GameDaoImpl.class) {
@@ -24,6 +38,9 @@ public abstract class DaoImpl<T> implements Dao<T> {
         return internalEntityManager;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.service.repository.Dao<T>#save(T)
+	 */
     @Override
     public T save(T entity) {
 

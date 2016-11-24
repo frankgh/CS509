@@ -116,6 +116,11 @@ public class ServerThread extends Thread implements ClientState {
         while ((request = getRequest()) != null) {
 
             Response response = handler.process(this, request);
+
+            if (response == null) {
+                continue;
+            }
+
             if (!sendMessage(response)) {
                 break;
             }
