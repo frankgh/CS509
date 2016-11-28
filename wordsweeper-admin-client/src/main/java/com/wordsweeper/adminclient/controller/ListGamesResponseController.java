@@ -9,15 +9,29 @@ import com.wordsweeper.adminclient.view.AdminClientApplication;
 
 import xml.Message;
 
+
+/**
+ * This is a class that listing response from game.
+ */
 public class ListGamesResponseController {
 	
 	public AdminClientApplication app;
 	public AdminClientModel model;
-	
+
+    /**
+     *
+     * @param a the admin client application
+     * @param m the admin client model
+     */
 	public ListGamesResponseController(AdminClientApplication a, AdminClientModel m) {
 		this.app = a;
 		this.model = m;
 	}
+
+    /**
+     *
+     * @param response the respond from list game controller.
+     */
 	
 	public void process(Message response) {
 		// this refers to the outer node of the Message DOM (in this case, updateResponse).

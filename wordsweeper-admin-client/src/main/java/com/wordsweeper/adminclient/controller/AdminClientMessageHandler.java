@@ -3,14 +3,27 @@ import xml.Message;
 import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
-public class AdminClinetMessageHandler implements IMessageHandler{
+/**
+ * This class implement admin-client handler.
+ */
+
+public class AdminClientMessageHandler implements IMessageHandler{
 	
 	AdminClientApplication app;
+
+	/**
+	 *
+	 * @param app the user interface application.
+	 */
 	
-	public AdminClinetMessageHandler(AdminClientApplication app) {
+	public AdminClientMessageHandler(AdminClientApplication app) {
 		this.app = app;
 	}
 
+	/**
+	 *
+	 * @param response the respond from the adminclient message controller..
+	 */
 	public void process(Message response) {
 		String type = response.contents.getFirstChild().getLocalName();
 

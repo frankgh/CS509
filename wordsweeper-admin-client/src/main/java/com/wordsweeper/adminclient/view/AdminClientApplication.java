@@ -1,10 +1,8 @@
 package com.wordsweeper.adminclient.view;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -18,7 +16,6 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -40,19 +37,16 @@ import javax.swing.JList;
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
 
-import com.wordsweeper.adminclient.controller.AdminClinetMessageHandler;
-import com.wordsweeper.adminclient.controller.BoardResponseController;
 import com.wordsweeper.adminclient.controller.CheckGameController;
 import com.wordsweeper.adminclient.controller.RefreshGameListController;
 import com.wordsweeper.adminclient.ServerAccess;
 
-import xml.Message;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-
-
-
+/**
+ * This is the class for admin client application.
+ */
 
 public class AdminClientApplication extends JFrame{
 	/** GUI application maintains reference to Model for ease of navigation. */
@@ -85,8 +79,11 @@ public class AdminClientApplication extends JFrame{
 	JTable PlayerList;
 	private JLabel lblNewLabel;
 
+	/**
+	 *
+	 * @param model the admin client application model
+	 */
 
-	
 	public AdminClientApplication(final AdminClientModel model) {
 		this.model = model;
 		setTitle("Online Game List");
@@ -240,28 +237,38 @@ public class AdminClientApplication extends JFrame{
 	public DefaultListModel<String> getResponseArea() {
 		return listModel;
 	}
-	
+
+	/** Pull connection status from server. */
 	public JTextArea getConnection() {
 		return txtConnection;
 	}
-	
+
+	/** Set player's information in the GUI.*/
 	public JTable setPlayerInfo(Object[] info) {
 		DefaultTableModel model = (DefaultTableModel) PlayerList.getModel();
 		model.addRow(info);
 		return PlayerList;
 	}
+
+	/** Get game id from server.*/
 	
 	public String getGameID(){
 		String game_idS = listModel.getElementAt(gamelist.getSelectedIndex()).toString();	
 		return game_idS;
 	}
+
+	/** Get game contant from the server.*/
 	
 	public String getContant(){
 		String game_contant = txtConnection.getText();
 		return game_contant;
 	}
-	
-	// convert content string(comma separate) into a 2d object array for Jtable to display
+
+	/**
+	 * Convert content string(comma separate) into a 2d object array for Jtable to display
+	 * @param alphabets the alphabets from game table
+	 * @return words
+	 */
 	public Object[][] stringTo2D(String alphabets){
 		String[] letters = alphabets.split(",");
 		int n=(int) Math.sqrt(letters.length);
@@ -276,7 +283,7 @@ public class AdminClientApplication extends JFrame{
 		return alpha; 
 	}
 	
-	// set the Jtable first row index. i.e. 1 2 3 4.....
+	/** set the Jtable first row index. i.e. 1 2 3 4.....*/
 	public String[] setColIndex(Object[][] alphabets){
 		int col=alphabets.length;
 		String[] colIndex = new String[col];
@@ -288,7 +295,7 @@ public class AdminClientApplication extends JFrame{
 		return colIndex;
 	}
 	
-	// set the JTable content
+	/** set the JTable content */
 	public JTable setContent(String Content){
 		Object[][] data = stringTo2D(Content);
 		String[] columnIndex =setColIndex(data);
@@ -326,10 +333,15 @@ public class AdminClientApplication extends JFrame{
 		return TableBoard;
 	}
 	
-	// Center class
+	/** Center class */
 	private static class HeaderRenderer implements TableCellRenderer {
 
 	    DefaultTableCellRenderer renderer;
+
+		/**
+		 * Render deader in game table.
+		 * @param table game table
+		 */
 
 	    public HeaderRenderer(JTable table) {
 	        renderer = (DefaultTableCellRenderer)
@@ -337,20 +349,49 @@ public class AdminClientApplication extends JFrame{
 	        renderer.setHorizontalAlignment(JLabel.CENTER);
 	    }
 
+		/**
+		 * This get the table component from the server.
+		 * @param table table in the game.
+		 * @param value object value in the table
+		 * @param isSelected
+		 * @param hasFocus
+		 * @param row table row
+		 * @param col table column
+		 * @return component from the server
+		 */
+
 	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int col) {
 	        return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 	    }
 	}
+
+	/**
+	 * This is the class for board cell renderer.
+	 */
 	
 	public class BorderCellRenderer extends DefaultTableCellRenderer
 	{
 
 		protected Border focusBorder = new LineBorder(Color.BLACK,2);
 
+		/**
+		 * Board cell renderer method.
+		 */
+
 		public BorderCellRenderer() {
 
 		}
-		
+
+		/**
+		 * This get the table component from the server.
+		 * @param table table in the game.
+		 * @param value object value in the table
+		 * @param isSelected if value is selected.
+		 * @param hasFocus boolean
+		 * @param row table row
+		 * @param col table column
+		 * @return component from the server
+		 */
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			if (hasFocus) {
@@ -369,17 +410,33 @@ public class AdminClientApplication extends JFrame{
 
 }
 
+/**
+ * This class create border cell renderer for game board
+ */
+
 class BorderCellRenderer extends JLabel implements TableCellRenderer {
 	  protected Border noFocusBorder;
-
-
 	  protected Border columnBorder;
 
+    /**
+     * This method create a new empty border
+     */
 
-	  public BorderCellRenderer() {
+    public BorderCellRenderer() {
 		noFocusBorder = new EmptyBorder(1, 2, 1, 2);
 		setOpaque(true);
 	  }
+
+    /**
+     * This method get the table cell renderer component.
+     * @param table table in the game.
+     * @param value object value in the table
+     * @param isSelected if value is selected.
+     * @param hasFocus boolean
+     * @param row table row
+     * @param col table column
+     * @return component from the server
+     */
 
 
 	  public Component getTableCellRendererComponent(JTable table, Object value,
@@ -416,17 +473,28 @@ class BorderCellRenderer extends JLabel implements TableCellRenderer {
 		return this;
 	  }
 
+    /**
+     * This method set the border column.
+     * @param border border for the game board.
+     */
 
 	  public void setColumnBorder(Border border) {
 		columnBorder = border;
 	  }
 
+    /**
+     * This method get the column border.
+     * @return column border
+     */
 
 	  public Border getColumnBorder() {
 		return columnBorder;
 	  }
 }
 
+/**
+ * Cell border interface.
+ */
 
 interface CellBorder {
 
@@ -445,6 +513,8 @@ interface CellBorder {
 
 	}
 
+
+
 class LinesBorder extends AbstractBorder implements SwingConstants {
 	  protected int northThickness;
 	  protected int southThickness;
@@ -454,21 +524,46 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 	  protected Color southColor;
 	  protected Color eastColor;
 	  protected Color westColor;
+
+    /**
+     * This method set line of border
+     * @param color color
+     */
 	  public LinesBorder(Color color) {
 		this(color, 1);
 	  }
 
+    /**
+     * This method set border line
+     * @param color color
+     * @param thickness line thickness
+     */
 
 	  public LinesBorder(Color color, int thickness) {
 		setColor(color);
 		setThickness(thickness);
 	  }
 
+    /**
+     * This method set border line
+     * @param color color
+     * @param insets insets
+     */
 
 	  public LinesBorder(Color color, Insets insets) {
 		setColor(color);
 		setThickness(insets);
 	  }
+
+    /**
+     * This creates board method
+     * @param c component
+     * @param g graphics
+     * @param x integer x for border
+     * @param y integer y for border
+     * @param width integer width for border
+     * @param height integer height for border
+     */
 
 	  public void paintBorder(Component c, Graphics g, int x, int y, int width,int height) {
 		  Color oldColor = g.getColor();
@@ -491,21 +586,43 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 			}
 			g.setColor(oldColor);
 		  }
-	
+
+    /**
+     * This method creates getting border insets
+      * @param c component
+     * @return new insets
+     */
 
 	  public Insets getBorderInsets(Component c) {
 		return new Insets(northThickness, westThickness, southThickness,eastThickness);
 	  }
+
+    /**
+     * This method creates getting insets for border.
+     * @param c component
+     * @param insets insets
+     * @return new insets
+     */
 
 
 	  public Insets getBorderInsets(Component c, Insets insets) {
 		return new Insets(northThickness, westThickness, southThickness,eastThickness);
 	  }
 
+    /**
+     * Check if border is opaque.
+     * @return true if it is opaque
+     */
+
 
 	  public boolean isBorderOpaque() {
 		return true;
 	  }
+
+    /**
+     * Set color
+     * @param c color
+     */
 
 
 	  public void setColor(Color c) {
@@ -514,6 +631,12 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 		eastColor = c;
 		westColor = c;
 	  }
+
+    /**
+     * This method set color for the game
+     * @param c color
+     * @param direction deirection
+     */
 
 
 	  public void setColor(Color c, int direction) {
@@ -534,6 +657,11 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 		}
 	  }
 
+    /**
+     * Method for setting thickness.
+     * @param n
+     */
+
 
 	  public void setThickness(int n) {
 		northThickness = n;
@@ -542,6 +670,11 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 		westThickness = n;
 	  }
 
+    /**
+     * Method for setting thickness.
+     * @param insets
+     */
+
 
 	  public void setThickness(Insets insets) {
 		northThickness = insets.top;
@@ -549,6 +682,12 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 		eastThickness = insets.right;
 		westThickness = insets.left;
 	  }
+
+    /**
+     * This method set thickness.
+     * @param n
+     * @param direction
+     */
 
 
 	  public void setThickness(int n, int direction) {
@@ -568,6 +707,10 @@ class LinesBorder extends AbstractBorder implements SwingConstants {
 		default:
 		}
 	  }
+
+    /**
+     * @param insets insert into table
+     */
 
 	  public void append(Insets insets) {
 

@@ -8,15 +8,30 @@ import xml.Message;
 import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
+/**
+ * This is a class for Board response controller.
+ */
+
 public class BoardResponseController {
 	
 	public AdminClientApplication app;
 	public AdminClientModel model;
+
+	/**
+	 *
+	 * @param a the admin client application
+	 * @param m the admin client model
+	 */
 	
 	public BoardResponseController(AdminClientApplication a, AdminClientModel m) {
 		this.app = a;
 		this.model = m;
 	}
+
+	/**
+	 *
+	 * @param response the respond from the board controller
+	 */
 	
 	public void process(Message response) {
 		// this refers to the outer node of the Message DOM (in this case, updateResponse).
