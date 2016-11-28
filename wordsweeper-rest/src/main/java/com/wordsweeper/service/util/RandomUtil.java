@@ -1,6 +1,7 @@
 package com.wordsweeper.service.util;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
@@ -11,7 +12,24 @@ import java.security.SecureRandom;
  */
 public class RandomUtil {
     final static String alphabet = "AAABCDEEEFGHIIIJKLMNOOOPQRSTUUUVWXYZ";
-    final static SecureRandom random = new SecureRandom();
+    final static SecureRandom random;
+
+    static {
+        SecureRandom sha1Random;
+        try {
+            SecureRandom nativeRandom = SecureRandom.getInstance("NativePRNGNonBlocking"); // assuming Unix
+            byte[] seed = nativeRandom.generateSeed(55); // NIST SP800-90A suggests 440 bits for SHA1 seed
+            sha1Random = SecureRandom.getInstance("SHA1PRNG");
+            sha1Random.setSeed(seed);
+            byte[] values = new byte[20];
+            sha1Random.nextBytes(values); // SHA1PRNG, seeded properly
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println(e);
+            sha1Random = new SecureRandom();
+        }
+
+        random = sha1Random;
+    }
 
     /**
      * Get a random alphabet character

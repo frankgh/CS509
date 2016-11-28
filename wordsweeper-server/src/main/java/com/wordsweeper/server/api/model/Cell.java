@@ -2,6 +2,7 @@ package com.wordsweeper.server.api.model;
 
 /**
  * Created by francisco on 10/12/16.
+ *
  * @author francisco
  */
 public class Cell {

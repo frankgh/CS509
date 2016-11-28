@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -23,26 +23,27 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "cell")
 public class Cell {
 
+    /**
+     * The Position.
+     */
     @XmlAttribute(name = "position", required = true)
     protected String position;
+    /**
+     * The Letter.
+     */
     @XmlAttribute(name = "letter", required = true)
     protected String letter;
 
     /**
      * Gets the value of the position property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getPosition() {
         return position;
@@ -50,11 +51,8 @@ public class Cell {
 
     /**
      * Sets the value of the position property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setPosition(String value) {
         this.position = value;
@@ -62,11 +60,8 @@ public class Cell {
 
     /**
      * Gets the value of the letter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getLetter() {
         return letter;
@@ -74,11 +69,8 @@ public class Cell {
 
     /**
      * Sets the value of the letter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setLetter(String value) {
         this.letter = value;

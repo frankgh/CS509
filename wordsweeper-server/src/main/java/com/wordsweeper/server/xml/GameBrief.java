@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -23,26 +23,27 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "gameBrief")
 public class GameBrief {
 
+    /**
+     * The Game id.
+     */
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
+    /**
+     * The Players.
+     */
     @XmlAttribute(name = "players", required = true)
     protected int players;
 
     /**
      * Gets the value of the gameId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getGameId() {
         return gameId;
@@ -50,11 +51,8 @@ public class GameBrief {
 
     /**
      * Sets the value of the gameId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setGameId(String value) {
         this.gameId = value;
@@ -62,7 +60,8 @@ public class GameBrief {
 
     /**
      * Gets the value of the players property.
-     * 
+     *
+     * @return the players
      */
     public int getPlayers() {
         return players;
@@ -70,7 +69,8 @@ public class GameBrief {
 
     /**
      * Sets the value of the players property.
-     * 
+     *
+     * @param value the value
      */
     public void setPlayers(int value) {
         this.players = value;

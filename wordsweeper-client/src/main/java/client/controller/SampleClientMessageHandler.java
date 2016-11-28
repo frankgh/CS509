@@ -8,14 +8,25 @@ import client.view.Application;
  * You should follow this template when designing YOUR message handler.
  *
  * Note: This one does nothing more than dump the XML message into the client window. Nothing that special.
+ * This class shows a sample for Client message handler interface.
  */
 public class SampleClientMessageHandler implements IMessageHandler {
 
 	Application app;
 
+	/**
+	 *
+	 * @param app the application for message handler interface.
+	 */
+
 	public SampleClientMessageHandler(Application app) {
 		this.app = app;
 	}
+
+	/**
+	 *
+	 * @param response respond from the board
+	 */
 
 	public void process(Message response) {
 		String type = response.contents.getFirstChild().getLocalName();

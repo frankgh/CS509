@@ -30,6 +30,5 @@ public class AdminClinetMessageHandler implements IMessageHandler{
 		// this isn't needed.
 		System.out.println(response);
 	}
-	
 
 }

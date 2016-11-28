@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,28 +24,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "joinGameRequest")
 public class JoinGameRequest {
 
+    /**
+     * The Name.
+     */
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    /**
+     * The Game id.
+     */
     @XmlAttribute(name = "gameId", required = true)
     protected String gameId;
+    /**
+     * The Password.
+     */
     @XmlAttribute(name = "password")
     protected String password;
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getName() {
         return name;
@@ -53,11 +57,8 @@ public class JoinGameRequest {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -65,11 +66,8 @@ public class JoinGameRequest {
 
     /**
      * Gets the value of the gameId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getGameId() {
         return gameId;
@@ -77,11 +75,8 @@ public class JoinGameRequest {
 
     /**
      * Sets the value of the gameId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setGameId(String value) {
         this.gameId = value;
@@ -89,11 +84,8 @@ public class JoinGameRequest {
 
     /**
      * Gets the value of the password property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is     {@link String }
      */
     public String getPassword() {
         return password;
@@ -101,11 +93,8 @@ public class JoinGameRequest {
 
     /**
      * Sets the value of the password property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is     {@link String }
      */
     public void setPassword(String value) {
         this.password = value;
