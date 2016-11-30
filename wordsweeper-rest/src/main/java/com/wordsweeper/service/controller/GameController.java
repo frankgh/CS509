@@ -233,6 +233,15 @@ public class GameController {
                     .build();
         }
 
+        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
+
+        if (wordWrapper.getWordLength() < 3) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "The word must be composed of at least 3 cells"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
         GameDao gameDao = new GameDaoImpl();
         Game game = gameDao.findByGameId(gameId);
 
@@ -251,8 +260,6 @@ public class GameController {
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
-
-        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
 
         if (game.validateWord(player, wordWrapper)) {
             int wordScore = game.calculateWordScore(wordWrapper);
