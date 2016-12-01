@@ -9,10 +9,15 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * Created by Francisco on 9/27/2016.
+ * The Game Data Access Object
+ *
+ * @author francisco
  */
 public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.service.repository.GameDao#save(com.wordsweeper.service.model.Game)
+	 */
     @Override
     public Game save(Game entity) {
         EntityManager entityManager = getEntityManager();
@@ -35,6 +40,9 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
         return entity;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.service.repository.GameDao#findByGameId(java.lang.String)
+	 */
     @Override
     public Game findByGameId(String gameId) {
 
@@ -46,6 +54,9 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
         return gameList != null && gameList.size() > 0 ? gameList.get(0) : null;
     }
 
+    /* (non-Javadoc)
+     * @see com.wordsweeper.service.repository.GameDao#findAll()
+	 */
     @Override
     public List<Game> findAll() {
 

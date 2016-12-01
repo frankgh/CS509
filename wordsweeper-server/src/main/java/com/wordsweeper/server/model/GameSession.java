@@ -47,6 +47,7 @@ public class GameSession {
      * Remove client state.
      *
      * @param client the client
+     * @return the boolean
      */
     public boolean removeClientState(ClientState client) {
         if (!clientStateList.contains(client)) {
@@ -63,6 +64,7 @@ public class GameSession {
      * @return the boolean
      */
     public boolean isEmpty() {
+
         return clientStateList.isEmpty();
     }
 }

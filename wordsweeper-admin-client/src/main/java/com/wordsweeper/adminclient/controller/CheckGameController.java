@@ -3,7 +3,6 @@ package com.wordsweeper.adminclient.controller;
 
 import xml.Message;
 import com.wordsweeper.adminclient.model.AdminClientModel;
-import com.wordsweeper.adminclient.view.AdminClientBoardApplication;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 public class CheckGameController {
 	AdminClientApplication app;

@@ -1,6 +1,5 @@
 package com.wordsweeper.server.util;
 
-import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -11,14 +10,16 @@ import java.util.Properties;
  */
 public class WordSweeperConfig {
 
-    private static final String WORDSWEEPER_CONFIG_FILE = "my.properties";
+    private static final String WORDSWEEPER_CONFIG_FILE = "ws.properties";
 
-    private static final String wordsweeperRestServerUrl;
+    private static String wordsweeperRestServerUrl;
 
     static {
-        InputStream asStream = WordSweeperConfig.class.getResourceAsStream(WORDSWEEPER_CONFIG_FILE);
-        Properties properties = new Properties();
+        Properties properties = PropertiesUtil.getProperties(null, WORDSWEEPER_CONFIG_FILE);
         wordsweeperRestServerUrl = properties.getProperty("wordsweeper.rest.server.url");
     }
 
+    public static String getWordsweeperRestServerUrl() {
+        return wordsweeperRestServerUrl;
+    }
 }

@@ -6,14 +6,18 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.Hashtable;
 
-/** Generic Server in a Client/Server communication. */
+/**
+ * Generic Server in a Client/Server communication.
+ */
 public class Server {
 	ServerSocket serverSocket = null;    /* ServerSocket to which we bind */
 	int state = 0;                       /* Server state. 0=inactive, 1=accepting */
 	IProtocolHandler protocolHandler;    /* Handler for protocol */
 	final int serverPort;                /* Default server port. */
-	
-	/** Hold onto references to all threads actively managed by server. */
+
+	/**
+	 * Hold onto references to all threads actively managed by server.
+	 */
 	static Hashtable<String, ClientState> ids = new Hashtable<String, ClientState>(); 
 
 	public Server(IProtocolHandler ph, int port) {
@@ -54,8 +58,9 @@ public class Server {
 
 	/**
 	 * Register thread in server.
-	 * @param id
-	 * @param thread
+	 * @param id the client's id of register.
+	 * @param state the client's state of register.
+	 * @return false if duplicate id, otherwise return true,
 	 */
 	public static boolean register (String id, ClientState state) {
 		if (ids.containsKey(id)) { return false; }
@@ -64,6 +69,11 @@ public class Server {
 		return true;
 	}
 
+	/**
+	 *
+	 * @param id remove the unregistered id
+	 */
+
 	public static void unregister (String id) {
 		ids.remove(id); 
 	}
@@ -71,15 +81,15 @@ public class Server {
 	/**
 	 * Return the clientState associated with this ID.
 	 * 
-	 * @param id
+	 * @param id get id
 	 */
 	public static ClientState getState(String id) {
 		return ids.get(id);
 	}
 
 	/**
-	 * Return the unique IDs for all connected clients.
-	 * 
+	 *
+	 * @return the unique IDs for all connected clients.
 	 */
 	public static Collection<String> ids() {
 		return ids.keySet();

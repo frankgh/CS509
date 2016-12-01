@@ -15,9 +15,21 @@ import java.util.Hashtable;
  * @author heineman
  */
 public class Server {
+    /**
+     * The State.
+     */
     int state = 0;                       /* Server state. 0=inactive, 1=accepting */
+    /**
+     * The Server port.
+     */
     final int serverPort;                /* Default server port. */
+    /**
+     * The Server socket.
+     */
     ServerSocket serverSocket = null;    /* ServerSocket to which we bind */
+    /**
+     * The Protocol handler.
+     */
     IProtocolHandler protocolHandler;    /* Handler for protocol */
 
     /**
@@ -25,6 +37,12 @@ public class Server {
      */
     static Hashtable<String, ClientState> ids = new Hashtable<String, ClientState>();
 
+    /**
+     * Instantiates a new Server.
+     *
+     * @param ph   the ph
+     * @param port the port
+     */
     public Server(IProtocolHandler ph, int port) {
         this.serverPort = port;
         this.protocolHandler = ph;
@@ -32,6 +50,8 @@ public class Server {
 
     /**
      * Bind Server to default port.
+     *
+     * @throws IOException the io exception
      */
     public void bind() throws IOException {
         serverSocket = new ServerSocket(serverPort);
@@ -43,6 +63,8 @@ public class Server {
      * and spawns threads to execute each one. Process will handle all
      * requests while state is 1 (accepting). Once no longer
      * accepting requests, this method will shutdown the server.
+     *
+     * @throws IOException the io exception
      */
     public void process() throws IOException {
         while (state == 1) {
@@ -55,6 +77,8 @@ public class Server {
 
     /**
      * Shutdown the server.
+     *
+     * @throws IOException the io exception
      */
     public void shutdown() throws IOException {
         if (serverSocket != null) {
@@ -67,8 +91,9 @@ public class Server {
     /**
      * Register thread in server.
      *
-     * @param id
-     * @param state
+     * @param id    the id
+     * @param state the state
+     * @return the boolean
      */
     public static boolean register(String id, ClientState state) {
         if (ids.containsKey(id)) {
@@ -91,7 +116,8 @@ public class Server {
     /**
      * Return the clientState associated with this ID.
      *
-     * @param id
+     * @param id the id
+     * @return the state
      */
     public static ClientState getState(String id) {
         return ids.get(id);
@@ -99,6 +125,8 @@ public class Server {
 
     /**
      * Return the unique IDs for all connected clients.
+     *
+     * @return the collection
      */
     public static Collection<String> ids() {
         return ids.keySet();
