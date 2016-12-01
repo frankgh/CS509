@@ -152,30 +152,22 @@ public abstract class ControllerChain implements IProtocolHandler {
      * @param game     the game
      */
     protected void broadcastResponse(Response response, String clientId, Game game) {
-        // all other players on game (excepting this particular client) need to be told of this
-        // same response. Note this is inefficient and should be replaced by more elegant functioning
-        // hint: rely on your game to store player names...
 
+        model.updateGame(game); /* Update game details */
+
+        // all other players on game (excepting this particular client) need to be told of this
+        // same response.
         List<ClientState> clientStateList = model.idsByGameId(game.getUniqueId());
 
-        if (clientStateList != null) {
-            boolean sendSetManagingUserResponse = model.updateManagingPlayer(game);
-
-            for (ClientState state : clientStateList) {
-                if (!state.id().equals(clientId)) {
-                    state.sendMessage(response);
-                }
-
-                if (sendSetManagingUserResponse &&
-                        StringUtils.equals(game.getManagingPlayerName(), (String) state.getData())) {
-                    // TODO: Implement this when xsd is updated
-//                    SetManagingUserResponse setManagingUserResponse = new SetManagingUserResponse();
-//                    state.sendMessage(response);
-                }
-            }
+        if (clientStateList == null) {
+            return;
         }
 
-        model.updateGame(game);
+        for (ClientState state : clientStateList) {
+            if (!StringUtils.equals(state.id(), clientId)) {
+                state.sendMessage(response);
+            }
+        }
     }
 
     /**
@@ -197,7 +189,7 @@ public abstract class ControllerChain implements IProtocolHandler {
                 return handleAPIError(request, apiResponse);
             }
         } catch (IOException e) {
-            System.err.println("Error connecting to the webservice");
+            System.err.println("Error connecting to webservice");
         }
 
         /* The request failed, return unsuccessful response */
@@ -211,12 +203,13 @@ public abstract class ControllerChain implements IProtocolHandler {
             return response;
         }
 
+        boolean isAdminClient = (this instanceof IAdminController);
+
         /* Map the game to a BoardResponse object */
-        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game);
+        BoardResponse boardResponse = MappingUtil.mapGameToBoardResponse(game, isAdminClient);
 
         /* Create the response object */
-        response = getBasicResponse(request);
-        response.setBoardResponse(boardResponse);
+        response = getBasicResponse(request, boardResponse);
 
         /* Broadcast the response to all the players in the game */
         broadcastResponse(response, client.id(), game);
@@ -232,13 +225,15 @@ public abstract class ControllerChain implements IProtocolHandler {
     /**
      * Get the basic Response with the response ID and success set to True
      *
-     * @param request the request
+     * @param request       the request
+     * @param boardResponse the boardResponse
      * @return the basic response
      */
-    protected Response getBasicResponse(Request request) {
+    protected Response getBasicResponse(Request request, BoardResponse boardResponse) {
         Response response = getObjectFactory().createResponse();
         response.setId(request.getId());
         response.setSuccess(true);
+        response.setBoardResponse(boardResponse);
         return response;
     }
 }

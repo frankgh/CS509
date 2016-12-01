@@ -18,8 +18,9 @@ import java.util.List;
  * to the API, and packaging up the API response
  *
  * @author Celia
+ * @since 2016 -11-08
  */
-public class ListGamesRequestController extends ControllerChain {
+public class ListGamesRequestController extends ControllerChain implements IAdminController {
 
     /**
      * Instantiates a new List games request.
@@ -27,19 +28,40 @@ public class ListGamesRequestController extends ControllerChain {
      * @param model the model
      */
     public ListGamesRequestController(ServerModel model) {
+
         this.model = model;
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
 	 */
+
+    /**
+     * This is the method that verifying values in request.
+     *
+     * @return boolean This returns yes or no based on values in request.
+     * @param request the request.
+     *
+     */
+
     public boolean canProcess(Request request) {
+
         return request != null && request.getListGamesRequest() != null;
     }
 
     /* (non-Javadoc)
      * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
 	 */
+
+    /**
+     * List game request status.
+     *
+     * @param state client state,
+     * @param request the request.
+     *
+     *
+     */
+
     public Response process(ClientState state, Request request) {
 
         Call<List<Game>> call = WordSweeperServiceFactory.getService().listGames();

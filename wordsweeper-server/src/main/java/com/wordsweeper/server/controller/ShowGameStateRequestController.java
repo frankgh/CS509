@@ -14,7 +14,7 @@ import retrofit2.Call;
  *
  * @author francisco
  */
-public class ShowGameStateRequestController extends ControllerChain {
+public class ShowGameStateRequestController extends ControllerChain implements IAdminController {
 
     /**
      * Instantiates a new Show game state request controller.

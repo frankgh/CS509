@@ -82,3 +82,4 @@ public class CreateGameRequestController extends ControllerChain {
     protected void setOnFailureResponse(Request request, Response response) {
     } // DO NOTHING
 }
+

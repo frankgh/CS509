@@ -39,6 +39,20 @@ public class Game {
      * The Player board columns.
      */
     static final int PLAYER_BOARD_COLUMNS = 4;
+    /**
+     * The Max player to board ratio.
+     */
+    static final double MAX_PLAYER_TO_BOARD_RATIO = 3.0;
+    /**
+     * The Player ratio multiplier.
+     */
+    static final double PLAYER_RATIO_MULTIPLIER = 40.0;
+
+    /**
+     * Point allocation for alphabet's letters
+     * 											 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+     */
+    static final int[] LETTER_SCORES = new int[]{2,4,3,3,1,4,4,2,2,7,5,3,3,2,2,4,8,2,2,1,3,5,3,7,4,8};
 
     /**
      * The Id.
@@ -46,7 +60,7 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id; /* The internal id of the game */
+    int id; /* The internal id of the game - for db purposes only */
 
     /**
      * The Board.
@@ -190,6 +204,13 @@ public class Game {
 
         randomizePlayerLocation(player);
 
+        if (((double) playerList.size() * PLAYER_RATIO_MULTIPLIER) /
+                (double) board.size() >= MAX_PLAYER_TO_BOARD_RATIO) {
+            // When the number of players to board ratio becomes too large,
+            // we increase the board size
+            board.grow(1);
+        }
+
         return true;
     }
 
@@ -245,6 +266,15 @@ public class Game {
         for (Player player : playerList) {
             player.setScore(0);
             randomizePlayerLocation(player);
+        }
+    }
+
+    /**
+     * Resets the scores of all players in the game
+     */
+    public void resetPlayersScores() {
+        for (Player player : playerList) {
+            player.setScore(0);
         }
     }
 
@@ -389,31 +419,73 @@ public class Game {
      * @param player       the player to reposition
      * @param rowChange    the rowChange
      * @param columnChange the columnChange
+     * @return true if the board was repositioned, false otherwise
      */
-    public void repositionBoard(Player player, int rowChange, int columnChange) {
-        player.setOffset(new Location(
-                Math.max(0, Math.min(player.getOffset().getRow() + rowChange,
-                        board.getRows() - PLAYER_BOARD_ROWS)),
-                Math.max(0, Math.min(player.getOffset().getColumn() + columnChange,
-                        board.getColumns() - PLAYER_BOARD_COLUMNS))));
+    public boolean repositionBoard(Player player, int rowChange, int columnChange) {
+
+        int currentRow = player.getOffset().getRow();
+        int currentColumn = player.getOffset().getColumn();
+
+        int newRow = Math.max(0, Math.min(currentRow + rowChange, board.getRows() - PLAYER_BOARD_ROWS));
+        int newColumn = Math.max(0, Math.min(currentColumn + columnChange, board.getColumns() - PLAYER_BOARD_COLUMNS));
+
+        if (currentRow != newRow || currentColumn != newColumn) {
+            player.setOffset(new Location(newRow, newColumn));
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Find the word in the locations, making sure that player stays within
-     * his bounds.
+     * Calculate the score of a word using the following formula:
+     * 2^N * 10 * SUM( 2^M * Pi ) * cellMultiplier
+     * Where N is the number of tiles in the word
+     * M is the number of players that share the cell if M is greater than 1
+     * Pi is the letter frequency
+     * cellMultiplier is the multiplier of the bonus cell if the word
+     * contains the bonus cell.
      *
-     * @param player the player
-     * @param word   the word
-     * @return true if the word exists, false otherwise
+     * @param word the word
+     * @return the score of the word
      */
-    public boolean findWord(Player player, Word word) {
+    public int calculateWordScore(Word word) {
+    	int numOfPlayers = this.playerList.size();
+    	int wordSize = word.locations.size();
+    	int N = word.getWordLength();
+    	int[] M = new int[wordSize];
+    	int sum = 0;
+    	boolean multiplier = false;
+    	Location bonusCell = this.board.bonusCellLocation;
 
-        if (!validateWord(player, word)) {
-            return false;
-        }
+    	if(N > 1){
+    		// calculate how many players share each cell
+    		for(int k = 0; k < numOfPlayers; k++){
+    			Player player = this.playerList.get(k);
+    			for(int i = 0; i < wordSize; i++){
+    				Location cellLoc = word.locations.get(i);
+    				if(player.isLocationInPlayerBoard(cellLoc))
+    					M[i]++;
+    			}
+    		}
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += Math.pow(2, M[i]-1) * calcLetterScore(word.word.charAt(i));
+    		}
+    	} else {
+    		// calculate the sum and check for multiplier cell
+    		for(int i = 0; i < wordSize; i++){
+    			if(word.locations.get(i).equals(bonusCell))
+    				multiplier = true;
+    			sum += calcLetterScore(word.word.charAt(i));
+    		}
+    	}
 
-
-        return false;
+    	sum *= 10;
+    	sum *= Math.pow(2, N);
+    	return (multiplier) ? sum * 10 : sum;
     }
 
     /**
@@ -424,26 +496,36 @@ public class Game {
      */
     public boolean validateWord(Player player, Word word) {
 
-        StringBuilder sb = new StringBuilder(49);
+        if (word.containsDuplicateCells()) {
+            return false;
+        }
 
-//        for (int i = 0; i < word.locations.size(); i++) {
-//            Location location = word.locations.get(i);
-//
-//            // TODO: Make sure all letters are adjacent
-//            if (i < word.locations.size() - 1 &&
-//                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
-//                return false;
-//            }
-//
-//            if (!player.isLocationInBoard(location)) {
-//                return false;
-//            } else {
-//                sb.append(board.getLetterAtLocation(location).printCharacter());
-//            }
-//        }
-//
-//        return StringUtils.equals(word.word, sb.toString());
-return true;   
+        StringBuilder sb = new StringBuilder(32);
+
+        for (int i = 0; i < word.locations.size(); i++) {
+            Location location = word.locations.get(i);
+
+            if (i < word.locations.size() - 1 &&
+                    !board.areLocationsAdjacent(location, word.locations.get(i + 1))) {
+                return false;
+            }
+
+            if (!player.isLocationInPlayerBoard(location)) {
+                return false;
+            } else {
+                sb.append(board.getLetterAtLocation(location).printCharacter());
+            }
+        }
+
+        return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
-    
+
+    int calcLetterScore(char c){
+		int Pi = (int) c;
+		if(Pi > 90)
+			Pi -= 97;
+		else
+			Pi -= 65;
+		return LETTER_SCORES[Pi];
+    }
 }

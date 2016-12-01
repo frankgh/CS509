@@ -64,7 +64,7 @@ public class LockGameRequestController extends ControllerChain {
         LockGameResponse lockGameResponse = getObjectFactory().createLockGameResponse();
         lockGameResponse.setGameId(game.getUniqueId());
 
-        Response response = getBasicResponse(request);
+        Response response = getBasicResponse(request, null);
         response.setLockGameResponse(lockGameResponse);
         return response;
     }

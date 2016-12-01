@@ -45,6 +45,11 @@ public class RequestError {
     public final static int INVALID_WORD = 405;
 
     /**
+     * The constant BOARD_POSITION_NOT_MODIFIED.
+     */
+    public final static int BOARD_POSITION_NOT_MODIFIED = 304;
+
+    /**
      * The Error code.
      */
     int statusCode;

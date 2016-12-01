@@ -2,6 +2,7 @@ package com.wordsweeper.server.api.model;
 
 /**
  * Created by francisco on 10/12/16.
+ *
  * @author francisco
  */
 public class Location {
@@ -36,6 +37,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return (getRow() + 1) + "," + (getColumn() + 1);
+        return (column + 1) + "," + (row + 1);
     }
 }

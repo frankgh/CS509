@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Created by francisco on 9/13/16.
+ *
  * @author francisco
  */
 @Embeddable
@@ -17,12 +18,6 @@ public class Letter {
     @Column(name = "character")
     @NotNull
     char character;
-    /**
-     * The Score.
-     */
-    @Column(name = "score")
-    @NotNull
-    int score;
 
     /**
      * Instantiates a new Letter.
@@ -34,20 +29,9 @@ public class Letter {
      * Instantiates a new Letter.
      *
      * @param character the character
-     * @param score     the score
      */
-    Letter(char character, int score) {
-        this.score = score;
+    Letter(char character) {
         this.character = character;
-    }
-
-    /**
-     * Sets score.
-     *
-     * @param score the score
-     */
-    public void setScore(int score) {
-        this.score = score;
     }
 
     /**
@@ -60,11 +44,15 @@ public class Letter {
     }
 
     /**
-     * Gets score.
+     * Print the character for this Letter. If the character is Q
+     * we return `Qu`
      *
-     * @return the score
+     * @return the character
      */
-    public int getScore() {
-        return score;
+    public String printCharacter() {
+        if (character == 'Q') {
+            return "Qu";
+        }
+        return Character.toString(character);
     }
 }

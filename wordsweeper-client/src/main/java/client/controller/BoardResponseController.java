@@ -11,16 +11,29 @@ import client.view.Application;
 /**
  * Tells the client whether the model is locked or not BY SOME OTHER CLIENT. This will never be returned to a client
  * to tell him that HE has the model locked (that is job of LockResponse).
+ *
  */
+
 public class BoardResponseController {
 
 	public Application app;
 	public Model model;
+
+    /**
+     *
+     * @param a a for the game application
+     * @param m m for the game model
+     */
 	
 	public BoardResponseController(Application a, Model m) {
 		this.app = a;
 		this.model = m;
 	}
+
+    /**
+     *
+     * @param response Get Board response.
+     */
 	
 	public void process(Message response) {
 		// this refers to the outer node of the Message DOM (in this case, updateResponse).

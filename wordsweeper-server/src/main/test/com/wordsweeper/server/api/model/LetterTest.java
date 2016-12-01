@@ -1,8 +1,6 @@
-package com.wordsweeper.service.model;
+package com.wordsweeper.server.api.model;
 
 import org.junit.Test;
-
-import com.wordsweeper.server.api.model.Letter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +10,11 @@ import static org.junit.Assert.assertEquals;
 public class LetterTest {
     @Test
     public void constructor() throws Exception {
-        
+        Letter let = new Letter();
+        let.character = "Q";
+
+        assertEquals("Qu", let.printCharacter());
+
     }
 
 }

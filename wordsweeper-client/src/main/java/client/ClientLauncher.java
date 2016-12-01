@@ -21,12 +21,12 @@ public class ClientLauncher {
     public static void main(String[] args) throws Exception {
         // FIRST thing to do is register the protocol being used. There will be a single class protocol
         // that will be defined and which everyone will use. For now, demonstrate with skeleton protocol.
-        if (!Message.configure("wordsweeper.xsd")) {
+        if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-client/wordsweeper.xsd")) {
             System.exit(0);
         }
 
         // select dedicated server with '-server' options
-        String host = "localhost";
+        String host = "cs509.frankgh.com";
         if (args.length > 0 && args[0].equals("-server")) {
             host = serverHost;
         }

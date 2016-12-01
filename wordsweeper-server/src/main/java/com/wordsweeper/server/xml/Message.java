@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -35,16 +33,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "message")
 public class Message {
 
+    /**
+     * The Response.
+     */
     protected Response response;
+    /**
+     * The Request.
+     */
     protected Request request;
 
     /**
      * Gets the value of the response property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Response }
-     *     
+     *
+     * @return possible object is     {@link Response }
      */
     public Response getResponse() {
         return response;
@@ -52,11 +53,8 @@ public class Message {
 
     /**
      * Sets the value of the response property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Response }
-     *     
+     *
+     * @param value allowed object is     {@link Response }
      */
     public void setResponse(Response value) {
         this.response = value;
@@ -64,11 +62,8 @@ public class Message {
 
     /**
      * Gets the value of the request property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Request }
-     *     
+     *
+     * @return possible object is     {@link Request }
      */
     public Request getRequest() {
         return request;
@@ -76,11 +71,8 @@ public class Message {
 
     /**
      * Sets the value of the request property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Request }
-     *     
+     *
+     * @param value allowed object is     {@link Request }
      */
     public void setRequest(Request value) {
         this.request = value;

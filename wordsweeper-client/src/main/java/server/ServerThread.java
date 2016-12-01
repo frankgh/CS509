@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
 
-/** Thread to handle individual requests from a client. */
+/**
+ * Thread to handle individual requests from a client.
+ */
 public class ServerThread extends Thread implements ClientState {
 	final Socket client;             // Socket used by thread to communicate with client.
 	final BufferedReader fromClient; // Used to process strings from client.
@@ -21,7 +23,13 @@ public class ServerThread extends Thread implements ClientState {
 	final String id;                 // Associated unique ID for this thread.
 	Object data;               		 // User-defined object associated with each thread.
 
-	/** Create objects to handle input/output to client. */
+	/**
+	 * Create objects to handle input/output to client.
+	 * @param srv server
+	 * @param s socket
+	 * @param h protocol handler
+	 * @throws IOException
+	 */
 	ServerThread(Server srv, Socket s, IProtocolHandler h) throws IOException {
 		server = srv;
 		fromClient = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -84,11 +92,13 @@ public class ServerThread extends Thread implements ClientState {
 		}
 	}
 
-	/** Return (statistically) unique id. */
+	/** @Return (statistically) unique id. */
 	public String id() { return id; }
 
 	/**
 	 * Associate new object data as the user-defined data for the thread and return the old previous value.
+	 * @param newData new object data
+	 * @return old
 	 */
 	public Object setData(Object newData) {
 		Object old = data;
@@ -98,6 +108,7 @@ public class ServerThread extends Thread implements ClientState {
 
 	/**
 	 * Retrieve user-defined data associated with this thread.
+	 * @return data
 	 */
 	public Object getData() {
 		return data;
@@ -106,6 +117,8 @@ public class ServerThread extends Thread implements ClientState {
 	/**
 	 * Send the given message to the client on whose behalf this thread is executing and return true
 	 * on success, false on error.
+	 * @param m the message
+	 * @return false if message is null, otherwise return message.
 	 */
 	public boolean sendMessage (Message m) {
 		if (m == null) { return false; }

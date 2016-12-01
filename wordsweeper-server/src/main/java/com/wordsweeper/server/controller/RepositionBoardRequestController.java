@@ -56,7 +56,7 @@ public class RepositionBoardRequestController extends ControllerChain {
      * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
-        return null;
+        return null; /* DO NOTHING */
     }
 
     /* (non-Javadoc)
@@ -71,4 +71,15 @@ public class RepositionBoardRequestController extends ControllerChain {
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
     } // DO NOTHING
+
+    /* (non-Javadoc)
+     * @see com.wordsweeper.server.controller.ControllerChain#handleAPIError(com.wordsweeper.server.xml.Request, retrofit2.Response<?>)
+	 */
+    @Override
+    public Response handleAPIError(Request request, retrofit2.Response<?> response) {
+        if (response.code() == 304) {
+            return null;
+        }
+        return super.handleAPIError(request, response);
+    }
 }

@@ -38,6 +38,12 @@ public class Player {
     int score;
 
     /**
+     * The Latest score.
+     */
+    @Transient
+    int latestScore;
+
+    /**
      * Instantiates a new Player.
      */
     public Player() {
@@ -68,8 +74,17 @@ public class Player {
      *
      * @param score the score
      */
-    protected void setScore(int score) {
+    public void setScore(int score) {
         this.score = score;
+    }
+
+    /**
+     * Sets latest score.
+     *
+     * @param latestScore the latest score
+     */
+    public void setLatestScore(int latestScore) {
+        this.latestScore = latestScore;
     }
 
     /**
@@ -100,16 +115,25 @@ public class Player {
     }
 
     /**
+     * Gets latest score.
+     *
+     * @return the latest score
+     */
+    public int getLatestScore() {
+        return latestScore;
+    }
+
+    /**
      * Determine if a location is within the player's board bounds
      *
      * @param location the location
      * @return true if the location is within the player's bound, false otherwise
      */
-    public boolean isLocationInBoard(Location location) {
+    public boolean isLocationInPlayerBoard(Location location) {
 
         return location.getRow() >= offset.getRow() &&
-                location.getRow() <= offset.getRow() + Game.PLAYER_BOARD_ROWS &&
+                location.getRow() < offset.getRow() + Game.PLAYER_BOARD_ROWS &&
                 location.getColumn() >= offset.getColumn() &&
-                location.getColumn() <= offset.getColumn() + Game.PLAYER_BOARD_COLUMNS;
+                location.getColumn() < offset.getColumn() + Game.PLAYER_BOARD_COLUMNS;
     }
 }
