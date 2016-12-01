@@ -294,13 +294,21 @@ public class Response {
     }
 
     /**
+     * Returns whether request was successful
+     * 
+     */
+    public Boolean getSuccess() {
+        return this.success;
+    }
+    
+    /**
      * Sets the value of the success property.
      * 
      */
     public void setSuccess(boolean value) {
         this.success = value;
     }
-
+    
     /**
      * Gets the value of the reason property.
      * 
