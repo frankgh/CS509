@@ -14,7 +14,7 @@ public class RandomUtil {
     /**
      * The constant alphabet.
      */
-    final static String alphabet = "AAABBCCDDEEEFFGGHHIIIJJKKLLMMNNOOOPPQQRRSSTTUUUVVWWXXYYZZ";
+    final static String alphabet = "AAABBCCDDEEEFFGGHHIIIJJKKLLMMNNOOOPPQQRRSSTTUUUVVWWXXYZZ";
     /**
      * The constant random.
      */

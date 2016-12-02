@@ -270,15 +270,6 @@ public class Game {
     }
 
     /**
-     * Resets the scores of all players in the game
-     */
-    public void resetPlayersScores() {
-        for (Player player : playerList) {
-            player.setScore(0);
-        }
-    }
-
-    /**
      * Randomizes the location of a player
      *
      * @param player the player

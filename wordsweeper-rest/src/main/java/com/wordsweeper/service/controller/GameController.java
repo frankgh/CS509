@@ -218,6 +218,15 @@ public class GameController {
         return Response.ok(game).build(); /* Return response with the game object */
     }
 
+    /**
+     * Find a word in the game
+     *
+     * @param gameId        the unique game ID
+     * @param playerName    the name of the player
+     * @param word          the word
+     * @param cellPositions the list of cell positions separated by pipe
+     * @return the updated game status if success, or an error otherwise
+     */
     @GET
     @Path("/findword/{gameId}/{playerName}/{word}/{cellPositions}")
     @Produces(MediaType.APPLICATION_JSON)
