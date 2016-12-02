@@ -91,8 +91,6 @@ public class GameController {
                 StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
-            // game.getBoard().reset(); /* finally, reset the board */
-            game.resetPlayersScores(); /* and reset player scores */
             gameDao.save(game);
         } else {
             return Response
