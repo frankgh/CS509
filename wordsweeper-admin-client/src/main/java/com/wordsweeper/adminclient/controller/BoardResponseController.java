@@ -1,5 +1,8 @@
 package com.wordsweeper.adminclient.controller;
 
+import java.awt.Color;
+import java.util.Arrays;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,8 +29,6 @@ public class BoardResponseController {
 		String boardcontents = map.getNamedItem("contents").getNodeValue();
 		app.setContent(boardcontents);
 		
-//		String gameId = map.getNamedItem("gameId").getNodeValue();
-//		app.setGameIDNumber().setText(gameId);
 		
 //		The actual get gameID list loop
 		NodeList list = boardResponse.getChildNodes();
@@ -36,10 +37,19 @@ public class BoardResponseController {
 			String pname = n.getAttributes().getNamedItem("name").getNodeValue();
 			String score = n.getAttributes().getNamedItem("score").getNodeValue();
 			String position = n.getAttributes().getNamedItem("position").getNodeValue();
-			Object[] info = new Object[]{pname,score,position};
-			
+			String index = Integer.toString(i+1);
+			Object[] info = new Object[]{index,pname,score,position};
 			app.setPlayerInfo(info);
+			
+			String[] parts = position.split(",");
+			int c= Integer.parseInt(parts[0]);
+			int r= Integer.parseInt(parts[1]);
+
+			app.addcolor(r, c, i);
+			
+			
 		}
+		app.setBoardColor();
 		
 
 		
