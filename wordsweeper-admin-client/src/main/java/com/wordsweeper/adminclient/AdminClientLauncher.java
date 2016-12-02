@@ -1,7 +1,7 @@
 package com.wordsweeper.adminclient;
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
-import com.wordsweeper.adminclient.controller.AdminClinetMessageHandler;
+import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
 import com.wordsweeper.adminclient.ServerAccess;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import xml.Message;
@@ -32,7 +32,7 @@ public class AdminClientLauncher {
         AdminClientModel model = new AdminClientModel();
         AdminClientApplication app = new AdminClientApplication(model);
         ServerAccess sa = new ServerAccess(host, 11425);
-        if (!sa.connect(new AdminClinetMessageHandler(app))) {
+        if (!sa.connect(new AdminClientMessageHandler(app))) {
             System.out.println("Unable to connect to server (" + host + "). Exiting.");
             System.exit(0);
         }

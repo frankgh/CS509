@@ -3,11 +3,11 @@ import xml.Message;
 import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
-public class AdminClinetMessageHandler implements IMessageHandler{
+public class AdminClientMessageHandler implements IMessageHandler{
 	
 	AdminClientApplication app;
 	
-	public AdminClinetMessageHandler(AdminClientApplication app) {
+	public AdminClientMessageHandler(AdminClientApplication app) {
 		this.app = app;
 	}
 
