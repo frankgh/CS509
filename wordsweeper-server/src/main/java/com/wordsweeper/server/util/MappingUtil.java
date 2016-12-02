@@ -38,6 +38,7 @@ public class MappingUtil {
         BoardResponse boardResponse = new ObjectFactory().createBoardResponse();
 
         boardResponse.setGameId(source.getUniqueId());
+        boardResponse.setSize(source.getBoard().getRows());
         boardResponse.setManagingUser(source.getManagingPlayerName());
         boardResponse.setBonus(source.getBoard().getBonusCellLocation().toString());
 
@@ -49,7 +50,6 @@ public class MappingUtil {
             }
 
             boardResponse.setContents(StringUtils.join(wordContents, ","));
-            boardResponse.setSize(source.getBoard().getRows());
         }
 
         for (Player player : source.getPlayerList()) {
