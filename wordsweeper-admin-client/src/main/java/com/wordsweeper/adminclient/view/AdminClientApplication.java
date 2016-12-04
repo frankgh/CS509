@@ -351,7 +351,7 @@ public class AdminClientApplication extends JFrame{
 		TableBoard.setFillsViewportHeight(true);
 		
 		/** initial the ColorMap color array. */
-		ColorMap = new Color[n][n][4];
+		ColorMap = new Color[n][n][5];
 
 		return TableBoard;
 	}
@@ -411,6 +411,12 @@ public class AdminClientApplication extends JFrame{
 		}
 	}
 	
+	public void setBonus(int B_r, int B_c){
+		if (ColorMap[B_r-1][B_c-1][4]==null){
+			ColorMap[B_r-1][B_c-1][4]=Color.YELLOW;
+		}
+	}
+	
 	
 	/** set the border color for each player's view window and player list. */
 	public void setBoardColor(){
@@ -419,6 +425,9 @@ public class AdminClientApplication extends JFrame{
 		
 		TableCellRenderer tcr1 = new ColorPlayerListCellRenderer();
 		PlayerList.setDefaultRenderer(Object.class, tcr1);
+		
+//		TableCellRenderer tcr2 = new ColorTableBonusRenderer();
+//		TableBoard.setDefaultRenderer(Object.class,tcr2);
 		
 	}
 	/** Generate the color array. */
@@ -475,6 +484,7 @@ public class AdminClientApplication extends JFrame{
 		boolean south=false;
 		boolean east=false;
 		boolean west=false;
+		boolean background=false;
 		int r;
 		int c;
 		int lineWidth=5;
@@ -492,6 +502,7 @@ public class AdminClientApplication extends JFrame{
 //			}
 			r=row;
 			c=column;
+//			if(ColorMap[r][c][0]!=null | ColorMap[r][c][1]!=null | ColorMap[r][c][2]!=null | ColorMap[r][c][3]!=null){ 
 			if(ColorMap[r][c]!=null){ 
 				super.setHorizontalAlignment(JLabel.CENTER);
 				if (ColorMap[r][c][0]!=null){
@@ -505,6 +516,9 @@ public class AdminClientApplication extends JFrame{
 				}
 				if (ColorMap[r][c][3]!=null){
 					west=true;
+				}
+				if (ColorMap[r][c][4]!=null){
+					background=true;
 				}
 				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
 			}
@@ -553,9 +567,32 @@ public class AdminClientApplication extends JFrame{
 				}
 				west=false;
 			}
+			if(background){
+				g2.setColor(Color.BLACK); 
+				g2.setStroke(stroke); 
+				g2.drawOval(2,2,36,36);
+				g2.drawOval(5,5,30,30);
+//				setBackground(Color.YELLOW);
+				background=false;
+			}
+
 		}
 	}
 	
+//	private class ColorTableBonusRenderer extends DefaultTableCellRenderer {
+//		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
+//
+//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+//
+//			if(ColorMap[row][column][4]!=null){ 
+//				setBackground(Color.YELLOW);
+//				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+//			}
+//			else{
+//				return renderer.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+//			}
+//		}
+//	}
 	
 	/** the player list color Renderer. */
 	private class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
