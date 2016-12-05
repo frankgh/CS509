@@ -42,7 +42,14 @@ public class BoardResponseController {
 		
 		NamedNodeMap map = boardResponse.getAttributes();
 		String boardcontents = map.getNamedItem("contents").getNodeValue();
+		String boardbonus = map.getNamedItem("bonus").getNodeValue();
+		
+		String[] bonusArray = boardbonus.split(",");
+		int Bonus_c= Integer.parseInt(bonusArray[0]);
+		int Bonus_r= Integer.parseInt(bonusArray[1]);
+		
 		app.setContent(boardcontents);
+		app.setBonus(Bonus_r,Bonus_c);
 		
 		
 //		The actual get gameID list loop
