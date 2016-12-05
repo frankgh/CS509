@@ -1,21 +1,29 @@
 package com.wordsweeper.adminclient.view;
 
+
+
+
+
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 
-
+import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -34,13 +42,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JList;
 
+import java.util.Random;
+
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
 
+import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
+import com.wordsweeper.adminclient.controller.BoardResponseController;
 import com.wordsweeper.adminclient.controller.CheckGameController;
 import com.wordsweeper.adminclient.controller.RefreshGameListController;
 import com.wordsweeper.adminclient.ServerAccess;
 
+import xml.Message;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -54,36 +67,47 @@ public class AdminClientApplication extends JFrame{
 	
 	JPanel contentPane;
 	JPanel gamePane;
+
 	ServerAccess serverAccess;
 	
+
 	JTextArea responseArea;
-	JList<String> gamelist;
-	DefaultListModel<String> listModel;
+	JTextArea txtConnection;
 	
 	JButton btnCheckGame;
 	JButton btnRefreshGame;
 	
 	JScrollPane gamelistOutput;
-	JTextArea txtConnection;
+
 	JScrollPane scrollPane;
-	
-	JTable TableBoard;
 	JScrollPane PlayerOutput;
 	JScrollPane scrollBoard;
+
+	JTable TableBoard;
+	JTable PlayerList;
+	JTable gamelist;
+
 	JLabel lblGameIdList;
 	JLabel lblBoardInfo;
+
 	JTextField txtGameID;
-	private JLabel lblBoard;
-	private JLabel lblPlayers;
 	JTextField txtBoard;
-	JTable PlayerList;
+
 	private JLabel lblNewLabel;
+	private JLabel lblBoard;
+
+	public Color[][][] ColorMap;
+	public Color[] randomColor;
+
+	public int n;
+
 
 	/**
 	 *
 	 * @param model the admin client application model
 	 */
 
+	
 	public AdminClientApplication(final AdminClientModel model) {
 		this.model = model;
 		setTitle("Online Game List");
@@ -93,58 +117,76 @@ public class AdminClientApplication extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		/** setup the panel and its size . */
 		gamePane = new JPanel();
 		gamePane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
+		/** set the color array. */
+		randomColor=randomColor();
+
+		/** Check game list button setup and click ActionListener. */
 		btnRefreshGame = new JButton("Refresh");
 		btnRefreshGame.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		btnRefreshGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				listModel.clear();
+				DefaultTableModel modelgameIDTable = (DefaultTableModel) gamelist.getModel();
+				modelgameIDTable.setRowCount(0);
 				new RefreshGameListController(AdminClientApplication.this, model).process();
 			}
 		});
 		
+		/** Check game button setup and click ActionListener. */
 		btnCheckGame = new JButton("Check");
 		btnCheckGame.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		btnCheckGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel modelTable = (DefaultTableModel) PlayerList.getModel();
 				modelTable.setRowCount(0);
+//				ColorMap = new Color[7][7];
 				new CheckGameController(AdminClientApplication.this, model).process();
-				
+
 			}
 		});
 		
-//		create the model and add elements 
-        listModel = new DefaultListModel<String>(); 
-	
+		/** create the model and add elements. */
 		gamelistOutput = new JScrollPane();
-		gamelist = new JList<String>(listModel);
-		gamelistOutput.setViewportView(gamelist);
-		gamelist.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		gamelist.setLayoutOrientation(JList.VERTICAL);
-		gamelist.setSelectedIndex(0);
-//		gamelist.addListSelectionListener(this);
-        gamelist.setVisibleRowCount(5);
-		
 		scrollPane = new JScrollPane();
 		txtConnection = new JTextArea();
 		scrollPane.setViewportView(txtConnection);
-		
 		scrollBoard = new JScrollPane();
-		
 		PlayerOutput = new JScrollPane();
-		
 		lblGameIdList = new JLabel("Game ID List");
-		
 		lblBoard = new JLabel("Board:");
-		
 		lblBoardInfo = new JLabel("Board Info:");
-		
 		JLabel lblConnectionInfo = new JLabel("Connection Info:");
-		
 		lblNewLabel = new JLabel("Manager");
+
+		/** setup Player list Jtable. */
+		DefaultTableModel modelT = new DefaultTableModel();
+		modelT.addColumn("");
+		modelT.addColumn("Player:");
+		modelT.addColumn("Score:");
+		modelT.addColumn("Position");
+		PlayerList = new JTable(modelT);
+		PlayerOutput.setViewportView(PlayerList);
+		/** set Player name column width to 120. */
+		TableColumn col1 =PlayerList.getColumnModel().getColumn(1);
+		col1.setPreferredWidth(120);
+		/** set color cell column width to 10. */
+		TableColumn col4 =PlayerList.getColumnModel().getColumn(0);
+		col4.setPreferredWidth(10);
+
+		/** setup the gameID List Jtable. */
+		DefaultTableModel modelG = new DefaultTableModel();
+		modelG.addColumn("Game ID");
+		modelG.addColumn("Players");
+		gamelist = new JTable(modelG);
+		gamelistOutput.setViewportView(gamelist);
+
+		/** set the gameID column width. */
+		TableColumn colG1 =gamelist.getColumnModel().getColumn(0);
+		colG1.setPreferredWidth(200);
+
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -153,8 +195,8 @@ public class AdminClientApplication extends JFrame{
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblGameIdList)
-						.addComponent(gamelistOutput, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+						.addComponent(gamelistOutput, GroupLayout.PREFERRED_SIZE, 276, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblBoard)
 						.addComponent(scrollBoard, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE))
@@ -169,9 +211,9 @@ public class AdminClientApplication extends JFrame{
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(44)
 					.addComponent(btnRefreshGame, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-					.addGap(217)
+					.addGap(219)
 					.addComponent(btnCheckGame, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(379, Short.MAX_VALUE))
+					.addContainerGap(377, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 928, Short.MAX_VALUE)
@@ -196,29 +238,19 @@ public class AdminClientApplication extends JFrame{
 								.addComponent(lblBoardInfo))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(gamelistOutput, 0, 0, Short.MAX_VALUE)
 								.addComponent(PlayerOutput, 0, 0, Short.MAX_VALUE)
-								.addComponent(scrollBoard, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-								.addComponent(gamelistOutput))
-							.addGap(31)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnCheckGame, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnRefreshGame, GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)))
+								.addComponent(scrollBoard, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+							.addGap(40)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnRefreshGame, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnCheckGame, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(61)
 							.addComponent(lblNewLabel)))
 					.addGap(45))
 		);
-		
-		DefaultTableModel modelT = new DefaultTableModel(); 
-		modelT.addColumn("Player:");
-		modelT.addColumn("Score:");
-		modelT.addColumn("Position");
-		PlayerList = new JTable(modelT); 
-		PlayerOutput.setViewportView(PlayerList);
-		TableColumn col =PlayerList.getColumnModel().getColumn(0);
-		col.setPreferredWidth(120);
-		
-		
+
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -232,18 +264,19 @@ public class AdminClientApplication extends JFrame{
 		return serverAccess;
 	}
 	
-	
-	/** Navigation access to actionable elements in the GUI. */
-	public DefaultListModel<String> getResponseArea() {
-		return listModel;
+	/** set the responded game list and player list info to the geme_list Jtable. */
+	public JTable SetGameIDInfo(Object[] info){
+		DefaultTableModel modelID = (DefaultTableModel) gamelist.getModel();
+		modelID.addRow(info);
+		return gamelist;
 	}
 
-	/** Pull connection status from server. */
+	/** add the connection info to the connection text box area. */
 	public JTextArea getConnection() {
 		return txtConnection;
 	}
 
-	/** Set player's information in the GUI.*/
+	/** set the players info to the Player_list Jtable area. */
 	public JTable setPlayerInfo(Object[] info) {
 		DefaultTableModel model = (DefaultTableModel) PlayerList.getModel();
 		model.addRow(info);
@@ -251,14 +284,17 @@ public class AdminClientApplication extends JFrame{
 	}
 
 	/** Get game id from server.*/
-	
+
 	public String getGameID(){
-		String game_idS = listModel.getElementAt(gamelist.getSelectedIndex()).toString();	
+		String game_idS = null;
+        int[] selectedRow = gamelist.getSelectedRows();
+        int[] selectedColumns = gamelist.getSelectedColumns();
+        game_idS = (String) gamelist.getValueAt(selectedRow[0], selectedColumns[0]);
 		return game_idS;
 	}
 
 	/** Get game contant from the server.*/
-	
+
 	public String getContant(){
 		String game_contant = txtConnection.getText();
 		return game_contant;
@@ -271,7 +307,7 @@ public class AdminClientApplication extends JFrame{
 	 */
 	public Object[][] stringTo2D(String alphabets){
 		String[] letters = alphabets.split(",");
-		int n=(int) Math.sqrt(letters.length);
+		n=(int) Math.sqrt(letters.length);
 		Object[][] alpha = new Object[n][n];
 		int k=0;
 		for(int i= 0;i<n;i++){
@@ -295,44 +331,133 @@ public class AdminClientApplication extends JFrame{
 		return colIndex;
 	}
 	
-	/** set the JTable content */
+
+	/** set the board content. */
 	public JTable setContent(String Content){
 		Object[][] data = stringTo2D(Content);
 		String[] columnIndex =setColIndex(data);
-		TableBoard = new JTable(data,columnIndex);
+		TableBoard = new JTable(new DefaultTableModel(data,columnIndex));
+
 		scrollBoard.setViewportView(TableBoard);
 		TableBoard.setRowHeight(40);
+
 		TableBoard.setCellSelectionEnabled(true);
 		TableBoard.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		TableBoard.setDefaultRenderer(Object.class, new BorderCellRenderer());
+		//set the header center alignment
 		JTableHeader header = TableBoard.getTableHeader();
-		// center the row position
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		header.setDefaultRenderer(new HeaderRenderer(TableBoard));
-		//center the column position
+		//set the column width to be fixed, whatever the horizontal size increase, each column width is 40
 		TableBoard.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		for(int i= 0;i<data.length;i++){
 			TableColumn col =TableBoard.getColumnModel().getColumn(i);
 			col.setPreferredWidth(40);
-			col.setCellRenderer(centerRenderer);
-//			TableBoard.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-//			TableBoard.getColumnModel().getColumn(i).setPreferredWidth(30);
 		}
-		header.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-//		int [] col = {1,2,3,4};
-//		int [] row= {2,3,4};
-//		setCellBorder(col, row);
-		//set the view size
+
+		/** set the view size. */
 		TableBoard.setPreferredScrollableViewportSize(new Dimension(350,350));
 		TableBoard.setFillsViewportHeight(true);
-		// set the player view border
-//		Color color = UIManager.getColor("Table.gridColor");
-//		MatteBorder border = new MatteBorder(0, 2, 0, 0, Color.red);		
-//		TableBoard.setBorder(border);
+
+		/** initial the ColorMap color array. */
+		ColorMap = new Color[n][n][4];
+
 		return TableBoard;
 	}
 	
+	/** mix the two input color. */
+	// mix the two color function
+	public static Color blend(Color c0, Color c1) {
+	    double totalAlpha = c0.getAlpha() + c1.getAlpha();
+	    double weight0 = c0.getAlpha() / totalAlpha;
+	    double weight1 = c1.getAlpha() / totalAlpha;
+
+	    double r = weight0 * c0.getRed() + weight1 * c1.getRed();
+	    double g = weight0 * c0.getGreen() + weight1 * c1.getGreen();
+	    double b = weight0 * c0.getBlue() + weight1 * c1.getBlue();
+	    double a = Math.max(c0.getAlpha(), c1.getAlpha());
+
+	    return new Color((int) r, (int) g, (int) b, (int) a);
+	  }
+
+	// add the color to the color matrix which is the same size as the board
+
+	/** add the border color to the ColorMap array. */
+	public void addcolor(int r, int c, int indexColor){
+		//set the row and column index -1
+		r=r-1;
+		c=c-1;
+		//start to add the boarder color around the 4*4 window
+		for(int i=0; i<4; i++){
+			//add the north border color
+			if (ColorMap[r][c+i][0]== null){
+				ColorMap[r][c+i][0]=randomColor[indexColor];
+			}
+			else{
+				ColorMap[r][c+i][0]=blend(ColorMap[r][c+i][0],randomColor[indexColor]);
+			}
+			//add the south border color
+			if (ColorMap[r+3][c+i][1]== null){
+				ColorMap[r+3][c+i][1]=randomColor[indexColor];
+			}
+			else{
+				ColorMap[r+3][c+i][1]=blend(ColorMap[r+3][c+i][1],randomColor[indexColor]);
+			}
+			//add the east border color
+			if (ColorMap[r+i][c][2]== null){
+				ColorMap[r+i][c][2]=randomColor[indexColor];
+			}
+			else{
+				ColorMap[r+i][c][2]=blend(ColorMap[r+i][c][2],randomColor[indexColor]);
+			}
+			//add the west border color
+			if (ColorMap[r+i][c+3][3]== null){
+				ColorMap[r+i][c+3][3]=randomColor[indexColor];
+			}
+			else{
+				ColorMap[r+i][c+3][3]=blend(ColorMap[r+i][c+3][3],randomColor[indexColor]);
+			}
+		}
+	}
+
+
+	/** set the border color for each player's view window and player list. */
+	public void setBoardColor(){
+		TableCellRenderer tcr = new ColorTableCellRenderer();
+		TableBoard.setDefaultRenderer(Object.class,tcr);
+
+		TableCellRenderer tcr1 = new ColorPlayerListCellRenderer();
+		PlayerList.setDefaultRenderer(Object.class, tcr1);
+
+	}
+	/** Generate the color array. */
+	//create a random color array
+	public Color[] randomColor(){
+		randomColor=new Color[10];
+		randomColor[0] = Color.red;
+		randomColor[1] = Color.green;
+		randomColor[2] = Color.blue;
+		randomColor[3] = Color.cyan;
+		randomColor[4] = Color.gray;
+		randomColor[5] = Color.magenta;
+		randomColor[6] = Color.orange;
+		randomColor[7] = Color.yellow;
+		randomColor[8] = Color.pink;
+		randomColor[9] = Color.darkGray;
+
+		/** the actual random color code. */
+//		final Random rand = new Random();
+//		randomColor=new Color[20];
+//		for(int i=0; i<20;i++){
+//			int r = (int) (rand.nextInt(256));
+//			int g = (int) (rand.nextInt(256));
+//			int b = (int) (rand.nextInt(256));
+//			randomColor[i] = new Color(r, g, b);
+//		}
+		return randomColor;
+	}
+
+	/** the header Renderer. */
+
+	// Center class
 	/** Center class */
 	private static class HeaderRenderer implements TableCellRenderer {
 
@@ -368,356 +493,124 @@ public class AdminClientApplication extends JFrame{
 	/**
 	 * This is the class for board cell renderer.
 	 */
-	
-	public class BorderCellRenderer extends DefaultTableCellRenderer
-	{
 
-		protected Border focusBorder = new LineBorder(Color.BLACK,2);
+//	cell render for highlight the each client view window
 
-		/**
-		 * Board cell renderer method.
-		 */
+	/** the board color table Renderer. */
+	private class ColorTableCellRenderer extends DefaultTableCellRenderer {
+		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();
+		boolean north=false;
+		boolean south=false;
+		boolean east=false;
+		boolean west=false;
+		int r;
+		int c;
+		int lineWidth=5;
 
-		public BorderCellRenderer() {
+        /**
+         * This get the table component from the server.
+         * @param table table in the game.
+         * @param value object value in the table
+         * @param isSelected if value is selected.
+         * @param hasFocus boolean
+         * @param row table row
+         * @param column table column
+         * @return component from the server
+         */
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-		}
-
-		/**
-		 * This get the table component from the server.
-		 * @param table table in the game.
-		 * @param value object value in the table
-		 * @param isSelected if value is selected.
-		 * @param hasFocus boolean
-		 * @param row table row
-		 * @param col table column
-		 * @return component from the server
-		 */
-		public Component getTableCellRendererComponent(JTable table, Object value,
-				boolean isSelected, boolean hasFocus, int row, int column) {
-			if (hasFocus) {
-			        setBorder(focusBorder);
-				if (table.isCellEditable(row, column)) {
-					setForeground( UIManager.getColor("Table.focusCellForeground") );
-					setBackground( UIManager.getColor("Table.focusCellBackground") );
+//			if(ColorMap[row][column]!=null){
+//				super.setHorizontalAlignment(JLabel.CENTER);
+//				setBackground(ColorMap[row][column]);
+//				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+//			}
+//			else{
+//				renderer.setHorizontalAlignment(JLabel.CENTER);
+//				return renderer.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+//			}
+			r=row;
+			c=column;
+			if(ColorMap[r][c]!=null){
+				super.setHorizontalAlignment(JLabel.CENTER);
+				if (ColorMap[r][c][0]!=null){
+					north=true;
 				}
-			} else {
-				setBorder(noFocusBorder);
+				if (ColorMap[r][c][1]!=null){
+					south=true;
+				}
+				if (ColorMap[r][c][2]!=null){
+					east=true;
+				}
+				if (ColorMap[r][c][3]!=null){
+					west=true;
+				}
+				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
 			}
-			setText((value == null) ? "" : value.toString());
-			return this;
+			else{
+				renderer.setHorizontalAlignment(JLabel.CENTER);
+				return renderer.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+			}
+
+
+		}
+
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			Graphics2D g2=(Graphics2D)g;
+			final BasicStroke stroke=new BasicStroke(2.0f);
+
+			if(north){
+				g2.setColor(ColorMap[r][c][0]);
+				g2.setStroke(stroke);
+				for (int i = 0; i < lineWidth; i++) {
+					g2.drawLine(0,0+i,getWidth(),0+i);
+				    }
+				north=false;
+			}
+			if(south){
+				g2.setColor(ColorMap[r][c][1]);
+				g2.setStroke(stroke);
+				for (int i = 0; i < lineWidth; i++) {
+					g2.drawLine(0,getHeight()-i,getWidth(),getHeight()-i);
+				}
+				south=false;
+			}
+			if(east){
+				g2.setColor(ColorMap[r][c][2]);
+				g2.setStroke(stroke);
+				for (int i = 0; i < lineWidth; i++) {
+					g2.drawLine(0+i,0,0+i,getHeight());
+				}
+				east=false;
+			}
+			if(west){
+				g2.setColor(ColorMap[r][c][3]);
+				g2.setStroke(stroke);
+				for (int i = 0; i < lineWidth; i++) {
+					g2.drawLine(getWidth()-i,0,getWidth()-i,getHeight());
+				}
+				west=false;
+			}
 		}
 	}
+
+
+	/** the player list color Renderer. */
+	private class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
+		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+			if(column==0){
+				setBackground(randomColor[row]);
+				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+			}
+			else{
+				return renderer.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
+			}
+
+			}
+		}
+
 
 }
-
-/**
- * This class create border cell renderer for game board
- */
-
-class BorderCellRenderer extends JLabel implements TableCellRenderer {
-	  protected Border noFocusBorder;
-	  protected Border columnBorder;
-
-    /**
-     * This method create a new empty border
-     */
-
-    public BorderCellRenderer() {
-		noFocusBorder = new EmptyBorder(1, 2, 1, 2);
-		setOpaque(true);
-	  }
-
-    /**
-     * This method get the table cell renderer component.
-     * @param table table in the game.
-     * @param value object value in the table
-     * @param isSelected if value is selected.
-     * @param hasFocus boolean
-     * @param row table row
-     * @param col table column
-     * @return component from the server
-     */
-
-
-	  public Component getTableCellRendererComponent(JTable table, Object value,
-	  	boolean isSelected, boolean hasFocus, int row, int column) {
-		if (isSelected) {
-	  	setForeground(table.getSelectionForeground());
-	  	setBackground(table.getSelectionBackground());
-		} else {
-	  	setForeground(table.getForeground());
-	  	setBackground(table.getBackground());
-		}
-		setFont(table.getFont());
-
-
-		if (hasFocus) {
-	  	setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
-	  	if (table.isCellEditable(row, column)) {
-	    	setForeground(UIManager.getColor("Table.focusCellForeground"));
-	    	setBackground(UIManager.getColor("Table.focusCellBackground"));
-	  	}
-		} else {
-	  	if (value instanceof CellBorder) {
-	    	Border border = ((CellBorder) value).getBorder();
-	    	setBorder(border);
-	  	} else {
-	    	if (columnBorder != null) {
-	      	setBorder(columnBorder);
-	    	} else {
-	      	setBorder(noFocusBorder);
-	    	}
-	  	}
-		}
-		setText((value == null) ? "" : value.toString());
-		return this;
-	  }
-
-    /**
-     * This method set the border column.
-     * @param border border for the game board.
-     */
-
-	  public void setColumnBorder(Border border) {
-		columnBorder = border;
-	  }
-
-    /**
-     * This method get the column border.
-     * @return column border
-     */
-
-	  public Border getColumnBorder() {
-		return columnBorder;
-	  }
-}
-
-/**
- * Cell border interface.
- */
-
-interface CellBorder {
-
-
-	  public Border getBorder();
-
-
-	  public Border getBorder(int row, int column);
-
-
-	  public void setBorder(Border border);
-
-
-	  public void setBorder(Border border, int row, int column);
-
-
-	}
-
-
-
-class LinesBorder extends AbstractBorder implements SwingConstants {
-	  protected int northThickness;
-	  protected int southThickness;
-	  protected int eastThickness;
-	  protected int westThickness;
-	  protected Color northColor;
-	  protected Color southColor;
-	  protected Color eastColor;
-	  protected Color westColor;
-
-    /**
-     * This method set line of border
-     * @param color color
-     */
-	  public LinesBorder(Color color) {
-		this(color, 1);
-	  }
-
-    /**
-     * This method set border line
-     * @param color color
-     * @param thickness line thickness
-     */
-
-	  public LinesBorder(Color color, int thickness) {
-		setColor(color);
-		setThickness(thickness);
-	  }
-
-    /**
-     * This method set border line
-     * @param color color
-     * @param insets insets
-     */
-
-	  public LinesBorder(Color color, Insets insets) {
-		setColor(color);
-		setThickness(insets);
-	  }
-
-    /**
-     * This creates board method
-     * @param c component
-     * @param g graphics
-     * @param x integer x for border
-     * @param y integer y for border
-     * @param width integer width for border
-     * @param height integer height for border
-     */
-
-	  public void paintBorder(Component c, Graphics g, int x, int y, int width,int height) {
-		  Color oldColor = g.getColor();
-		  
-		  g.setColor(northColor);
-			for (int i = 0; i < northThickness; i++) {
-		  	g.drawLine(x, y + i, x + width - 1, y + i);
-			}
-			g.setColor(southColor);
-			for (int i = 0; i < southThickness; i++) {
-		  	g.drawLine(x, y + height - i - 1, x + width - 1, y + height- i - 1);
-			}
-			g.setColor(eastColor);
-			for (int i = 0; i < westThickness; i++) {
-		  	g.drawLine(x + i, y, x + i, y + height - 1);
-			}
-			g.setColor(westColor);
-			for (int i = 0; i < eastThickness; i++) {
-		  	g.drawLine(x + width - i - 1, y, x + width - i - 1, y + height - 1);
-			}
-			g.setColor(oldColor);
-		  }
-
-    /**
-     * This method creates getting border insets
-      * @param c component
-     * @return new insets
-     */
-
-	  public Insets getBorderInsets(Component c) {
-		return new Insets(northThickness, westThickness, southThickness,eastThickness);
-	  }
-
-    /**
-     * This method creates getting insets for border.
-     * @param c component
-     * @param insets insets
-     * @return new insets
-     */
-
-
-	  public Insets getBorderInsets(Component c, Insets insets) {
-		return new Insets(northThickness, westThickness, southThickness,eastThickness);
-	  }
-
-    /**
-     * Check if border is opaque.
-     * @return true if it is opaque
-     */
-
-
-	  public boolean isBorderOpaque() {
-		return true;
-	  }
-
-    /**
-     * Set color
-     * @param c color
-     */
-
-
-	  public void setColor(Color c) {
-		northColor = c;
-		southColor = c;
-		eastColor = c;
-		westColor = c;
-	  }
-
-    /**
-     * This method set color for the game
-     * @param c color
-     * @param direction deirection
-     */
-
-
-	  public void setColor(Color c, int direction) {
-		switch (direction) {
-		case NORTH:
-	  	northColor = c;
-	  	break;
-		case SOUTH:
-	  	southColor = c;
-	  	break;
-		case EAST:
-	  	eastColor = c;
-	  	break;
-		case WEST:
-	  	westColor = c;
-	  	break;
-		default:
-		}
-	  }
-
-    /**
-     * Method for setting thickness.
-     * @param n
-     */
-
-
-	  public void setThickness(int n) {
-		northThickness = n;
-		southThickness = n;
-		eastThickness = n;
-		westThickness = n;
-	  }
-
-    /**
-     * Method for setting thickness.
-     * @param insets
-     */
-
-
-	  public void setThickness(Insets insets) {
-		northThickness = insets.top;
-		southThickness = insets.bottom;
-		eastThickness = insets.right;
-		westThickness = insets.left;
-	  }
-
-    /**
-     * This method set thickness.
-     * @param n
-     * @param direction
-     */
-
-
-	  public void setThickness(int n, int direction) {
-		switch (direction) {
-		case NORTH:
-	  	northThickness = n;
-	  	break;
-		case SOUTH:
-	  	southThickness = n;
-	  	break;
-		case EAST:
-	  	eastThickness = n;
-	  	break;
-		case WEST:
-	  	westThickness = n;
-	  	break;
-		default:
-		}
-	  }
-
-    /**
-     * @param insets insert into table
-     */
-
-	  public void append(Insets insets) {
-
-	  	northThickness = Math.max(northThickness, insets.top);
-	  	southThickness = Math.max(southThickness, insets.bottom);
-	  	eastThickness = Math.max(eastThickness, insets.right);
-	  	westThickness = Math.max(westThickness, insets.left);
-	  }
-	  
-	}

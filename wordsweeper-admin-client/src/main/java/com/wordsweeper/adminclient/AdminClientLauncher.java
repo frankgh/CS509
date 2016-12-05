@@ -2,6 +2,7 @@ package com.wordsweeper.adminclient;
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
+import com.wordsweeper.adminclient.ServerAccess;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import xml.Message;
 
@@ -13,9 +14,7 @@ import xml.Message;
  */
 public class AdminClientLauncher {
 
-    /**
-     * If requested by ClientLauncher (pass in '-server' as argument).
-     */
+	// If requested by ClientLauncher (pass in '-server' as argument).
     public static final String serverHost = "cs509.frankgh.com";
 
     /**

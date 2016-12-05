@@ -8,14 +8,14 @@ import com.wordsweeper.adminclient.view.AdminClientApplication;
  */
 
 public class AdminClientMessageHandler implements IMessageHandler{
-	
+
 	AdminClientApplication app;
 
 	/**
 	 *
 	 * @param app the user interface application.
 	 */
-	
+
 	public AdminClientMessageHandler(AdminClientApplication app) {
 		this.app = app;
 	}
@@ -43,6 +43,5 @@ public class AdminClientMessageHandler implements IMessageHandler{
 		// this isn't needed.
 		System.out.println(response);
 	}
-	
 
 }

@@ -91,7 +91,7 @@ public class Location {
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#toString()
+     * @see java.lang.Object#equals()
 	 */
     @Override
     public boolean equals(Object obj) {

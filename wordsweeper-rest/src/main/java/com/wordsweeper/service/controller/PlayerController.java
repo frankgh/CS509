@@ -57,8 +57,14 @@ public class PlayerController {
                     .build();
         }
 
-        game.repositionBoard(player, rowChange, columnChange);
-        gameDao.save(game);
+        if (game.repositionBoard(player, rowChange, columnChange)) {
+            gameDao.save(game);
+        } else {
+            return Response
+                    .ok(new RequestError(RequestError.BOARD_POSITION_NOT_MODIFIED, "No change in position"))
+                    .status(Response.Status.NOT_MODIFIED)
+                    .build();
+        }
 
         return Response.ok(game).build(); /* Return response with the game object */
     }

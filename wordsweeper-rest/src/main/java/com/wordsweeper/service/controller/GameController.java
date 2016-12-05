@@ -91,8 +91,6 @@ public class GameController {
                 StringUtils.isBlank(password) ? null : password); /* join the game */
 
         if (addPlayer) {
-            // game.getBoard().reset(); /* finally, reset the board */
-            game.resetPlayersScores(); /* and reset player scores */
             gameDao.save(game);
         } else {
             return Response
@@ -220,6 +218,15 @@ public class GameController {
         return Response.ok(game).build(); /* Return response with the game object */
     }
 
+    /**
+     * Find a word in the game
+     *
+     * @param gameId        the unique game ID
+     * @param playerName    the name of the player
+     * @param word          the word
+     * @param cellPositions the list of cell positions separated by pipe
+     * @return the updated game status if success, or an error otherwise
+     */
     @GET
     @Path("/findword/{gameId}/{playerName}/{word}/{cellPositions}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -229,6 +236,15 @@ public class GameController {
         if (!WordTable.isWord(word)) {
             return Response
                     .ok(new RequestError(RequestError.INVALID_WORD, "I can't find that word in my dictionary"))
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
+
+        if (wordWrapper.getWordLength() < 3) {
+            return Response
+                    .ok(new RequestError(RequestError.INVALID_WORD, "The word must be composed of at least 3 cells"))
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
@@ -251,8 +267,6 @@ public class GameController {
                     .status(Response.Status.NOT_FOUND)
                     .build();
         }
-
-        Word wordWrapper = new Word(word, Util.parseCellPositions(cellPositions));
 
         if (game.validateWord(player, wordWrapper)) {
             int wordScore = game.calculateWordScore(wordWrapper);
