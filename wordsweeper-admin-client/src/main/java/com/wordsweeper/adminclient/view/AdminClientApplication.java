@@ -57,9 +57,9 @@ import xml.Message;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-
-
-
+/**
+ * This is the class for admin client application.
+ */
 
 public class AdminClientApplication extends JFrame{
 	/** GUI application maintains reference to Model for ease of navigation. */
@@ -102,6 +102,10 @@ public class AdminClientApplication extends JFrame{
 	public int n;
 	
 
+	/**
+	 *
+	 * @param model the admin client application model
+	 */
 
 	
 	public AdminClientApplication(final AdminClientModel model) {
@@ -278,8 +282,9 @@ public class AdminClientApplication extends JFrame{
 		model.addRow(info);
 		return PlayerList;
 	}
-	
-	/** get the selected gameID. */
+
+	/** Get game id from server.*/
+
 	public String getGameID(){
 		String game_idS = null;
         int[] selectedRow = gamelist.getSelectedRows();
@@ -287,15 +292,19 @@ public class AdminClientApplication extends JFrame{
         game_idS = (String) gamelist.getValueAt(selectedRow[0], selectedColumns[0]);
 		return game_idS;
 	}
-	
-	/** add the connection info to the connection text box area. */
+
+	/** Get game contant from the server.*/
+
 	public String getContant(){
 		String game_contant = txtConnection.getText();
 		return game_contant;
 	}
-	
-	/** process the input board content letters string into a 2d array. */
-	// convert content string(comma separate) into a 2d object array for Jtable to display
+
+	/**
+	 * Convert content string(comma separate) into a 2d object array for Jtable to display
+	 * @param alphabets the alphabets from game table
+	 * @return words
+	 */
 	public Object[][] stringTo2D(String alphabets){
 		String[] letters = alphabets.split(",");
 		n=(int) Math.sqrt(letters.length);
@@ -310,9 +319,7 @@ public class AdminClientApplication extends JFrame{
 		return alpha; 
 	}
 	
-	// set the Jtable first row index. i.e. 1 2 3 4.....
-	
-	/** set the board row index, it will increasing when board growing. */
+	/** set the Jtable first row index. i.e. 1 2 3 4.....*/
 	public String[] setColIndex(Object[][] alphabets){
 		int col=alphabets.length;
 		String[] colIndex = new String[col];
@@ -324,7 +331,7 @@ public class AdminClientApplication extends JFrame{
 		return colIndex;
 	}
 	
-	
+
 	/** set the board content. */
 	public JTable setContent(String Content){
 		Object[][] data = stringTo2D(Content);
@@ -333,7 +340,7 @@ public class AdminClientApplication extends JFrame{
 
 		scrollBoard.setViewportView(TableBoard);
 		TableBoard.setRowHeight(40);
-		
+
 		TableBoard.setCellSelectionEnabled(true);
 		TableBoard.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		//set the header center alignment
@@ -416,8 +423,8 @@ public class AdminClientApplication extends JFrame{
 			ColorMap[B_r-1][B_c-1][4]=Color.YELLOW;
 		}
 	}
-	
-	
+
+
 	/** set the border color for each player's view window and player list. */
 	public void setBoardColor(){
 		TableCellRenderer tcr = new ColorTableCellRenderer(); 
@@ -425,10 +432,10 @@ public class AdminClientApplication extends JFrame{
 		
 		TableCellRenderer tcr1 = new ColorPlayerListCellRenderer();
 		PlayerList.setDefaultRenderer(Object.class, tcr1);
-		
+
 //		TableCellRenderer tcr2 = new ColorTableBonusRenderer();
 //		TableBoard.setDefaultRenderer(Object.class,tcr2);
-		
+
 	}
 	/** Generate the color array. */
 	//create a random color array
@@ -460,9 +467,15 @@ public class AdminClientApplication extends JFrame{
 	/** the header Renderer. */
 	
 	// Center class
+	/** Center class */
 	private static class HeaderRenderer implements TableCellRenderer {
 
 	    DefaultTableCellRenderer renderer;
+
+		/**
+		 * Render deader in game table.
+		 * @param table game table
+		 */
 
 	    public HeaderRenderer(JTable table) {
 	        renderer = (DefaultTableCellRenderer)
@@ -470,11 +483,26 @@ public class AdminClientApplication extends JFrame{
 	        renderer.setHorizontalAlignment(JLabel.CENTER);
 	    }
 
+		/**
+		 * This get the table component from the server.
+		 * @param table table in the game.
+		 * @param value object value in the table
+		 * @param isSelected
+		 * @param hasFocus
+		 * @param row table row
+		 * @param col table column
+		 * @return component from the server
+		 */
+
 	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int col) {
 	        return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 	    }
 	}
-	
+
+	/**
+	 * This is the class for board cell renderer.
+	 */
+
 //	cell render for highlight the each client view window
 	
 	/** the board color table Renderer. */
@@ -488,8 +516,18 @@ public class AdminClientApplication extends JFrame{
 		int r;
 		int c;
 		int lineWidth=5;
-		
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+
+        /**
+         * This get the table component from the server.
+         * @param table table in the game.
+         * @param value object value in the table
+         * @param isSelected if value is selected.
+         * @param hasFocus boolean
+         * @param row table row
+         * @param column table column
+         * @return component from the server
+         */
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
 //			if(ColorMap[row][column]!=null){ 
 //				super.setHorizontalAlignment(JLabel.CENTER);
@@ -502,8 +540,8 @@ public class AdminClientApplication extends JFrame{
 //			}
 			r=row;
 			c=column;
-//			if(ColorMap[r][c][0]!=null | ColorMap[r][c][1]!=null | ColorMap[r][c][2]!=null | ColorMap[r][c][3]!=null){ 
-			if(ColorMap[r][c]!=null){ 
+//			if(ColorMap[r][c][0]!=null | ColorMap[r][c][1]!=null | ColorMap[r][c][2]!=null | ColorMap[r][c][3]!=null){
+			if(ColorMap[r][c]!=null){
 				super.setHorizontalAlignment(JLabel.CENTER);
 				if (ColorMap[r][c][0]!=null){
 					north=true;
@@ -568,8 +606,8 @@ public class AdminClientApplication extends JFrame{
 				west=false;
 			}
 			if(background){
-				g2.setColor(Color.BLACK); 
-				g2.setStroke(stroke); 
+				g2.setColor(Color.BLACK);
+				g2.setStroke(stroke);
 				g2.drawOval(2,2,36,36);
 				g2.drawOval(5,5,30,30);
 //				setBackground(Color.YELLOW);
@@ -580,11 +618,11 @@ public class AdminClientApplication extends JFrame{
 	}
 	
 //	private class ColorTableBonusRenderer extends DefaultTableCellRenderer {
-//		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
+//		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();
 //
-//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 //
-//			if(ColorMap[row][column][4]!=null){ 
+//			if(ColorMap[row][column][4]!=null){
 //				setBackground(Color.YELLOW);
 //				return super.getTableCellRendererComponent(table, value, isSelected,hasFocus, row, column);
 //			}
@@ -593,7 +631,7 @@ public class AdminClientApplication extends JFrame{
 //			}
 //		}
 //	}
-	
+
 	/** the player list color Renderer. */
 	private class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
 		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
