@@ -10,6 +10,7 @@ import java.util.Iterator;
  * The table of words
  *
  * @author George Heineman
+ * @author francisco
  */
 public class WordTable {
     /**
@@ -18,14 +19,19 @@ public class WordTable {
     static Hashtable<String, Boolean> table;
 
     /**
+     * The Letter frequency.
+     */
+    static LetterFrequency letterFrequency;
+
+    /**
      * Default word table.
      */
-    public static final String wordTable = "WordTable.sort";
+    private static final String wordTable = "WordTable.sort";
 
     /**
      * The constant resourcesFolder.
      */
-    public static final String resourcesFolder = "com/wordsweeper/service";
+    private static final String resourcesFolder = "com/wordsweeper/service";
 
     /**
      * Load up word table. Note that there may be superfluous spaces throughout for formatting
@@ -35,6 +41,7 @@ public class WordTable {
      */
     public static void loadWordTable() throws IOException {
         table = new Hashtable<>();
+        letterFrequency = new LetterFrequency();
 
         ClassLoader classLoader = WordTable.class.getClassLoader();
         String resourcePath = resourcesFolder.replace("/", getPathDelim()) + getPathDelim() + wordTable;
@@ -46,7 +53,10 @@ public class WordTable {
             String word = it.next();
             word = word.trim();
             table.put(word, Boolean.TRUE);
+            letterFrequency.feedWord(word);
         }
+
+        letterFrequency.build();
     }
 
     /**
@@ -56,6 +66,20 @@ public class WordTable {
      * @return <code>true</code> if a word in the table; <code>false</code> otherwise.
      */
     public static boolean isWord(String s) {
+        if (!ensureInitialized()) {
+            return false;
+        }
+
+        s = s.toLowerCase();
+        return table.containsKey(s);
+    }
+
+    /**
+     * Ensure table is initialized
+     *
+     * @return true if initialized, false otherwise
+     */
+    private static boolean ensureInitialized() {
         if (table == null) {
             try {
                 synchronized (WordTable.class) {
@@ -68,9 +92,18 @@ public class WordTable {
                 return false;
             }
         }
+        return true;
+    }
 
-        s = s.toLowerCase();
-        return table.containsKey(s);
+    /**
+     * Return the letter by the frequency range
+     *
+     * @param value the value between 0 and 1
+     * @return the character in the frequency
+     */
+    public static char getLetterByFrequency(double value) {
+        ensureInitialized();
+        return letterFrequency.getCharacter(value);
     }
 
     /**
