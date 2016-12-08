@@ -1,6 +1,7 @@
 package com.wordsweeper.service.controller;
 
 import com.wordsweeper.service.model.Game;
+import com.wordsweeper.service.model.Location;
 import com.wordsweeper.service.model.Player;
 import com.wordsweeper.service.model.RequestError;
 import com.wordsweeper.service.repository.GameDao;
@@ -49,6 +50,9 @@ public class GameControllerTest {
     	res = gameCont.lock(games.get(0).getUniqueId(), "testPlayer1");
     	assertEquals(res.getStatusInfo(), Response.Status.OK);
     	
+    	res = gameCont.lock(games.get(0).getUniqueId(), "testPlayer1");
+    	assertEquals(res.getStatusInfo(), Response.Status.FORBIDDEN);
+    	
     	res = gameCont.join(games.get(0).getUniqueId(), "testPlayer3", "password");
     	assertEquals(res.getStatusInfo(), Response.Status.FORBIDDEN);
     	
@@ -89,7 +93,13 @@ public class GameControllerTest {
     	res = gameCont.findWord(games.get(0).getUniqueId()+1, "testPlayer1", "yes", "11|22|33");
     	assertEquals(res.getStatusInfo(), Response.Status.NOT_FOUND);
     	
-    	res = gameCont.findWord(games.get(0).getUniqueId(), "testPlayer1", "yes", "11|22|33");
+    	Location loc = games.get(0).getPlayer("testPlayer1").getOffset();
+    	String locStr1 = String.valueOf(loc.getColumn()+1)+String.valueOf(loc.getRow()+1);
+    	String locStr2 = String.valueOf(loc.getColumn()+1)+String.valueOf(loc.getRow()+2);
+    	String locStr3 = String.valueOf(loc.getColumn()+1)+String.valueOf(loc.getRow()+3);
+    	System.out.println(locStr1+ "||" + locStr2 + "||" + locStr3);
+    	
+    	res = gameCont.findWord(games.get(0).getUniqueId(), "testPlayer1", "yes", locStr1+ "|" + locStr2 + "|" + locStr3);
     	assertEquals(res.getStatusInfo(), Response.Status.NOT_FOUND);
     	
     }

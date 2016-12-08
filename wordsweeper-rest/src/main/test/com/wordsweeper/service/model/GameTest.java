@@ -30,8 +30,10 @@ public class GameTest {
         
         game2.addPlayer("testPlayer2", "password");
         Location temp = game2.getPlayer("testPlayer2").offset;
+        game2.getPlayer("testPlayer2").setScore(5);
+        assertEquals(5, game2.getPlayer("testPlayer2").getScore());
         game2.reset();
-        assertFalse(temp.equals(game2.getPlayer("testPlayer2").offset));
+        assertEquals(0, game2.getPlayer("testPlayer2").getScore());
         
         
         assertFalse(game2.isLocked());

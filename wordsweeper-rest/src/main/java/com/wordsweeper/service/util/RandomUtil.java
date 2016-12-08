@@ -26,7 +26,7 @@ public class RandomUtil {
     static {
         SecureRandom sha1Random;
         try {
-            SecureRandom nativeRandom = SecureRandom.getInstance("NativePRNGNonBlocking"); // assuming Unix
+            SecureRandom nativeRandom = SecureRandom.getInstance("SHA1PRNG"); // assuming Unix
             byte[] seed = nativeRandom.generateSeed(55); // NIST SP800-90A suggests 440 bits for SHA1 seed
             sha1Random = SecureRandom.getInstance("SHA1PRNG");
             sha1Random.setSeed(seed);
