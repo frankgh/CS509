@@ -14,7 +14,6 @@ public class WordTableTest {
 	@Test
 	public void constructor() throws Exception {
 		WordTable wordTable = new WordTable();
-		assertNull(wordTable.table);
 		assertTrue(wordTable.isWord("yes")); // also calls loadWordTable since table is null
 		assertEquals(wordTable.table.size(), 160232);
 		assertTrue(wordTable.isWord("yes"));
