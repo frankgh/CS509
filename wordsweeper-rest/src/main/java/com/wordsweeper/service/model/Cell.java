@@ -14,11 +14,6 @@ import javax.persistence.*;
 public class Cell {
 
     /**
-     * The constant MAX_CELL_MULTIPLIER.
-     */
-    public static final int MAX_CELL_MULTIPLIER = 10;
-
-    /**
      * The Id.
      */
     @Id
