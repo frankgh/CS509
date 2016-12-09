@@ -1,14 +1,14 @@
 package com.wordsweeper.adminclient;
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
-import com.wordsweeper.adminclient.controller.AdminClinetMessageHandler;
+import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
 import com.wordsweeper.adminclient.ServerAccess;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import xml.Message;
 
 /**
  * Launch Admin Client for the WordSweeper game
- * 
+ *
  * @author Ye
  *
  */
@@ -16,7 +16,10 @@ public class AdminClientLauncher {
 
 	// If requested by ClientLauncher (pass in '-server' as argument).
     public static final String serverHost = "cs509.frankgh.com";
-    
+
+    /**
+     * If requested by ClientLauncher (pass in '-server' as argument).
+     */
     public static void main(String[] args) throws Exception {
     	
     	if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-admin-client/wordsweeper.xsd")) {
@@ -32,7 +35,7 @@ public class AdminClientLauncher {
         AdminClientModel model = new AdminClientModel();
         AdminClientApplication app = new AdminClientApplication(model);
         ServerAccess sa = new ServerAccess(host, 11425);
-        if (!sa.connect(new AdminClinetMessageHandler(app))) {
+        if (!sa.connect(new AdminClientMessageHandler(app))) {
             System.out.println("Unable to connect to server (" + host + "). Exiting.");
             System.exit(0);
         }

@@ -12,10 +12,6 @@ import java.security.SecureRandom;
  */
 public class RandomUtil {
     /**
-     * The constant alphabet.
-     */
-    final static String alphabet = "AAABBCCDDEEEFFGGHHIIIJJKKLLMMNNOOOPPQQRRSSTTUUUVVWWXXYYZZ";
-    /**
      * The constant random.
      */
     final static SecureRandom random;
@@ -46,7 +42,7 @@ public class RandomUtil {
      * @return a random character from the alphabet
      */
     public static char getRandomCharacter() {
-        return alphabet.charAt(nextInt(alphabet.length()));
+        return WordTable.getLetterByFrequency(random.nextDouble());
     }
 
     /**

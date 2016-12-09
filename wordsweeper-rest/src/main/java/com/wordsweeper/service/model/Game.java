@@ -270,15 +270,6 @@ public class Game {
     }
 
     /**
-     * Resets the scores of all players in the game
-     */
-    public void resetPlayersScores() {
-        for (Player player : playerList) {
-            player.setScore(0);
-        }
-    }
-
-    /**
      * Randomizes the location of a player
      *
      * @param player the player
@@ -519,7 +510,13 @@ public class Game {
 
         return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
-
+    
+    /**
+     * Returns the score that is associated with the detected letter
+     * 
+     * @param char c
+     * @return associated int score
+     */
     int calcLetterScore(char c){
 		int Pi = (int) c;
 		if(Pi > 90)
