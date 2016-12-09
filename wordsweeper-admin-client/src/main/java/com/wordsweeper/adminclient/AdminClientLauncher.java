@@ -8,7 +8,7 @@ import xml.Message;
 
 /**
  * Launch Admin Client for the WordSweeper game
- * 
+ *
  * @author Ye
  *
  */
@@ -16,7 +16,10 @@ public class AdminClientLauncher {
 
 	// If requested by ClientLauncher (pass in '-server' as argument).
     public static final String serverHost = "cs509.frankgh.com";
-    
+
+    /**
+     * If requested by ClientLauncher (pass in '-server' as argument).
+     */
     public static void main(String[] args) throws Exception {
     	
     	if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-admin-client/wordsweeper.xsd")) {

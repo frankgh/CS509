@@ -4,15 +4,27 @@ package com.wordsweeper.adminclient.controller;
 import xml.Message;
 import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
+
+/**
+ * This is the class that check game status.
+ */
 public class CheckGameController {
 	AdminClientApplication app;
 	AdminClientModel model;
-	
+
+    /**
+     *
+     * @param app the admin client application.
+     * @param model the admin client model.
+     */
 	public CheckGameController(AdminClientApplication app, AdminClientModel model) {
 		this.app = app;
 		this.model = model;
 	}
 
+    /**
+     * Create a GUI for admin client board application.
+     */
 	
 //	for GUI test, use the join the game request
 	public void process() {

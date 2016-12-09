@@ -11,9 +11,14 @@ import java.security.SecureRandom;
  * @author francisco
  */
 public class RandomUtil {
-    final static String alphabet = "AAABCDEEEFGHIIIJKLMNOOOPQRSTUUUVWXYZ";
+    /**
+     * The constant random.
+     */
     final static SecureRandom random;
 
+    /**
+     * Initialize the SecureRandom Generator
+     */
     static {
         SecureRandom sha1Random;
         try {
@@ -37,18 +42,15 @@ public class RandomUtil {
      * @return a random character from the alphabet
      */
     public static char getRandomCharacter() {
-        return alphabet.charAt(nextInt(alphabet.length()));
+        return WordTable.getLetterByFrequency(random.nextDouble());
     }
 
     /**
      * Returns a pseudorandom, uniformly distributed {@code int} value
      * between 0 (inclusive) and the specified value (exclusive)
      *
-     * @param n the bound on the random number to be returned.  Must be
-     *          positive.
-     * @return the next pseudorandom, uniformly distributed {@code int}
-     * value between {@code 0} (inclusive) and {@code n} (exclusive)
-     * from this random number generator's sequence
+     * @param n the bound on the random number to be returned.  Must be          positive.
+     * @return the next pseudorandom, uniformly distributed {@code int} value between {@code 0} (inclusive) and {@code n} (exclusive) from this random number generator's sequence
      */
     public static int nextInt(int n) {
         return random.nextInt(n);

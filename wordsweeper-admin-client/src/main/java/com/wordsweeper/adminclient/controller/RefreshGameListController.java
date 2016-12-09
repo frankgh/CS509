@@ -4,10 +4,19 @@ import xml.Message;
 import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
+/**
+ * This class introduces refreshing game list controller.
+ */
 public class RefreshGameListController {
 	
 	AdminClientApplication app;
 	AdminClientModel model;
+
+    /**
+     *
+     * @param app admin client application.
+     * @param model admin client model.
+     */
 	
 	public RefreshGameListController(AdminClientApplication app, AdminClientModel model) {
 		this.app = app;

@@ -46,7 +46,7 @@ public class Game {
     /**
      * The Player ratio multiplier.
      */
-    static final double PLAYER_RATIO_MULTIPLIER = 16.0;
+    static final double PLAYER_RATIO_MULTIPLIER = 40.0;
 
     /**
      * Point allocation for alphabet's letters
@@ -60,7 +60,7 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id; /* The internal id of the game */
+    int id; /* The internal id of the game - for db purposes only */
 
     /**
      * The Board.
@@ -266,15 +266,6 @@ public class Game {
         for (Player player : playerList) {
             player.setScore(0);
             randomizePlayerLocation(player);
-        }
-    }
-
-    /**
-     * Resets the scores of all players in the game
-     */
-    public void resetPlayersScores() {
-        for (Player player : playerList) {
-            player.setScore(0);
         }
     }
 
@@ -519,7 +510,13 @@ public class Game {
 
         return StringUtils.equalsIgnoreCase(word.word, sb.toString());
     }
-
+    
+    /**
+     * Returns the score that is associated with the detected letter
+     * 
+     * @param char c
+     * @return associated int score
+     */
     int calcLetterScore(char c){
 		int Pi = (int) c;
 		if(Pi > 90)
