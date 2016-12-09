@@ -61,7 +61,7 @@ public class Util {
      * @param s The value where parsing is being performed on.
      * @return The parsed Integer if valid or null if invalid.
      */
-    private static Integer parseInteger(String s) {
+    static Integer parseInteger(String s) {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
