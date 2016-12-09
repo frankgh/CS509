@@ -32,7 +32,13 @@ public class StringFileIterator implements Iterator<String> {
     public StringFileIterator(File f) throws FileNotFoundException {
         sc = new Scanner(f);
     }
-
+    
+    /**
+     * Empty constructor used for testing purposes. 
+     */
+    public StringFileIterator() {
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.util.Iterator#hasNext()
