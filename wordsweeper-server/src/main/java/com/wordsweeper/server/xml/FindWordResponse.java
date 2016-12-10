@@ -28,6 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "findWordResponse")
+/**
+ * Server send find word response,
+ */
 public class FindWordResponse {
 
     /**

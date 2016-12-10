@@ -5,8 +5,7 @@ import com.wordsweeper.service.util.RandomUtil;
 import javax.persistence.*;
 
 /**
- * Created by francisco on 9/13/16.
- *
+ * This class specifying cells' attributes in a board.
  * @author francisco
  */
 @Entity

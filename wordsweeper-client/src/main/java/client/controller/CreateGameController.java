@@ -6,7 +6,7 @@ import client.view.Application;
 import xml.Message;
 
 /**
- * This class implemented a controller that creating game: WordSweeper
+ * Controller on server, receiving creating game request from the player.
  */
 public class CreateGameController {
 

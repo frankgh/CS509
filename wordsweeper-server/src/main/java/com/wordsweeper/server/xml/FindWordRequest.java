@@ -36,6 +36,9 @@ import javax.xml.bind.annotation.XmlType;
     "cell"
 })
 @XmlRootElement(name = "findWordRequest")
+/**
+ * Get finding word request from the client.
+ */
 public class FindWordRequest {
 
     /**

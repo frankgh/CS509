@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+/**
+ * This class testing the gmae board.
+ */
+
 public class BoardTest {
 	@Test
 	public void constructor() throws Exception {

@@ -26,6 +26,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "exitGameResponse")
+/**
+ * Server in charge of relaying exitGame requests to send it to the joining player.
+ */
 public class ExitGameResponse {
 
     /**

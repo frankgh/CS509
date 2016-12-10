@@ -6,7 +6,7 @@ import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
 /**
- * This is the class that check game status.
+ * This is the controller for admin client that can check game status timely..
  */
 public class CheckGameController {
 	AdminClientApplication app;

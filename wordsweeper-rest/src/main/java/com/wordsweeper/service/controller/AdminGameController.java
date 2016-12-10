@@ -13,8 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by francisco on 10/4/16.
- *
+ * This is admin controller for WordSweeper game.
  * @author francisco
  */
 @Path("/admin/game")

@@ -58,7 +58,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 /**
- * This is the class for admin client application.
+ * This is the user interface of WordSweeper board game for admin client.
  */
 
 public class AdminClientApplication extends JFrame{
@@ -417,7 +417,8 @@ public class AdminClientApplication extends JFrame{
 			}
 		}
 	}
-	
+
+	/** set the bonus points for the board. */
 	public void setBonus(int B_r, int B_c){
 		if (ColorMap[B_r-1][B_c-1][4]==null){
 			ColorMap[B_r-1][B_c-1][4]=Color.YELLOW;

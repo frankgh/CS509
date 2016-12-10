@@ -4,7 +4,7 @@ import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
 /**
- * This class implement admin-client handler.
+ * This class specified admin client handler.
  */
 
 public class AdminClientMessageHandler implements IMessageHandler{
@@ -21,8 +21,7 @@ public class AdminClientMessageHandler implements IMessageHandler{
 	}
 
 	/**
-	 *
-	 * @param response the respond from the adminclient message controller..
+	 * @param response the respond from the admin client message controller..
 	 */
 	public void process(Message response) {
 		String type = response.contents.getFirstChild().getLocalName();
