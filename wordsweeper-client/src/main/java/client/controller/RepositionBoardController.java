@@ -5,7 +5,7 @@ import client.view.Application;
 import xml.Message;
 
 /**
- * This class specifies reposition the game board
+ * This class specifies reposition the game board controller.
  * @author Francisco
  */
 public class RepositionBoardController {

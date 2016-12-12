@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Server replied find word respond.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

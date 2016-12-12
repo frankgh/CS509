@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Testing the game controller for admin client.
+ * Testing the game controller from admin client side.
  * @author George
  */
 public class AdminGameControllerTest {

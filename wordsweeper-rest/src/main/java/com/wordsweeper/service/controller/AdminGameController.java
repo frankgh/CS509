@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * This is admin controller for WordSweeper game.
+ * This class tells game controller from admin client side..
  * @author francisco
  */
 @Path("/admin/game")

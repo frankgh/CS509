@@ -7,8 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by francisco on 10/12/16.
- *
+ * The word sweeper service factory.
  * @author Francisco Guerrero afguerrerohernan@wpi.edu
  */
 public class WordSweeperServiceFactory {

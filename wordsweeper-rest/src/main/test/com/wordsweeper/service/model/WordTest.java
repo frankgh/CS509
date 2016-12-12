@@ -7,7 +7,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 /**
- * Created by francisco on 10/4/16.
+ * This class tested words.
+ * @author francisco
  */
 public class WordTest {
     @Test

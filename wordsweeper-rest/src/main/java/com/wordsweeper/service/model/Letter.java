@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by francisco on 9/13/16.
+ * Class letter from WordSweeper board game.
  *
  * @author francisco
  */

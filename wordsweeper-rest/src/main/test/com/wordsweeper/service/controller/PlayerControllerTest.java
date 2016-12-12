@@ -18,7 +18,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by george on 11/11/16.
+ * Testing player controller
+ * @author george.
  */
 public class PlayerControllerTest {
     @Test

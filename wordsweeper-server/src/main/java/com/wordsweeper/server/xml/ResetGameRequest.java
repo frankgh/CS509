@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Reset game request for server.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

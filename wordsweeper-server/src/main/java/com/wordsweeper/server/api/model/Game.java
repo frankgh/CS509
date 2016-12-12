@@ -3,7 +3,7 @@ package com.wordsweeper.server.api.model;
 import java.util.List;
 
 /**
- * Created by francisco on 10/12/16.
+ * Model for the WordSweeper Game
  *
  * @author francisco
  */

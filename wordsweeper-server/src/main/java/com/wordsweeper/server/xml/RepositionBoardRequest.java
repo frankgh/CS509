@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * This class introduced reposition board request received from server side.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

@@ -11,7 +11,9 @@ import xml.Message;
 
 
 /**
- * This is a class that listing response from game.
+ * Controller on admin-client in charge of relaying list game response
+ * to the API, and packaging up the API response to send to all
+ * the players joined to the game.
  */
 public class ListGamesResponseController {
 	

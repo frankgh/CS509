@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 /**
  * Model class for the WordSweeper Player
- *
  * @author francisco
  */
 @Entity
