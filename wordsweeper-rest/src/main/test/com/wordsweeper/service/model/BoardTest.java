@@ -3,7 +3,7 @@ package com.wordsweeper.service.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 

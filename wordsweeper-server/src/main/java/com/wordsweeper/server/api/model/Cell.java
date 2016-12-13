@@ -19,4 +19,8 @@ public class Cell {
     public String printCharacter() {
         return letter.printCharacter();
     }
+    
+    public void setLetter(Letter letter){
+    	this.letter = letter;
+    }
 }

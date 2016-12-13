@@ -15,6 +15,7 @@ public class PlayerTest {
     	Player p = new Player();
     	p.name = "test";
     	p.score = 100;
+    	p.latestScore = 10;
     	Location l = new Location();
     	l.column = 3;
     	l.row = 4;
@@ -24,6 +25,7 @@ public class PlayerTest {
     	assertEquals(3, p.getOffset().getColumn());
     	assertEquals(4, p.getOffset().getRow());
     	assertEquals(100, p.getScore());
+    	assertEquals(10, p.getLatestScore());
     }
 
 }

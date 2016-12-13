@@ -199,7 +199,7 @@ public class ServerThread extends Thread implements ClientState {
      *
      * @return the request
      */
-    private Request getRequest() {
+    public Request getRequest() {
         String xml = getXmlStringFromReader(fromClient, "</request>");
 
         if (xml == null) {

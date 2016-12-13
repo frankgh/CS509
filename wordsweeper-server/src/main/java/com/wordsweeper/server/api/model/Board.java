@@ -28,7 +28,25 @@ public class Board {
      * The Bonus cell location.
      */
     Location bonusCellLocation;
-
+    
+    /**
+     * 
+     * Constructor
+     */
+    public Board(int columns, int rows, List<Cell> cellList, Location bonus) {
+        this.columns = columns;
+        this.rows = rows;
+        this.cellList = cellList;
+        this.bonusCellLocation = bonus;
+    }
+    
+    /**
+     * 
+     * Empty constructor
+     */
+    public Board() {
+    }
+    
     /**
      * Gets columns.
      *

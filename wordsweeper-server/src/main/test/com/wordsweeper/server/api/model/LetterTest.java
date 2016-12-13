@@ -14,7 +14,7 @@ public class LetterTest {
         let.character = "Q";
 
         assertEquals("Qu", let.printCharacter());
-
+        assertEquals("Q", let.getCharacter());
     }
 
 }

@@ -118,7 +118,7 @@ public class FindWordRequestController extends ControllerChain {
      * @param cellList the list of cells
      * @return the string representing the cell positions
      */
-    private String getCellPositions(List<Cell> cellList) {
+    protected String getCellPositions(List<Cell> cellList) {
         StringBuilder sb = new StringBuilder(256);
         final Iterator<Cell> iterator = cellList.iterator();
         final Cell first = iterator.next();
