@@ -83,9 +83,9 @@ public class AdminClientApplication extends JFrame{
 	JScrollPane PlayerOutput;
 	JScrollPane scrollBoard;
 	
-	JTable TableBoard;
+	public JTable TableBoard;
 	JTable PlayerList;
-	JTable gamelist;
+	public JTable gamelist;
 
 	JLabel lblGameIdList;
 	JLabel lblBoardInfo;
@@ -506,7 +506,7 @@ public class AdminClientApplication extends JFrame{
 //	cell render for highlight the each client view window
 	
 	/** the board color table Renderer. */
-	private class ColorTableCellRenderer extends DefaultTableCellRenderer {
+	public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
 		boolean north=false;
 		boolean south=false;
