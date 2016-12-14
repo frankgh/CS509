@@ -10,4 +10,8 @@ import org.junit.Test;
 public class CellTest {
 	@Test
 	public void constructor() throws Exception {
-	}}
+		Cell cell = new Cell();
+		Letter l1 = cell.getLetter();
+		assertFalse(l1 == null);
+		}
+}

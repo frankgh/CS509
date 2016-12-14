@@ -36,6 +36,8 @@ public class PlayerTest {
         location1.setColumn(4);
         assertFalse(player.isLocationInPlayerBoard(location1));
         
+        player.setLatestScore(5);
+        assertEquals(5, player.getLatestScore());
     }	
 
 }

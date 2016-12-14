@@ -11,7 +11,8 @@ import static org.junit.Assert.assertEquals;
 public class LetterTest {
     @Test
     public void constructor() throws Exception {
-        Letter letter = new Letter('A');
+        Letter letter = new Letter();
+        letter.character = 'A';
         assertEquals("A", letter.printCharacter());
 
         letter = new Letter('Q');
