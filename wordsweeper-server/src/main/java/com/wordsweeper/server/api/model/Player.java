@@ -26,7 +26,26 @@ public class Player {
      * The score of the latest word
      */
     int latestScore;
+    
+     /**
+     * 
+     * Constructor
+     */
+    public Player(String name, Location offset, int score, int latestScore) {
+        this.name = name;
+        this.offset = offset;
+        this.score = score;
+        this.latestScore = latestScore;
+    }
+    
+    /**
+    * 
+    * Empty constructor
+    */
+   public Player() {
 
+   }
+   
     /**
      * Gets name.
      *

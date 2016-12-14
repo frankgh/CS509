@@ -13,7 +13,7 @@ public class StringFileIteratorTest {
 
 	@Test
 	public void constructor() throws Exception {
-		File f  = new File("src/main/java/com/wordsweeper/service/util/test.txt");
+		File f  = new File("src/main/test/com/wordsweeper/service/util/test.txt");
 		StringFileIterator iterator1 = new StringFileIterator(f);
 		
 		StringFileIterator iterator = new StringFileIterator();
