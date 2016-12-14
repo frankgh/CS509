@@ -34,4 +34,8 @@ public class Letter {
         }
         return character;
     }
+    
+    public void setCharacter(String character){
+    	this.character = character;
+    }
 }

@@ -58,9 +58,9 @@ public class AdminClientApplication extends JFrame{
 	JScrollPane PlayerOutput;
 	JScrollPane scrollBoard;
 	
-	JTable TableBoard;
+	public JTable TableBoard;
 	JTable PlayerList;
-	JTable gamelist;
+	public JTable gamelist;
 
 	JLabel lblGameIdList;
 	JLabel lblBoardInfo;
@@ -446,7 +446,7 @@ public class AdminClientApplication extends JFrame{
 	}
 	
 	/** the board color table Renderer. */
-	private class ColorTableCellRenderer extends DefaultTableCellRenderer {
+	public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
 		boolean north=false;
 		boolean south=false;
@@ -538,7 +538,7 @@ public class AdminClientApplication extends JFrame{
 	}
 	
 	/** the player list color Renderer. */
-	private class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
+	public class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
 		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
 		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 

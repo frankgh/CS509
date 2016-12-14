@@ -1,6 +1,6 @@
 package com.wordsweeper.adminclient;
 
-import server.ServerThread;
+//import server.ServerThread;
 import xml.Message;
 import xml.Parser;
 

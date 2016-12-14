@@ -1,5 +1,7 @@
 package com.wordsweeper.server.api.model;
 
+import java.util.List;
+
 /**
  * The type Location.
  *
@@ -16,7 +18,23 @@ public class Location {
      * The Row.
      */
     int row;
-
+    
+    /**
+     * 
+     * Constructor
+     */
+    public Location(int column, int row) {
+        this.column = column;
+        this.row = row;
+    }
+    
+    /**
+     * 
+     * Empty constructor
+     */
+    public Location() {
+    }
+    
     /**
      * Gets column.
      *
