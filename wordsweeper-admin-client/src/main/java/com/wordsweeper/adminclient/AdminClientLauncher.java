@@ -13,7 +13,7 @@ import xml.Message;
  */
 public class AdminClientLauncher {
 
-	// If requested by ClientLauncher (pass in '-server' as argument).
+	/** If requested by ClientLauncher (pass in '-server' as argument). */
     public static final String serverHost = "cs509.frankgh.com";
 
     /**

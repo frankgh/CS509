@@ -12,7 +12,7 @@ public class AdminClientMessageHandler implements IMessageHandler{
 	AdminClientApplication app;
 
 	/**
-	 *
+	 * The admin client message handler.
 	 * @param app the user interface application.
 	 */
 

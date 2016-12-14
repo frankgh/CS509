@@ -75,7 +75,11 @@ public class AdminClientApplication extends JFrame{
 	public Color[] randomColor;
 	
 	public int n;
-	
+
+	/**
+	 * The admin client application model
+	 * @param model model for the admin client.
+	 */
 	
 	public AdminClientApplication(final AdminClientModel model) {
 		this.model = model;
