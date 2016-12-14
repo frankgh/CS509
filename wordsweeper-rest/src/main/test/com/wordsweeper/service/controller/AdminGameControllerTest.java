@@ -11,6 +11,9 @@ import org.junit.Test;
  */
 public class AdminGameControllerTest {
     @Test
+    /**
+     * Admin game controller test.
+     */
     public void constructor() throws Exception {
     	AdminGameController adminCon = new AdminGameController(); 
     	Response res = adminCon.list();

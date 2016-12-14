@@ -20,6 +20,10 @@ public class APIBoardTest {
 	}
 
 	@Test
+
+	/**
+	 * API board testing.
+	 */
 	public void constructor() throws Exception {
 		Board b = new Board ();
 	    b.columns = 7 ;
