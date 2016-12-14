@@ -1,6 +1,5 @@
 package com.wordsweeper.adminclient.controller;
 
-import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import com.wordsweeper.core.xml.Request;
 
@@ -12,15 +11,12 @@ import java.util.UUID;
 public class RefreshGameListController {
 
     AdminClientApplication app;
-    AdminClientModel model;
 
     /**
-     * @param app   admin client application.
-     * @param model admin client model.
+     * @param app admin client application.
      */
-    public RefreshGameListController(AdminClientApplication app, AdminClientModel model) {
+    public RefreshGameListController(AdminClientApplication app) {
         this.app = app;
-        this.model = model;
     }
 
     /**

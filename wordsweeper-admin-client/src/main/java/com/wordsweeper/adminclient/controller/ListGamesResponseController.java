@@ -1,6 +1,5 @@
 package com.wordsweeper.adminclient.controller;
 
-import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import com.wordsweeper.core.xml.GameBrief;
 import com.wordsweeper.core.xml.Response;
@@ -13,15 +12,12 @@ import com.wordsweeper.core.xml.Response;
 public class ListGamesResponseController {
 
     public AdminClientApplication app;
-    public AdminClientModel model;
 
     /**
      * @param a the admin client application
-     * @param m the admin client model
      */
-    public ListGamesResponseController(AdminClientApplication a, AdminClientModel m) {
+    public ListGamesResponseController(AdminClientApplication a) {
         this.app = a;
-        this.model = m;
     }
 
     /**

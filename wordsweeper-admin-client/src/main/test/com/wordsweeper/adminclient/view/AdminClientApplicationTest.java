@@ -2,7 +2,6 @@ package com.wordsweeper.adminclient.view;
 
 import com.wordsweeper.adminclient.ServerAccess;
 import com.wordsweeper.adminclient.controller.ListGamesResponseController;
-import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication.ColorPlayerListCellRenderer;
 import com.wordsweeper.adminclient.view.AdminClientApplication.ColorTableCellRenderer;
 import com.wordsweeper.core.util.JAXBUtil;
@@ -24,9 +23,8 @@ import static org.junit.Assert.*;
 public class AdminClientApplicationTest {
     @Test
     public void constructor() throws Exception {
-        AdminClientModel model = new AdminClientModel();
 
-        AdminClientApplication app = new AdminClientApplication(model);
+        AdminClientApplication app = new AdminClientApplication();
         assertTrue(app.getLayout().toString().length() > 1);
         assertEquals(app.btnRefreshGame.getText(), "Refresh");
         assertEquals(app.btnCheckGame.getText(), "Check");
@@ -38,7 +36,7 @@ public class AdminClientApplicationTest {
 
         JTextArea testText = app.getConnection();
         assertEquals(testText.getText(), "");
-        ListGamesResponseController resCont = new ListGamesResponseController(app, model);
+        ListGamesResponseController resCont = new ListGamesResponseController(app);
         assertEquals(app.gamelist.getRowCount(), 0);
         BufferedReader bufferedReader = org.mockito.Mockito.mock(BufferedReader.class);
         String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response id=\"cc667680-81d6-4d5b-a23b-3edc2cdf866f\" success=\"true\" version=\"1.0\"><listGamesResponse><gameBrief gameId=\"nc99qujnk002q3akkhpde400s0\" players=\"1\"/><gameBrief gameId=\"n65agh23rrusg7lcc4rm80fuj\" players=\"1\"/></listGamesResponse></response>";

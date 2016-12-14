@@ -27,13 +27,13 @@ public class AdminClientMessageHandler implements IMessageHandler {
 
         if (response.getListGamesResponse() != null) {
             /** process the ListGameResponseController to handel the game list info */
-            new ListGamesResponseController(app, app.model).process(response);
+            new ListGamesResponseController(app).process(response);
         } else if (response.getConnectResponse() != null) {
             /** connect response is to show the connection info */
             app.getConnection().setText(response.toString());
         } else if (response.getBoardResponse() != null) {
             /** board response is to display the board content and relevant players' info */
-            new BoardResponseController(app, app.model).process(response);
+            new BoardResponseController(app).process(response);
         }
 
         System.out.println(response);

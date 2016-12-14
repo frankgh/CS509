@@ -1,6 +1,5 @@
 package com.wordsweeper.adminclient.controller;
 
-import com.wordsweeper.adminclient.model.AdminClientModel;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import com.wordsweeper.core.xml.Request;
 import com.wordsweeper.core.xml.ShowGameStateRequest;
@@ -12,15 +11,12 @@ import java.util.UUID;
  */
 public class CheckGameController {
     AdminClientApplication app;
-    AdminClientModel model;
 
     /**
-     * @param app   the admin client application.
-     * @param model the admin client model.
+     * @param app the admin client application.
      */
-    public CheckGameController(AdminClientApplication app, AdminClientModel model) {
+    public CheckGameController(AdminClientApplication app) {
         this.app = app;
-        this.model = model;
     }
 
     /**
