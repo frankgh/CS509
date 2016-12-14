@@ -1,18 +1,9 @@
 package com.wordsweeper.service.controller;
 
-import com.wordsweeper.service.repository.GameDao;
-import com.wordsweeper.service.repository.GameDaoImpl;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import javax.ws.rs.core.Response;
+import org.junit.Test;
 
 /**
  * Testing the game controller from admin client side.
