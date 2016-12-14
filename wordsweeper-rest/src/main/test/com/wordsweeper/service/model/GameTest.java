@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+/**
+ * The test case for game.
+ */
+
 public class GameTest {
 	@Test
 	public void constructor() throws Exception {

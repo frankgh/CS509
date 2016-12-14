@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * Server get createGame requests from the player.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

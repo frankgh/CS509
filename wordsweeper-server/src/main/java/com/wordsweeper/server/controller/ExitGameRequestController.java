@@ -17,6 +17,7 @@ import retrofit2.Call;
  * the game is up-to-date
  *
  * @author francisco
+ *
  */
 public class ExitGameRequestController extends ControllerChain implements IShutdownHandler {
 

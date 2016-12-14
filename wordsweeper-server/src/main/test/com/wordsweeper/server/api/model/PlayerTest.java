@@ -7,7 +7,8 @@ import com.wordsweeper.server.api.model.Letter;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by george on 11/11/16.
+ * This class test player's status in a game.
+ * @author george.
  */
 public class PlayerTest {
     @Test

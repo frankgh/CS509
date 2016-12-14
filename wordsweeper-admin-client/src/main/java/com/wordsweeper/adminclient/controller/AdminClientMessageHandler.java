@@ -4,7 +4,7 @@ import com.wordsweeper.adminclient.IMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 
 /**
- * This class implement admin-client handler.
+ * This class specified admin client handler.
  */
 
 public class AdminClientMessageHandler implements IMessageHandler{
@@ -21,26 +21,23 @@ public class AdminClientMessageHandler implements IMessageHandler{
 	}
 
 	/**
-	 *
-	 * @param response the respond from the adminclient message controller..
+	 * @param response the respond from the admin client message controller..
 	 */
 	public void process(Message response) {
 		String type = response.contents.getFirstChild().getLocalName();
 
-		// process each response that comes in with its own controller.
+		// list game response is to display the existing game IDs and player numbers.
 		if (type.equals ("listGamesResponse")) {
-			// What happens now that we are connected?
+			/** process the ListGameResponseController to handel the game list info */
 			new ListGamesResponseController(app, app.model).process(response);
+		/** connect response is to show the connection info */
 		} else if (type.equals ("connectResponse")) {
 			app.getConnection().setText(response.toString());
+		/** board response is to display the board content and relevant players' info */
 		} else if (type.equals("boardResponse")) {
-//			???????????????????????
 			new BoardResponseController(app, app.model).process(response);
 		}
 		
-
-		// only here to show messages as they are received by the client
-		// this isn't needed.
 		System.out.println(response);
 	}
 

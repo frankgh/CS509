@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * This class tells the respond from server for locking game.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

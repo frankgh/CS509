@@ -1,8 +1,7 @@
 package com.wordsweeper.server.api.model;
 
 /**
- * Created by francisco on 11/8/16.
- *
+ * This class specifies API errors.
  * @author francisco
  */
 public class APIError {

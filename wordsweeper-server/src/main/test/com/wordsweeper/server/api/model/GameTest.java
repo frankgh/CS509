@@ -9,7 +9,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 /**
- * Created by george on 11/11/16.
+ * The test case for game.
+ * @author george
  */
 public class GameTest {
     @Test

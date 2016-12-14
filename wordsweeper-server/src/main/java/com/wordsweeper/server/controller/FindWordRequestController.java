@@ -13,7 +13,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by francisco on 11/10/16.
+ * @authot Francisco
+ * Controller on server in charge of relaying finding word requests
+ * to the API, and packaging up the API response to send to all
+ * the players.
  */
 public class FindWordRequestController extends ControllerChain {
 

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * This class specified requests received by the server for lock game.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

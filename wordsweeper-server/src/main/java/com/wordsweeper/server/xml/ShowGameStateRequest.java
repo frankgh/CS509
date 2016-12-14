@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Request for showing game to server side.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

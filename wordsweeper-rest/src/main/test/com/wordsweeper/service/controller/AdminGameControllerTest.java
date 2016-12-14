@@ -6,7 +6,8 @@ import javax.ws.rs.core.Response;
 import org.junit.Test;
 
 /**
- * Created by george on 11/11/16.
+ * Testing the game controller from admin client side.
+ * @author George
  */
 public class AdminGameControllerTest {
     @Test

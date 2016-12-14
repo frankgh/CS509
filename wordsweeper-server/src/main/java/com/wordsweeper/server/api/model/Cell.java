@@ -1,7 +1,7 @@
 package com.wordsweeper.server.api.model;
 
 /**
- * Created by francisco on 10/12/16.
+ * This class specifying cells' attributes in a board.
  *
  * @author francisco
  */

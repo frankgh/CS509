@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * The player's attributes from the server side.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

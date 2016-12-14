@@ -3,8 +3,6 @@ package com.wordsweeper.service.model;
 /**
  * Wrapper class for Request Errors
  * <p>
- * Created by francisco on 11/7/16.
- *
  * @author francisco
  */
 public class RequestError {

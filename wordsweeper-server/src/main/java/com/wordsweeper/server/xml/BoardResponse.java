@@ -31,12 +31,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * This class will return board response from client.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "player"
 })
 @XmlRootElement(name = "boardResponse")
+
 public class BoardResponse {
 
     /**

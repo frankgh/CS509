@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by francisco on 10/4/16.
+ * This class test letter in board.
+ * @author francisco
  */
 public class LetterTest {
     @Test

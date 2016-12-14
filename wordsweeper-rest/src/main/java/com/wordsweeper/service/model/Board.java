@@ -9,12 +9,12 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by francisco on 9/13/16.
- *
+ * This class introduced board attributes.
  * @author francisco
  */
 @Entity
 @Table(name = "board")
+
 public class Board {
 
     /**
