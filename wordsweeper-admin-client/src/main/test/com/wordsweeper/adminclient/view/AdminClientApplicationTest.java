@@ -5,14 +5,19 @@ import com.wordsweeper.adminclient.controller.ListGamesResponseController;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.wordsweeper.adminclient.model.AdminClientModel;
+import com.wordsweeper.adminclient.view.AdminClientApplication.ColorPlayerListCellRenderer;
 import com.wordsweeper.adminclient.view.AdminClientApplication.ColorTableCellRenderer;
 
 import xml.Message;
@@ -45,7 +50,7 @@ public class AdminClientApplicationTest {
 		BufferedReader bufferedReader = org.mockito.Mockito.mock(BufferedReader.class);
 		String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response id=\"cc667680-81d6-4d5b-a23b-3edc2cdf866f\" success=\"true\" version=\"1.0\"><listGamesResponse><gameBrief gameId=\"nc99qujnk002q3akkhpde400s0\" players=\"1\"/><gameBrief gameId=\"n65agh23rrusg7lcc4rm80fuj\" players=\"1\"/></listGamesResponse></response>";
 		if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-admin-client/wordsweeper.xsd")) {
-        System.exit(0);
+        return; 
 		}
 		Mockito.when(bufferedReader.readLine()).thenReturn(input).thenReturn(input);
 		Message testMessage = Parser.extractResponse(bufferedReader);
@@ -70,5 +75,38 @@ public class AdminClientApplicationTest {
 		assertTrue(colRend.north);
 		assertTrue(colRend.east);
 		
+		colRend.south = true;
+		colRend.east = true;
+		colRend.north = true;
+		colRend.west = true;
+		colRend.background = true;
+		BufferedImage bi = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = bi.createGraphics();
+		app.setSize(50,50);
+		colRend.paintComponent((Graphics)g2);
+		
+		colRend.south = false;
+		colRend.east = false;
+		colRend.north = false;
+		colRend.west = false;
+		colRend.background = false;
+		colRend.paintComponent((Graphics)g2);
+				
+		g2.dispose();
+
+		JTable testTable = new JTable();
+		app.ColorMap[0][0][0] = Color.YELLOW;
+		app.ColorMap[0][0][1] = Color.YELLOW;
+		app.ColorMap[0][0][2] = Color.YELLOW;
+		app.ColorMap[0][0][3] = Color.YELLOW;
+		app.ColorMap[0][0][4] = Color.YELLOW;
+		colRend.getTableCellRendererComponent(testTable, blue, false, false, 0, 0);
+		colRend.getTableCellRendererComponent(testTable, blue, true, false, 0, 0);
+		colRend.getTableCellRendererComponent(null, blue, false, true, 1, 1);
+		colRend.getTableCellRendererComponent(null, blue, true, true, 1, 1);
+		
+		ColorPlayerListCellRenderer cellRend = app.new ColorPlayerListCellRenderer();
+		cellRend.getTableCellRendererComponent(testTable, blue, false, false, 0, 0);
+		colRend.getTableCellRendererComponent(null, blue, false, true, 1, 1);
 	}
 }

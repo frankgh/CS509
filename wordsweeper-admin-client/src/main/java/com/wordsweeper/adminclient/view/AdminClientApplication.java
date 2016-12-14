@@ -633,7 +633,7 @@ public class AdminClientApplication extends JFrame{
 //	}
 
 	/** the player list color Renderer. */
-	private class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
+	public class ColorPlayerListCellRenderer extends DefaultTableCellRenderer {
 		DefaultTableCellRenderer renderer=new DefaultTableCellRenderer(); 
 		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
