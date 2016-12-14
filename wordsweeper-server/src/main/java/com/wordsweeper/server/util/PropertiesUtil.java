@@ -41,7 +41,7 @@ public class PropertiesUtil {
      *
      * @return the path delim
      */
-    private static String getPathDelim() {
+    protected static String getPathDelim() {
         return System.getProperty("file.separator", "/");
     }
 

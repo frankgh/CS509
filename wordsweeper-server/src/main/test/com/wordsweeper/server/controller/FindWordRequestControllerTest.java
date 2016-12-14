@@ -1,89 +1,96 @@
 package com.wordsweeper.server.controller;
 
-import com.wordsweeper.server.Server;
+import com.wordsweeper.core.xml.FindWordRequest;
+import com.wordsweeper.core.xml.Request;
+import com.wordsweeper.core.xml.Response;
 import com.wordsweeper.server.ServerThread;
-import com.wordsweeper.server.api.model.Board;
-import com.wordsweeper.server.api.model.Cell;
-import com.wordsweeper.server.api.model.Game;
-import com.wordsweeper.server.api.model.Letter;
-import com.wordsweeper.server.api.model.Location;
-import com.wordsweeper.server.api.model.Player;
-import com.wordsweeper.server.model.ClientState;
+import com.wordsweeper.server.api.model.*;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.xml.CreateGameRequest;
-import com.wordsweeper.server.xml.ExitGameRequest;
-import com.wordsweeper.server.xml.FindWordRequest;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
+import static org.junit.Assert.*;
 
 
 public class FindWordRequestControllerTest {
 
-	@Test
-	public void constructor() throws Exception {
-		ServerModel mockServer = Mockito.mock(ServerModel.class);
-		FindWordRequestController findCon = new FindWordRequestController(mockServer);
-		
-		ServerThread client = Mockito.mock(ServerThread.class);
-		Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
-		Request testReq = Mockito.mock(Request.class);
-		
-		assertFalse(findCon.canProcess(null));
-		
-		Mockito.when(testReq.getFindWordRequest()).thenReturn(null);
-		assertFalse(findCon.canProcess(testReq));
-		
-		Mockito.when(testReq.getFindWordRequest()).thenReturn(new FindWordRequest());
-		assertTrue(findCon.canProcess(testReq));
-		
-		findCon.setOnSuccessResponse(testReq,new Response());
-		findCon.setOnFailureResponse(testReq, new Response());
-		Mockito.when(testReq.getFindWordRequest()).thenReturn(null);
-		
-		
+    @Test
+    public void constructor() throws Exception {
+        ServerModel mockServer = Mockito.mock(ServerModel.class);
+        FindWordRequestController findCon = new FindWordRequestController(mockServer);
 
-		Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
+        ServerThread client = Mockito.mock(ServerThread.class);
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
+        Request testReq = Mockito.mock(Request.class);
+
+        assertFalse(findCon.canProcess(null));
+
+        Mockito.when(testReq.getFindWordRequest()).thenReturn(null);
+        assertFalse(findCon.canProcess(testReq));
+
+        Mockito.when(testReq.getFindWordRequest()).thenReturn(new FindWordRequest());
+        assertTrue(findCon.canProcess(testReq));
+
+        findCon.setOnSuccessResponse(testReq, new Response());
+        findCon.setOnFailureResponse(testReq, new Response());
+        Mockito.when(testReq.getFindWordRequest()).thenReturn(null);
+
+
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
 //		assertTrue(findCon.process(client, testReq) instanceof Response);
-		
-		Game game = new Game();
-		ArrayList<Cell> cellList = new ArrayList<Cell>();
-		Cell cell = new Cell();
-		Letter letter = new Letter();
-		letter.setCharacter("a");
-		cell.setLetter(letter);
-		for(int i = 0; i < 50; i++) 
-			cellList.add(cell);
-		Location loc = new Location(1,1);
-		Board board = new Board(4, 4, (List)cellList, loc);
-		game.setBoard(board);
-		game.setUniqueId("testID");
-		game.setPassword("123");
-		game.setManagingPlayerName("testPlayer");
-		ArrayList<Player> playerList = new ArrayList<Player>();
-		Player testPlayer = new Player("testPlayer", loc , 50, 10);
-		playerList.add(testPlayer);
-		game.setPlayerList(playerList);
-		Mockito.when(mockServer.exitGame(client)).thenReturn(false);
-		assertTrue(findCon.execute(client, testReq, game) instanceof Response);
-		
-		com.wordsweeper.server.xml.Cell testCell = new com.wordsweeper.server.xml.Cell(); 
-		testCell.setPosition("1,1");
-		ArrayList<com.wordsweeper.server.xml.Cell> cells = new ArrayList<com.wordsweeper.server.xml.Cell>();
-		cells.add(testCell);
-		com.wordsweeper.server.xml.Cell testCell2 = new com.wordsweeper.server.xml.Cell(); 
-		testCell2.setPosition("2,2");
-		cells.add(testCell2);
-		assertEquals(findCon.getCellPositions(cells), "1,1|2,2");
 
-	}		
+        Game game = new Game();
+        ArrayList<Cell> cellList = new ArrayList<Cell>();
+        Cell cell = new Cell();
+        Letter letter = new Letter();
+        letter.setCharacter("a");
+        cell.setLetter(letter);
+        for (int i = 0; i < 50; i++)
+            cellList.add(cell);
+        Location loc = new Location(1, 1);
+        Board board = new Board(4, 4, (List) cellList, loc);
+        game.setBoard(board);
+        game.setUniqueId("testID");
+        game.setPassword("123");
+        game.setManagingPlayerName("testPlayer");
+        ArrayList<Player> playerList = new ArrayList<Player>();
+        Player testPlayer = new Player("testPlayer", loc, 50, 10);
+        playerList.add(testPlayer);
+        game.setPlayerList(playerList);
+        Mockito.when(mockServer.exitGame(client)).thenReturn(false);
+        assertTrue(findCon.execute(client, testReq, game) instanceof Response);
+
+        com.wordsweeper.core.xml.Cell testCell = new com.wordsweeper.core.xml.Cell();
+        testCell.setPosition("1,1");
+        ArrayList<com.wordsweeper.core.xml.Cell> cells = new ArrayList<com.wordsweeper.core.xml.Cell>();
+        cells.add(testCell);
+        com.wordsweeper.core.xml.Cell testCell2 = new com.wordsweeper.core.xml.Cell();
+        testCell2.setPosition("2,2");
+        cells.add(testCell2);
+        assertEquals(findCon.getCellPositions(cells), "1,1|2,2");
+        
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
+        FindWordRequest findReq = Mockito.mock(FindWordRequest.class);
+        Mockito.when(testReq.getFindWordRequest()).thenReturn(findReq);
+        Mockito.when(findReq.getName()).thenReturn("testName");
+        Mockito.when(findReq.getGameId()).thenReturn("testID");        
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(true);
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        Mockito.when(findReq.getCell()).thenReturn(null);
+        Mockito.when(findReq.getWord()).thenReturn("test");
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        
+        cells = new ArrayList<com.wordsweeper.core.xml.Cell>();
+        Mockito.when(findReq.getCell()).thenReturn(cells);
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+
+    }
 }

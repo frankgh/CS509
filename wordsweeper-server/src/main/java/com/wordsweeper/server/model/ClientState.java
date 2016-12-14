@@ -1,6 +1,6 @@
 package com.wordsweeper.server.model;
 
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.core.xml.Response;
 
 /**
  * Server-side interface to per-client state. Exposes only the methods of ServerThread that are safe.

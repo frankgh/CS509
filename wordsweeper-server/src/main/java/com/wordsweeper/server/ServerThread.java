@@ -1,18 +1,17 @@
 package com.wordsweeper.server;
 
+import com.wordsweeper.core.util.JAXBUtil;
+import com.wordsweeper.core.xml.ObjectFactory;
+import com.wordsweeper.core.xml.Request;
+import com.wordsweeper.core.xml.Response;
 import com.wordsweeper.server.controller.IProtocolHandler;
 import com.wordsweeper.server.controller.IShutdownHandler;
 import com.wordsweeper.server.model.ClientState;
-import com.wordsweeper.server.util.JAXBUtil;
-import com.wordsweeper.server.xml.ObjectFactory;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -175,14 +174,7 @@ public class ServerThread extends Thread implements ClientState {
      * @return true on success, otherwise false
      */
     public boolean sendMessage(Response response) {
-        StringWriter sw = new StringWriter();
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(response.getClass());
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.marshal(response, sw);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        String messageString = JAXBUtil.serialize(response);
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
@@ -190,7 +182,7 @@ public class ServerThread extends Thread implements ClientState {
         System.out.println(dateFormat.format(cal.getTime()) + " Sending Response to " + id +
                 " at " + getRemoteSocketAddress() + ":");
         JAXBUtil.prettyPrintln(response);
-        toClient.println(sw.toString());
+        toClient.println(messageString);
         return !toClient.checkError();
     }
 
@@ -200,54 +192,13 @@ public class ServerThread extends Thread implements ClientState {
      * @return the request
      */
     public Request getRequest() {
-        String xml = getXmlStringFromReader(fromClient, "</request>");
+        String xml = JAXBUtil.getXmlStringFromReader(fromClient, "</request>");
 
         if (xml == null) {
             return null;
         }
 
-        try {
-            JAXBContext requestContext = JAXBContext.newInstance(Request.class);
-            Unmarshaller unmarshaller = requestContext.createUnmarshaller();
-            StringReader reader = new StringReader(xml);
-            return (Request) unmarshaller.unmarshal(reader);
-        } catch (JAXBException e) {
-            System.err.println("Unable to deserialize request from Remote Client.");
-            return null;
-        }
-    }
-
-    /**
-     * Extract the XML message and construct String object based on
-     * the terminator string (either "</request>" or "</response>"). Returns
-     * null if communication is interrupted in any way.
-     *
-     * @param in         the in
-     * @param terminator the terminator
-     * @return the xml string from reader
-     */
-    static String getXmlStringFromReader(BufferedReader in, String terminator) {
-        try {
-            String line = in.readLine();
-            if (line == null) {
-                return null;
-            }
-            // The default capacity of 16 is way too low
-            StringBuilder buf = new StringBuilder(1024);
-            buf.append(line);
-
-            while (!terminator.equals(buf.substring(buf.length() - terminator.length()))) {
-                line = in.readLine();
-                if (line == null) {
-                    return null;
-                }
-                buf.append(line);
-            }
-
-            return buf.toString();
-        } catch (IOException ioe) {
-            return null;
-        }
+        return JAXBUtil.deserialize(xml, Request.class);
     }
 
     /**

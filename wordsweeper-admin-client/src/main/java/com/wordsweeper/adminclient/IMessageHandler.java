@@ -1,12 +1,12 @@
 package com.wordsweeper.adminclient;
 
-import xml.Message;
+import com.wordsweeper.core.xml.Response;
 
 /**
  * This interface create message handler.
  */
 public interface IMessageHandler {
-	
-	void process(Message response);
+
+    void process(Response response);
 
 }

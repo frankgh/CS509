@@ -5,10 +5,10 @@ import com.wordsweeper.server.api.model.APIError;
 import com.wordsweeper.server.api.model.Cell;
 import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.api.model.Player;
-import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.GameBrief;
-import com.wordsweeper.server.xml.ListGamesResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
+import com.wordsweeper.core.xml.BoardResponse;
+import com.wordsweeper.core.xml.GameBrief;
+import com.wordsweeper.core.xml.ListGamesResponse;
+import com.wordsweeper.core.xml.ObjectFactory;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Converter;
@@ -52,7 +52,7 @@ public class MappingUtil {
         }
 
         for (Player player : source.getPlayerList()) {
-            com.wordsweeper.server.xml.Player mPlayer = new com.wordsweeper.server.xml.Player();
+            com.wordsweeper.core.xml.Player mPlayer = new com.wordsweeper.core.xml.Player();
             List<String> word = new ArrayList<String>();
 
             for (int j = player.getOffset().getRow(); j < player.getOffset().getRow() + 4; j++) {

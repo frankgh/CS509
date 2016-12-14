@@ -1,44 +1,39 @@
 package com.wordsweeper.adminclient;
 
-import com.wordsweeper.adminclient.model.AdminClientModel;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
-import com.wordsweeper.adminclient.ServerAccess;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
-import xml.Message;
+import com.wordsweeper.core.xml.Request;
+
+import java.util.UUID;
 
 /**
  * Launch as an admin client for the WordSweeper game
- * @author Ye
  *
+ * @author Ye
  */
 public class AdminClientLauncher {
 
-	// If requested by ClientLauncher (pass in '-server' as argument).
-    public static final String serverHost = "cs509.frankgh.com";
-
     /**
-     * If requested by ClientLauncher (pass in '-server' as argument).
+     * If requested by ClientLauncher (pass in '--host' and/or '--port' as argument).
      */
     public static void main(String[] args) throws Exception {
-    	
-    	if (!Message.configure("wordsweeper.xsd") && !Message.configure("wordsweeper-admin-client/wordsweeper.xsd")) {
-            System.exit(0);
+
+        AdminClientCommandOptions settings = new AdminClientCommandOptions();
+        try {
+            new JCommander(settings, args);
+        } catch (ParameterException e) {
+            System.exit(-1);
         }
 
-    	// select dedicated server with '-server' options
-        String host = "cs509.frankgh.com";
-        if (args.length > 0 && args[0].equals("-server")) {
-            host = serverHost;
-        }
-        
-        AdminClientModel model = new AdminClientModel();
-        AdminClientApplication app = new AdminClientApplication(model);
-        ServerAccess sa = new ServerAccess(host, 11425);
+        AdminClientApplication app = new AdminClientApplication();
+        ServerAccess sa = new ServerAccess(settings.getHost(), settings.getPort());
         if (!sa.connect(new AdminClientMessageHandler(app))) {
-            System.out.println("Unable to connect to server (" + host + "). Exiting.");
+            System.out.println("Unable to connect to server (" + settings.getHost() + ":" + settings.getPort() + "). Exiting.");
             System.exit(0);
         }
-        System.out.println("Connected to " + host);
+        System.out.println("Connected to " + settings.getHost() + ":" + settings.getPort());
 
 
         // Should we on the client ever need to communicate with the server, we need this ServerAccess
@@ -47,9 +42,11 @@ public class AdminClientLauncher {
 
         // send an introductory connect request now that we have created (but not made visible!)
         // the GUI
-        String xmlString = Message.requestHeader() + "<connectRequest/></request>";
-        Message m = new Message(xmlString);
-        sa.sendRequest(m);
+        Request request = new Request();
+        request.setId(UUID.randomUUID().toString());
+        request.setConnectRequest("");
+
+        sa.sendRequest(request);
 
         // at this point, we need to make app visible, otherwise we would terminate application
         app.setVisible(true);
