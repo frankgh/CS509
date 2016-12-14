@@ -4,10 +4,10 @@ import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.BoardResponse;
-import com.wordsweeper.server.xml.ObjectFactory;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.core.xml.BoardResponse;
+import com.wordsweeper.core.xml.ObjectFactory;
+import com.wordsweeper.core.xml.Request;
+import com.wordsweeper.core.xml.Response;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 

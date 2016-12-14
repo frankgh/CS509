@@ -5,7 +5,7 @@ import org.mockito.Mockito;
 
 import com.wordsweeper.server.controller.WordSweeperProtocolHandler;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.core.xml.Response;
 
 import static org.junit.Assert.*;
 

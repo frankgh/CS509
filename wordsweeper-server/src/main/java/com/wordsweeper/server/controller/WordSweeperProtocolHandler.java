@@ -3,9 +3,9 @@ package com.wordsweeper.server.controller;
 import com.wordsweeper.server.ServerThread;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
-import com.wordsweeper.server.util.JAXBUtil;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.core.util.JAXBUtil;
+import com.wordsweeper.core.xml.Request;
+import com.wordsweeper.core.xml.Response;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,14 +51,14 @@ public class WordSweeperProtocolHandler implements IProtocolHandler, IShutdownHa
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.core.xml.Request)
 */
     public boolean canProcess(Request request) {
         return false;
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.core.xml.Request)
 */
     public Response process(ClientState state, Request request) {
 

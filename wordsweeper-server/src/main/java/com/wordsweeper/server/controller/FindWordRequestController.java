@@ -5,7 +5,7 @@ import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.*;
+import com.wordsweeper.core.xml.*;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 
@@ -30,14 +30,14 @@ public class FindWordRequestController extends ControllerChain {
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.core.xml.Request)
 	 */
     public boolean canProcess(Request request) {
         return request != null && request.getFindWordRequest() != null;
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.core.xml.Request)
 	 */
     public Response process(ClientState client, Request request) {
 
@@ -66,7 +66,7 @@ public class FindWordRequestController extends ControllerChain {
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.core.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
         /* Map the game to a BoardResponse object */
@@ -97,14 +97,14 @@ public class FindWordRequestController extends ControllerChain {
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.core.xml.Request, com.wordsweeper.core.xml.Response)
 	 */
     protected boolean setOnSuccessResponse(Request request, Response response) {
         return false; // DO NOTHING
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.core.xml.Request, com.wordsweeper.core.xml.Response)
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
         FindWordResponse findWordResponse = getObjectFactory().createFindWordResponse();

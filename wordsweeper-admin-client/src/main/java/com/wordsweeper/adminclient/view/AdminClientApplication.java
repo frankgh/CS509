@@ -343,7 +343,6 @@ public class AdminClientApplication extends JFrame{
 	  }
 	
 	/** add the color to the color matrix which is the same size as the board*/
-	/** add the border color to the ColorMap array. */
 	public void addcolor(int r, int c, int indexColor){
 		//set the row and column index -1
 		r=r-1;

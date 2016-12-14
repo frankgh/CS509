@@ -5,9 +5,9 @@ import com.wordsweeper.server.api.model.Game;
 import com.wordsweeper.server.model.ClientState;
 import com.wordsweeper.server.model.ServerModel;
 import com.wordsweeper.server.util.MappingUtil;
-import com.wordsweeper.server.xml.ListGamesResponse;
-import com.wordsweeper.server.xml.Request;
-import com.wordsweeper.server.xml.Response;
+import com.wordsweeper.core.xml.ListGamesResponse;
+import com.wordsweeper.core.xml.Request;
+import com.wordsweeper.core.xml.Response;
 import retrofit2.Call;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class ListGamesRequestController extends ControllerChain implements IAdmi
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#canProcess(com.wordsweeper.core.xml.Request)
 	 */
 
     /**
@@ -50,7 +50,7 @@ public class ListGamesRequestController extends ControllerChain implements IAdmi
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request)
+     * @see com.wordsweeper.server.controller.IProtocolHandler#process(com.wordsweeper.server.model.ClientState, com.wordsweeper.core.xml.Request)
 	 */
 
     /**
@@ -87,21 +87,21 @@ public class ListGamesRequestController extends ControllerChain implements IAdmi
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.server.xml.Request, com.wordsweeper.server.api.model.Game)
+     * @see com.wordsweeper.server.controller.ControllerChain#execute(com.wordsweeper.server.model.ClientState, com.wordsweeper.core.xml.Request, com.wordsweeper.server.api.model.Game)
 	 */
     protected Response execute(ClientState client, Request request, Game game) {
         return null;
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnSuccessResponse(com.wordsweeper.core.xml.Request, com.wordsweeper.core.xml.Response)
 	 */
     protected boolean setOnSuccessResponse(Request request, Response response) {
         return false; // DO NOTHING
     }
 
     /* (non-Javadoc)
-     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
+     * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.core.xml.Request, com.wordsweeper.core.xml.Response)
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
     } // DO NOTHING

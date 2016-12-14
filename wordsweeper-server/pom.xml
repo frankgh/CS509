@@ -131,6 +131,13 @@
             <version>3.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.wordsweeper.core</groupId>
+            <artifactId>wordsweeper-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor -->
         <dependency>
@@ -138,6 +145,7 @@
             <artifactId>logging-interceptor</artifactId>
             <version>3.4.1</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
