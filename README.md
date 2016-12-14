@@ -124,3 +124,29 @@ mvn clean install -Dwordsweeper.rest.server.url=http://yoururl.com:yourportnumbe
 ```
 java -cp wordsweeper-server-1.0-SNAPSHOT.jar com.wordsweeper.server.ServerLauncher
 ```
+
+### Running With Options
+
+```
+java -cp wordsweeper-server-1.0-SNAPSHOT.jar com.wordsweeper.server.ServerLauncher --port 12345
+```
+
+## wordsweeper-admin-client Project
+
+The Administrative client connects to the wordsweeper-server and allows us to view the status of the server.
+
+### Building
+
+```
+mvn clean install
+```
+
+### Running
+```
+java -cp wordsweeper-admin-client-1.0-SNAPSHOT.jar com.wordsweeper.adminclient.AdminClientLauncher
+```
+
+### Running With Options
+```
+java -cp wordsweeper-admin-client-1.0-SNAPSHOT.jar com.wordsweeper.adminclient.AdminClientLauncher --host yourhost --port 12345
+```
