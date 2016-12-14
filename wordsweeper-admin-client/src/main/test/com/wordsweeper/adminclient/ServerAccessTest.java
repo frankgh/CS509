@@ -27,6 +27,8 @@ import static org.junit.Assert.*;
 
 /**
  * This is the class for admin client model.
+ *
+ * @author george
  */
 public class ServerAccessTest {
     @Test

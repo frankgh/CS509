@@ -121,26 +121,6 @@ public class ServerAccess {
     }
 
     /**
-     * Send request to the server and register controller to process response
-     * only on success. Return success or failure of operation.
-     * <p>
-     * The given IController object is going to be responsible for processing the
-     * response that comes back.
-     */
-//    public synchronized boolean sendRequest(IController c, Request m) {
-//        if (!isActive) {
-//            return false;
-//        }
-//
-//        toServer.println(m);
-//        boolean success = !toServer.checkError();
-//        if (success) {
-//            pending.put(m.getId(), new Tuple(c, m, m.getId()));
-//        }
-//        return success;
-//    }
-
-    /**
      * Useful method for extracting key information in error messages.
      */
     public String toString() {

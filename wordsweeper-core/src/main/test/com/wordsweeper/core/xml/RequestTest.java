@@ -13,7 +13,7 @@ public class RequestTest {
         Request req = new Request();
 
         assertNull(req.getConnectRequest());
-        Object conReq = new Object();
+        Object conReq = "";
         req.setConnectRequest(conReq);
         assertEquals(req.getConnectRequest(), conReq);
 
@@ -45,7 +45,7 @@ public class RequestTest {
         req.setRepositionBoardRequest(reposReq);
         assertEquals(req.getRepositionBoardRequest(), reposReq);
 
-        Object getReq = new Object();
+        Object getReq = "";
         req.setListGamesRequest(getReq);
         assertEquals(req.getListGamesRequest(), getReq);
 

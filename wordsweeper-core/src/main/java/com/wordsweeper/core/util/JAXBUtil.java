@@ -34,7 +34,7 @@ public class JAXBUtil {
      * @param object the object
      * @return the XML string representation of the object
      */
-    public static String serialize(Object object) {
+    public static <T> String serialize(T object) {
         return serialize(object, false);
     }
 
@@ -45,7 +45,7 @@ public class JAXBUtil {
      * @param formatted true if formatted, false otherwise
      * @return* @return the XML string representation of the object
      */
-    public static String serialize(Object object, boolean formatted) {
+    public static <T> String serialize(T object, boolean formatted) {
         StringWriter sw = new StringWriter();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(object.getClass());
@@ -55,6 +55,8 @@ public class JAXBUtil {
             }
             jaxbMarshaller.marshal(object, sw);
         } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

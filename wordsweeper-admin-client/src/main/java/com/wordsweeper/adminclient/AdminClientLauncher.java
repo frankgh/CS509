@@ -1,5 +1,7 @@
 package com.wordsweeper.adminclient;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import com.wordsweeper.adminclient.controller.AdminClientMessageHandler;
 import com.wordsweeper.adminclient.view.AdminClientApplication;
 import com.wordsweeper.core.xml.Request;
@@ -13,27 +15,25 @@ import java.util.UUID;
  */
 public class AdminClientLauncher {
 
-    // If requested by ClientLauncher (pass in '-server' as argument).
-    public static final String serverHost = "cs509.frankgh.com";
-
     /**
-     * If requested by ClientLauncher (pass in '-server' as argument).
+     * If requested by ClientLauncher (pass in '--host' and/or '--port' as argument).
      */
     public static void main(String[] args) throws Exception {
 
-        // select dedicated server with '-server' options
-        String host = "localhost";
-        if (args.length > 0 && args[0].equals("-server")) {
-            host = serverHost;
+        AdminClientCommandOptions settings = new AdminClientCommandOptions();
+        try {
+            new JCommander(settings, args);
+        } catch (ParameterException e) {
+            System.exit(-1);
         }
 
         AdminClientApplication app = new AdminClientApplication();
-        ServerAccess sa = new ServerAccess(host, 11425);
+        ServerAccess sa = new ServerAccess(settings.getHost(), settings.getPort());
         if (!sa.connect(new AdminClientMessageHandler(app))) {
-            System.out.println("Unable to connect to server (" + host + "). Exiting.");
+            System.out.println("Unable to connect to server (" + settings.getHost() + ":" + settings.getPort() + "). Exiting.");
             System.exit(0);
         }
-        System.out.println("Connected to " + host);
+        System.out.println("Connected to " + settings.getHost() + ":" + settings.getPort());
 
 
         // Should we on the client ever need to communicate with the server, we need this ServerAccess
@@ -44,7 +44,7 @@ public class AdminClientLauncher {
         // the GUI
         Request request = new Request();
         request.setId(UUID.randomUUID().toString());
-        request.setConnectRequest(new Object());
+        request.setConnectRequest("");
 
         sa.sendRequest(request);
 

@@ -58,7 +58,7 @@ public class ServerThreadTest {
 		Mockito.doReturn(testReq).when(testThread).getRequest();
 		Mockito.when(testReq.getConnectRequest()).thenReturn(null);
 		testThread.run();
-		Mockito.when(testReq.getConnectRequest()).thenReturn(new Object());
+		Mockito.when(testReq.getConnectRequest()).thenReturn("");
 		Mockito.doReturn(false).when(testThread).sendMessage(null);
 		testThread.run();
 		ObjectFactory objectFactory = new ObjectFactory();

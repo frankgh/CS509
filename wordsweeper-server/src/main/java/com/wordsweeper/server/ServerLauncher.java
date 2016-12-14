@@ -1,6 +1,8 @@
 package com.wordsweeper.server;
 
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import com.wordsweeper.server.controller.*;
 import com.wordsweeper.server.model.ServerModel;
 
@@ -20,6 +22,13 @@ public class ServerLauncher {
      */
     public static void main(String[] args) {
 
+        ServerCommandOptions settings = new ServerCommandOptions();
+        try {
+            new JCommander(settings, args);
+        } catch (ParameterException e) {
+            System.exit(-1);
+        }
+
         // Server-side model contains everything you need on the server.
         ServerModel serverModel = new ServerModel();
 
@@ -38,7 +47,7 @@ public class ServerLauncher {
 
         // Start server and have ProtocolHandler be responsible for all XML messages.
         //Server server = new Server(new WordSweeperProtocolHandler(serverModel), 11425);
-        Server server = new Server(handler, 11425);
+        Server server = new Server(handler, settings.getPort());
 
         try {
             server.bind();
@@ -48,7 +57,7 @@ public class ServerLauncher {
         }
 
         // process all requests and exit.
-        System.out.println("Server awaiting client connections");
+        System.out.println("Server awaiting client connections on port " + settings.getPort());
         try {
             server.process();
             System.out.println("Server shutting down.");

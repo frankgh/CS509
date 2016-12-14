@@ -99,8 +99,15 @@ protocol. The wordsweeper-server project uses maven to build a jar file.
 - OkHttp
 
 ### Building
+The default build command will point the server to the localhost REST server
 ```
 mvn clean install
+```
+
+### Building for custom REST server
+To build with a custom server URL, use the following command, where yoururl.com is your own ip address or the domain name of your server; and yourportnumber is your tomcat port number
+```
+mvn clean install -Dwordsweeper.rest.server.url=http://yoururl.com:yourportnumber
 ```
 
 ### Running

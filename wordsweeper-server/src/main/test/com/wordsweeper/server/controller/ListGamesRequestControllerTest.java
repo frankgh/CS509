@@ -25,7 +25,7 @@ public class ListGamesRequestControllerTest {
         Mockito.when(testReq.getListGamesRequest()).thenReturn(null);
         assertFalse(listCon.canProcess(testReq));
 
-        Mockito.when(testReq.getListGamesRequest()).thenReturn(new Object());
+        Mockito.when(testReq.getListGamesRequest()).thenReturn("");
         assertTrue(listCon.canProcess(testReq));
 
         assertFalse(listCon.setOnSuccessResponse(testReq, new Response()));

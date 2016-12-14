@@ -25,7 +25,7 @@ public class RefreshGameListController {
     public void process() {
         Request request = new Request();
         request.setId(UUID.randomUUID().toString());
-        request.setListGamesRequest(new Object());
+        request.setListGamesRequest("");
 
         app.getServerAccess().sendRequest(request);
     }

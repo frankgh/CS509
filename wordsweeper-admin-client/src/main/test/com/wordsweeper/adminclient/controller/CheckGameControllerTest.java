@@ -12,6 +12,8 @@ import com.wordsweeper.core.xml.ListGamesResponse;
 import com.wordsweeper.core.xml.Response;
 /**
  * This is the class for admin client model.
+ *
+ * @author george
  */
 public class CheckGameControllerTest {
 	@Test
