@@ -71,6 +71,26 @@ public class FindWordRequestControllerTest {
         testCell2.setPosition("2,2");
         cells.add(testCell2);
         assertEquals(findCon.getCellPositions(cells), "1,1|2,2");
+        
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(false);
+        FindWordRequest findReq = Mockito.mock(FindWordRequest.class);
+        Mockito.when(testReq.getFindWordRequest()).thenReturn(findReq);
+        Mockito.when(findReq.getName()).thenReturn("testName");
+        Mockito.when(findReq.getGameId()).thenReturn("testID");        
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        Mockito.when(mockServer.isClientInGame(client)).thenReturn(true);
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        Mockito.when(findReq.getCell()).thenReturn(null);
+        Mockito.when(findReq.getWord()).thenReturn("test");
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
+        
+        cells = new ArrayList<com.wordsweeper.core.xml.Cell>();
+        Mockito.when(findReq.getCell()).thenReturn(cells);
+        assertTrue(findCon.process(client, testReq) instanceof Response);
+        
 
     }
 }
