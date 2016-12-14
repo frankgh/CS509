@@ -1,5 +1,15 @@
 # CS509 - Server WordSweeper
 
+## wordsweeper-core Project
+
+The wordsweeper-core project contains shared functionality between the wordsweeper-server project and the wordsweeper-admin-client project. Make sure to build this project before building the projects that depend on it.
+
+### Compilation
+
+```
+mvn clean install
+```
+
 ## wordsweeper-rest Project
 
 The wordsweeper-rest project is a RESTful service that provides the
@@ -55,7 +65,7 @@ Save it and restart Tomcat, now you should able to deploy using the maven comman
 To deploy the application in tomcat (Running in localhost port 8080),
 run the following command:
 ```
-mvn clean install tomcat7:deploy -Denv=local
+mvn clean install tomcat7:deploy -Denv=local -DskipTests -Dmaven.test.skip=true
 ```
 
 ### API
