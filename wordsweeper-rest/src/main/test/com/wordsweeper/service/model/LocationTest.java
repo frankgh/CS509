@@ -7,7 +7,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by francisco on 10/4/16.
+ * This class test location with row and column.
+ * @author francisco
  */
 public class LocationTest {
     @Test

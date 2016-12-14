@@ -23,10 +23,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * Server in charge of relaying exitGame requests to the API, and packaging up the API response to send it to the player.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "exitGameRequest")
+
 public class ExitGameRequest {
 
     /**

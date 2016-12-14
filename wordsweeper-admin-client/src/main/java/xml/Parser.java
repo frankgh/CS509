@@ -3,6 +3,9 @@ package xml;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+/**
+ * Class parser.
+ */
 public class Parser {
 
 	/** Common id across request/responses. */

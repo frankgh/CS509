@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * This class tells the join game request to server-side.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

@@ -32,8 +32,9 @@ import com.wordsweeper.adminclient.ServerAccess;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-
-
+/**
+ * This is the user interface of WordSweeper board game for admin client.
+ */
 
 
 public class AdminClientApplication extends JFrame{
@@ -380,6 +381,7 @@ public class AdminClientApplication extends JFrame{
 			}
 		}
 	}
+
 	/** set the board bonus location in the colormap array */
 	public void setBonus(int B_r, int B_c){
 		if (ColorMap[B_r-1][B_c-1][4]==null){

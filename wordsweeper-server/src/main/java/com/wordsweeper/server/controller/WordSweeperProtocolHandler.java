@@ -17,7 +17,6 @@ import java.util.Calendar;
  * WordSweeperProtocolHandler will also make sure that clients that disconnect
  * from the server are removed from the API and the local ServerModel state.
  * <p>
- * Created by francisco on 10/27/16.
  *
  * @author francisco
  */

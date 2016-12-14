@@ -30,12 +30,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Server in charge of relaying finding word requests.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "cell"
 })
 @XmlRootElement(name = "findWordRequest")
+/**
+ * Get finding word request from the client.
+ */
 public class FindWordRequest {
 
     /**

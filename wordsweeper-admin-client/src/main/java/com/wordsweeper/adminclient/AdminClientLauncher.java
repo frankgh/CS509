@@ -7,8 +7,7 @@ import com.wordsweeper.adminclient.view.AdminClientApplication;
 import xml.Message;
 
 /**
- * Launch Admin Client for the WordSweeper game
- *
+ * Launch as an admin client for the WordSweeper game
  * @author Ye
  *
  */

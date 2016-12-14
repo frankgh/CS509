@@ -9,7 +9,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 
 /**
- * Created by francisco on 10/4/16.
+ * This class tested words.
+ * @author francisco
  */
 public class WordTest {
 	@Test
