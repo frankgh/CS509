@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response;
 /**
  * The game controller
  * <p>
- * Created by francisco on 9/15/16.
  *
  * @author francisco
  */

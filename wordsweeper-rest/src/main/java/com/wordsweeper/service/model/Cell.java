@@ -5,18 +5,12 @@ import com.wordsweeper.service.util.RandomUtil;
 import javax.persistence.*;
 
 /**
- * Created by francisco on 9/13/16.
- *
+ * This class specifying cells' attributes in a board.
  * @author francisco
  */
 @Entity
 @Table(name = "cell")
 public class Cell {
-
-    /**
-     * The constant MAX_CELL_MULTIPLIER.
-     */
-    public static final int MAX_CELL_MULTIPLIER = 10;
 
     /**
      * The Id.

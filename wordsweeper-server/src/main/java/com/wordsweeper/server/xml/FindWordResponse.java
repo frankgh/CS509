@@ -24,10 +24,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Server replied find word respond.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "findWordResponse")
+/**
+ * Server send find word response,
+ */
 public class FindWordResponse {
 
     /**

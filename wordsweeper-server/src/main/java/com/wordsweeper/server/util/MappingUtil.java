@@ -20,14 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by francisco on 10/12/16.
+ * Map game to board response board response.
  *
  * @author francisco
  */
 public class MappingUtil {
 
     /**
-     * Map game to board response board response.
      *
      * @param source               the source
      * @param includeBoardContents whether to include the board contents

@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Player controller
+ * Model class for the WordSweeper Player
  *
  * @author francisco
  */

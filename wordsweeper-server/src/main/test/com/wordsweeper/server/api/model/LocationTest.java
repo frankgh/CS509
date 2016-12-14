@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by george on 11/11/16.
+ * This class test location with row and column.
+ * @author george
  */
 public class LocationTest {
     @Test

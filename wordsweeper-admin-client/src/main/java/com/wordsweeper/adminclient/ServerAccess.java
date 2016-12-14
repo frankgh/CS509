@@ -11,6 +11,24 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 
+/**
+ * Responsible for all communication to/from server.
+ * <p>
+ * To communicate with a remote server, construct a ServerAccess object (using
+ * the default port or one of your own specification) and invoke the
+ * {@link #connect(IMessageHandler)} method. Once connected, you can send a message
+ * request to the server through the {@link #sendRequest(Message)} message. All
+ * responses to these requests from the server are processed by a
+ * {@link IMessageHandler} object.
+ * <p>
+ * Should you want more control, then when sending a request, you can also register
+ * a {@link IController} object to specifically be given the response from the server
+ * to a given request.
+ * <p>
+ * Once done, call {@link #disconnect()} and the server communication will be
+ * terminated and the background {@link ServerThread} thread will cleanly shut down.
+ */
+
 public class ServerAccess {
 		
 	String host = null;            /* Server to whom we are connecting */

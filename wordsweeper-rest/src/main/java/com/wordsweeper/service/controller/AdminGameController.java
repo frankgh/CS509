@@ -13,8 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by francisco on 10/4/16.
- *
+ * This class tells game controller from admin client side..
  * @author francisco
  */
 @Path("/admin/game")

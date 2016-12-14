@@ -22,10 +22,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * Server in charge of relaying exitGame requests to send it to the joining player.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "exitGameResponse")
+
 public class ExitGameResponse {
 
     /**

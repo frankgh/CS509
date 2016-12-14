@@ -61,5 +61,6 @@ public class ShowGameStateRequestController extends ControllerChain implements I
      * @see com.wordsweeper.server.controller.ControllerChain#setOnFailureResponse(com.wordsweeper.server.xml.Request, com.wordsweeper.server.xml.Response)
 	 */
     protected void setOnFailureResponse(Request request, Response response) {
-    } // DO NOTHING
+        response.setBoardResponse(getObjectFactory().createBoardResponse());
+    }
 }

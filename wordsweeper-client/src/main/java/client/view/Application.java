@@ -13,7 +13,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * This is the class for GUI application extended from JFrame.
+ */
 public class Application extends JFrame {
 
     /**

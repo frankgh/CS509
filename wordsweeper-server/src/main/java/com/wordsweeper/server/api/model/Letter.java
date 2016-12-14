@@ -3,7 +3,7 @@ package com.wordsweeper.server.api.model;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by francisco on 10/12/16.
+ * Class letter from WordSweeper board game.
  *
  * @author francisco
  */

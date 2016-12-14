@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author francisco
  */
-public class LetterFrequency {
+class LetterFrequency {
 
     /**
      * The Character count map.
@@ -29,7 +29,7 @@ public class LetterFrequency {
      *
      * @param word the word
      */
-    public void feedWord(final String word) {
+    void feedWord(final String word) {
         final String s = word.toUpperCase();
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
@@ -48,7 +48,7 @@ public class LetterFrequency {
     /**
      * Build the letter frequency model
      */
-    public void build() {
+    void build() {
         double total = Math.max(1, MapUtil.sumValues(characterCountMap)); // Do not allow division by 0
         Map<Character, Double> sortedMap = MapUtil.sortByValue(characterCountMap, MapUtil.DESCENDING);
 

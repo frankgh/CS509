@@ -3,8 +3,7 @@ package com.wordsweeper.server.api.model;
 import java.util.List;
 
 /**
- * Created by francisco on 10/12/16.
- *
+ * This class introduced board attributes.
  * @author francisco
  */
 public class Board {

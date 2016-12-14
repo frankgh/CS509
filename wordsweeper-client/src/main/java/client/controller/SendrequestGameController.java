@@ -1,7 +1,8 @@
 package client.controller;
 
 /**
- * Created by Celia on 10/7/2016.
+ * This class implemented a controller that sending game request.
+ * @author Celia
  */
 public class SendrequestGameController {
 
